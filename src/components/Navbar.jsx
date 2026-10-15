@@ -98,7 +98,7 @@ export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenR
                 onClick={() => setTheme && setTheme('swiss-dark')}
                 className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
                   isDark
-                    ? 'bg-blue-600 text-white shadow-sm'
+                    ? 'bg-[#318cdd] text-white shadow-sm'
                     : 'hover:opacity-80 text-slate-600'
                 }`}
                 title="Logo Contrast: Deep Midnight Obsidian making the logo pop in high contrast"
@@ -110,11 +110,7 @@ export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenR
 
             <button
               onClick={() => onOpenRegister()}
-              className={`py-2.5 px-5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-md hover:scale-105 flex items-center gap-1.5 whitespace-nowrap text-white ${
-                !isDark
-                  ? 'bg-[#d02426] hover:bg-[#b51c1e] shadow-red-500/25'
-                  : 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/20'
-              }`}
+              className="py-2.5 px-5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-md hover:scale-105 flex items-center gap-1.5 whitespace-nowrap text-white bg-[#d02426] hover:bg-[#b51c1e] shadow-red-500/25"
             >
               <span>Book Free Trial</span>
               <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -138,9 +134,7 @@ export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenR
             </button>
             <button
               onClick={() => onOpenRegister()}
-              className={`px-3 py-1.5 rounded-full text-[11px] font-black uppercase tracking-wider text-white shadow-sm flex items-center gap-1 ${
-                !isDark ? 'bg-[#d02426]' : 'bg-blue-600'
-              }`}
+              className="px-3 py-1.5 rounded-full text-[11px] font-black uppercase tracking-wider text-white shadow-sm flex items-center gap-1 bg-[#d02426]"
             >
               <span>Trial</span>
             </button>

@@ -235,11 +235,7 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 px-6 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-xl flex items-center justify-center gap-2 hover:scale-[1.01]"
-                style={{
-                  backgroundColor: 'var(--accent)',
-                  color: 'var(--accent-contrast)'
-                }}
+                className="w-full py-3.5 px-6 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-xl flex items-center justify-center gap-2 hover:scale-[1.01] bg-[#d02426] hover:bg-[#b51c1e] text-white shadow-red-500/25"
               >
                 {loading ? 'Registering on Roster...' : 'Confirm Registration / Free Trial'}
               </button>

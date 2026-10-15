@@ -51,19 +51,22 @@
     --card-shadow: 0 14px 30px -8px rgba(49, 140, 221, 0.12);
   }
 
-  /* 🌌 SWISS CLEAN - VERSION 2: LOGO CONTRAST (Dark • Deep Obsidian & Luminous Accents) */
+  /* 🌌 SWISS CLEAN - VERSION 2: LOGO CONTRAST (Dark • Deep Obsidian & Logo Palette) */
   body[data-theme='swiss-dark'] {
     --bg-page: #090d16;
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --text-heading: #ffffff;
-    --accent: #3b82f6;
+    --accent: #318cdd;
+    --accent-red: #d02426;
+    --accent-orange: #ef7f1a;
     --accent-contrast: #ffffff;
     --border-color: #1e293b;
     --card-bg: #0f172a;
     --card-hover: #172033;
     --card-inner: rgba(255, 255, 255, 0.04);
-    --badge-bg: rgba(59, 130, 246, 0.16);
+    --badge-bg: rgba(49, 140, 221, 0.16);
+    --badge-red-bg: rgba(208, 36, 38, 0.16);
     --hero-overlay-from: #090d16;
     --hero-overlay-via: rgba(9, 13, 22, 0.85);
     --hero-img-filter: brightness(0.9) contrast(1.1);

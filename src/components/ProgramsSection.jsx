@@ -40,9 +40,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                 onClick={() => setActiveCategory(cat)}
                 className={`px-4 py-2 text-xs font-bold tracking-wide rounded-full transition-all duration-200 flex-shrink-0 ${
                   isActive
-                    ? !isDark
-                      ? 'bg-[#318cdd] text-white shadow-md shadow-[#318cdd]/25'
-                      : 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
+                    ? 'bg-[#318cdd] text-white shadow-md shadow-[#318cdd]/25'
                     : isDark
                       ? 'bg-slate-800/80 hover:bg-slate-700 text-slate-300'
                       : 'bg-slate-100 hover:bg-slate-200/80 text-slate-700'
@@ -151,11 +149,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
 
                 <button
                   onClick={() => onRegister(program)}
-                  className={`py-2.5 px-5 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md hover:scale-105 flex items-center gap-1.5 ${
-                    !isDark
-                      ? 'bg-[#318cdd] hover:bg-[#2575c0] shadow-[#318cdd]/25'
-                      : 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/20'
-                  }`}
+                  className="py-2.5 px-5 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md hover:scale-105 flex items-center gap-1.5 bg-[#318cdd] hover:bg-[#2575c0] shadow-[#318cdd]/25"
                 >
                   <span>Register</span>
                   <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
