@@ -1,0 +1,22 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Production build outputs
+dist/
+dist-ssr/
+*.local
+
+# Cloudflare & tooling cache
+.wrangler/
+
+# IDE & OS files
+.vs/
+.vscode/
+.DS_Store
+Thumbs.db

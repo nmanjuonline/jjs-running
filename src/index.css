@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-page: #f8fafc;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-heading: #0f172a;
+    --accent: #0055ff;
+    --accent-contrast: #ffffff;
+    --border-color: #e2e8f0;
+    --card-bg: #ffffff;
+    --card-hover: #f8fafc;
+    --card-inner: #f1f5f9;
+    --badge-bg: rgba(0, 85, 255, 0.08);
+    --hero-overlay-from: #f8fafc;
+    --hero-overlay-via: rgba(248, 250, 252, 0.88);
+    --hero-img-filter: contrast(1.05) saturate(1.15) brightness(1.0);
+    --nav-bg: rgba(255, 255, 255, 0.94);
+    --input-bg: #ffffff;
+    --input-border: #cbd5e1;
+    --logo-filter: none;
+    --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  }
+
+  /* 🏔️ THEME 1 (LIGHT): Swiss Clean (On Running / Minimalist Performance) */
+  body[data-theme='olympic-clean'], body[data-theme='street-crew'] {
+    --bg-page: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-heading: #020617;
+    --accent: #0055ff;
+    --accent-contrast: #ffffff;
+    --border-color: #e2e8f0;
+    --card-bg: #ffffff;
+    --card-hover: #f8fafc;
+    --card-inner: #f1f5f9;
+    --badge-bg: rgba(0, 85, 255, 0.08);
+    --hero-overlay-from: #ffffff;
+    --hero-overlay-via: rgba(255, 255, 255, 0.88);
+    --hero-img-filter: contrast(1.06) brightness(1.02);
+    --nav-bg: rgba(255, 255, 255, 0.96);
+    --input-bg: #ffffff;
+    --input-border: #cbd5e1;
+    --logo-filter: none;
+    --card-shadow: 0 14px 30px -8px rgba(0, 50, 150, 0.08);
+  }
+
+  /* 🌅 THEME 2 (LIGHT): Sunrise Stride (Nike Run Club / Radiant Dawn) */
+  body[data-theme='sunrise-coral'], body[data-theme='heritage-gold'] {
+    --bg-page: #faf8f5;
+    --text-primary: #18181b;
+    --text-secondary: #52525b;
+    --text-heading: #09090b;
+    --accent: #ff4800;
+    --accent-contrast: #ffffff;
+    --border-color: #fed7aa;
+    --card-bg: #ffffff;
+    --card-hover: #fffaf5;
+    --card-inner: #fff1e6;
+    --badge-bg: rgba(255, 72, 0, 0.09);
+    --hero-overlay-from: #faf8f5;
+    --hero-overlay-via: rgba(250, 248, 245, 0.85);
+    --hero-img-filter: contrast(1.08) saturate(1.2) brightness(1.02);
+    --nav-bg: rgba(250, 248, 245, 0.96);
+    --input-bg: #ffffff;
+    --input-border: #fdba74;
+    --logo-filter: none;
+    --card-shadow: 0 14px 30px -8px rgba(255, 72, 0, 0.10);
+  }
+
+  /* ⚡ THEME 3 (DARK): Kinetic Volt (Asymmetric Bento Cockpit) */
+  body[data-theme='kinetic'] {
+    --bg-page: #090a0f;
+    --text-primary: #ffffff;
+    --text-secondary: #94a3b8;
+    --text-heading: #ffffff;
+    --accent: #ccff00;
+    --accent-contrast: #000000;
+    --border-color: #1e2230;
+    --card-bg: #11131c;
+    --card-hover: #171b28;
+    --card-inner: rgba(255, 255, 255, 0.04);
+    --badge-bg: rgba(204, 255, 0, 0.15);
+    --hero-overlay-from: #090a0f;
+    --hero-overlay-via: rgba(9, 10, 15, 0.78);
+    --hero-img-filter: brightness(0.4) contrast(1.2);
+    --nav-bg: rgba(9, 10, 15, 0.92);
+    --input-bg: rgba(255, 255, 255, 0.05);
+    --input-border: rgba(255, 255, 255, 0.12);
+    --logo-filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.5)) contrast(1.15) brightness(1.2);
+    --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  }
+
+  /* 🔴 THEME 4 (DARK): Crimson Velocity (Breaking2 Speed Runway) */
+  body[data-theme='crimson'] {
+    --bg-page: #070709;
+    --text-primary: #ffffff;
+    --text-secondary: #a1a1aa;
+    --text-heading: #ffffff;
+    --accent: #ff1e42;
+    --accent-contrast: #ffffff;
+    --border-color: #26161b;
+    --card-bg: #110e12;
+    --card-hover: #19141b;
+    --card-inner: rgba(255, 30, 66, 0.05);
+    --badge-bg: rgba(255, 30, 66, 0.18);
+    --hero-overlay-from: #070709;
+    --hero-overlay-via: rgba(7, 7, 9, 0.82);
+    --hero-img-filter: brightness(0.38) contrast(1.3);
+    --nav-bg: rgba(7, 7, 9, 0.94);
+    --input-bg: rgba(255, 255, 255, 0.05);
+    --input-border: rgba(255, 255, 255, 0.12);
+    --logo-filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.5)) contrast(1.15) brightness(1.2);
+    --card-shadow: 0 10px 30px -10px rgba(255, 30, 66, 0.15);
+  }
+
+  /* Prevent horizontal scroll globally */
+  html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    position: relative;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  #root {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* Hide scrollbar for clean horizontal snap sliders on mobile */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(150, 150, 150, 0.3);
+  border-radius: 4px;
+}
