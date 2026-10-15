@@ -240,11 +240,11 @@ export default function App() {
             <div className="flex flex-wrap items-center justify-center gap-3">
               <button
                 onClick={() => handleOpenRegister()}
-                className="py-3 px-6 sm:px-8 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all duration-300 shadow-xl hover:scale-105 flex items-center gap-2"
-                style={{
-                  backgroundColor: 'var(--accent)',
-                  color: 'var(--accent-contrast)'
-                }}
+                className={`py-3 px-6 sm:px-8 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all duration-300 shadow-xl hover:scale-105 flex items-center gap-2 text-white ${
+                  theme === 'swiss-light'
+                    ? 'bg-[#d02426] hover:bg-[#b51c1e] shadow-red-500/25'
+                    : 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/25'
+                }`}
               >
                 <span>Book Free Trial Run</span>
                 <ArrowRight className="w-4 h-4" />

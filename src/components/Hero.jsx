@@ -20,8 +20,12 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
             {/* Left Column: Clean Swiss Minimalist Typography & CTAs */}
             <div className="lg:col-span-7 space-y-6">
               {/* Sleek Status Badge */}
-              <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wide shadow-sm border ${isDark ? 'bg-blue-950/70 border-blue-800/80 text-blue-400' : 'bg-blue-50 border-blue-200/80 text-blue-700'}`}>
-                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+              <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wide shadow-sm border ${
+                isDark
+                  ? 'bg-blue-950/70 border-blue-800/80 text-blue-400'
+                  : 'bg-[#318cdd]/10 border-[#318cdd]/30 text-[#1d72bd]'
+              }`}>
+                <span className={`w-2 h-2 rounded-full animate-pulse ${isDark ? 'bg-blue-400' : 'bg-[#d02426]'}`} />
                 <span>INDIA'S PREMIER RUNNING ACADEMY • 30+ CENTERS</span>
               </div>
 
@@ -30,7 +34,11 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                 <h1 className={`text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[0.98] ${isDark ? 'text-white' : 'text-slate-950'}`}>
                   RUN WITH SCIENCE.
                   <br />
-                  <span className={`text-transparent bg-clip-text ${isDark ? 'bg-gradient-to-r from-blue-400 to-indigo-400' : 'bg-gradient-to-r from-blue-600 to-indigo-600'}`}>
+                  <span className={`text-transparent bg-clip-text ${
+                    isDark
+                      ? 'bg-gradient-to-r from-blue-400 via-indigo-400 to-red-400'
+                      : 'bg-gradient-to-r from-[#318cdd] via-[#2470ba] to-[#d02426]'
+                  }`}>
                     CONQUER EVERY MILE.
                   </span>
                 </h1>
@@ -45,7 +53,11 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
               <div className="flex flex-wrap items-center gap-3.5 pt-2">
                 <button
                   onClick={onBookTrial}
-                  className="py-3.5 px-7 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(0,85,255,0.35)] hover:shadow-[0_15px_30px_-5px_rgba(0,85,255,0.45)] hover:-translate-y-0.5 flex items-center gap-2"
+                  className={`py-3.5 px-7 rounded-2xl text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all hover:-translate-y-0.5 flex items-center gap-2 shadow-lg ${
+                    !isDark
+                      ? 'bg-[#d02426] hover:bg-[#b51c1e] shadow-[0_10px_25px_-5px_rgba(208,36,38,0.38)]'
+                      : 'bg-blue-600 hover:bg-blue-700 shadow-[0_10px_25px_-5px_rgba(0,85,255,0.35)]'
+                  }`}
                 >
                   <span>Book Free Trial Run</span>
                   <ArrowRight className="w-4 h-4 stroke-[2.5]" />
@@ -53,17 +65,23 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
 
                 <button
                   onClick={onExploreCenters}
-                  className={`py-3.5 px-6 rounded-2xl text-xs sm:text-sm font-bold border transition-all shadow-sm hover:shadow hover:-translate-y-0.5 flex items-center gap-2 ${isDark ? 'bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-800' : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200'}`}
+                  className={`py-3.5 px-6 rounded-2xl text-xs sm:text-sm font-bold border transition-all shadow-sm hover:shadow hover:-translate-y-0.5 flex items-center gap-2 ${
+                    isDark
+                      ? 'bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-800'
+                      : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200 hover:border-[#318cdd]'
+                  }`}
                 >
-                  <MapPin className="w-4 h-4 text-emerald-500 stroke-[2.5]" />
+                  <MapPin className={`w-4 h-4 stroke-[2.5] ${isDark ? 'text-emerald-500' : 'text-[#318cdd]'}`} />
                   <span>Find Your Center (30+)</span>
                 </button>
 
                 <button
                   onClick={onOpenCalc}
-                  className={`py-3.5 px-3 text-xs font-mono font-bold uppercase underline underline-offset-4 flex items-center gap-1.5 transition-colors ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}
+                  className={`py-3.5 px-3 text-xs font-mono font-bold uppercase underline underline-offset-4 flex items-center gap-1.5 transition-colors ${
+                    isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-600 hover:text-[#318cdd]'
+                  }`}
                 >
-                  <Activity className="w-4 h-4 text-blue-500" />
+                  <Activity className={`w-4 h-4 ${isDark ? 'text-blue-500' : 'text-[#318cdd]'}`} />
                   <span>Pace Calculator</span>
                 </button>
               </div>
@@ -74,9 +92,9 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                   <span className={`block text-2xl sm:text-3xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>15,000+</span>
                   <span className={`text-[11px] font-medium uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Runners Coached</span>
                 </div>
-                <div className={`p-3 rounded-2xl border ${isDark ? 'bg-blue-950/60 border-blue-900/80' : 'bg-blue-50/60 border-blue-100/80'}`}>
-                  <span className={`block text-2xl sm:text-3xl font-black ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>30+</span>
-                  <span className={`text-[11px] font-medium uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Active Grounds</span>
+                <div className={`p-3 rounded-2xl border ${isDark ? 'bg-blue-950/60 border-blue-900/80' : 'bg-[#318cdd]/8 border-[#318cdd]/25'}`}>
+                  <span className={`block text-2xl sm:text-3xl font-black ${isDark ? 'text-blue-400' : 'text-[#318cdd]'}`}>30+</span>
+                  <span className={`text-[11px] font-medium uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-[#1d72bd]'}`}>Active Grounds</span>
                 </div>
                 <div className={`p-3 rounded-2xl border ${isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-slate-50/80 border-slate-100'}`}>
                   <span className={`block text-2xl sm:text-3xl font-black ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>98.4%</span>
@@ -114,7 +132,9 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                     </div>
                     <button
                       onClick={onBookTrial}
-                      className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-md"
+                      className={`px-3.5 py-1.5 rounded-lg text-white text-xs font-bold transition-all shadow-md ${
+                        !isDark ? 'bg-[#d02426] hover:bg-[#b51c1e]' : 'bg-blue-600 hover:bg-blue-500'
+                      }`}
                     >
                       Join ➔
                     </button>

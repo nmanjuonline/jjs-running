@@ -110,9 +110,7 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
             <div className="mb-6">
               <div className="flex items-center justify-between gap-3 mb-3">
                 <JJSLogo className="h-9 sm:h-10 w-auto" />
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider"
-                  style={{ backgroundColor: 'var(--badge-bg)', color: 'var(--accent)' }}
-                >
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-red-50 text-[#d02426] border border-red-200/80">
                   <Sparkles className="w-3.5 h-3.5" />
                   Zero Obligation
                 </span>

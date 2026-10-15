@@ -48,9 +48,7 @@ export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenR
                 >
                   JJs Running
                 </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded font-black tracking-wider uppercase hidden sm:inline-block"
-                  style={{ backgroundColor: 'var(--badge-bg)', color: 'var(--accent)' }}
-                >
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded font-black tracking-wider uppercase hidden sm:inline-block bg-[#d02426]/10 text-[#d02426] border border-[#d02426]/30">
                   JJS
                 </span>
               </div>
@@ -88,10 +86,10 @@ export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenR
                 onClick={() => setTheme && setTheme('swiss-light')}
                 className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
                   !isDark
-                    ? 'bg-blue-600 text-white shadow-sm'
+                    ? 'bg-[#318cdd] text-white shadow-sm'
                     : 'hover:opacity-80 text-slate-400'
                 }`}
-                title="Logo Match: Clean Swiss White with Cobalt & Sprint Red matching the official logo"
+                title="Logo Match: Clean Swiss White with Cerulean Blue (#318cdd) & Sprint Red (#d02426) matching the official logo"
               >
                 <Sun className="w-3.5 h-3.5" />
                 <span>Logo Match</span>
@@ -112,7 +110,11 @@ export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenR
 
             <button
               onClick={() => onOpenRegister()}
-              className="py-2.5 px-5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-md shadow-blue-500/20 hover:scale-105 flex items-center gap-1.5 whitespace-nowrap bg-blue-600 hover:bg-blue-700 text-white"
+              className={`py-2.5 px-5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-md hover:scale-105 flex items-center gap-1.5 whitespace-nowrap text-white ${
+                !isDark
+                  ? 'bg-[#d02426] hover:bg-[#b51c1e] shadow-red-500/25'
+                  : 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/20'
+              }`}
             >
               <span>Book Free Trial</span>
               <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -136,7 +138,9 @@ export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenR
             </button>
             <button
               onClick={() => onOpenRegister()}
-              className="px-3 py-1.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-blue-600 text-white shadow-sm flex items-center gap-1"
+              className={`px-3 py-1.5 rounded-full text-[11px] font-black uppercase tracking-wider text-white shadow-sm flex items-center gap-1 ${
+                !isDark ? 'bg-[#d02426]' : 'bg-blue-600'
+              }`}
             >
               <span>Trial</span>
             </button>

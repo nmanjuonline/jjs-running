@@ -40,7 +40,9 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                 onClick={() => setActiveCategory(cat)}
                 className={`px-4 py-2 text-xs font-bold tracking-wide rounded-full transition-all duration-200 flex-shrink-0 ${
                   isActive
-                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
+                    ? !isDark
+                      ? 'bg-[#318cdd] text-white shadow-md shadow-[#318cdd]/25'
+                      : 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
                     : isDark
                       ? 'bg-slate-800/80 hover:bg-slate-700 text-slate-300'
                       : 'bg-slate-100 hover:bg-slate-200/80 text-slate-700'
@@ -66,7 +68,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
               className={`w-[86vw] sm:w-[350px] md:w-auto flex-shrink-0 snap-center rounded-3xl border transition-all duration-300 flex flex-col justify-between overflow-hidden group hover:-translate-y-1.5 ${
                 isDark
                   ? 'bg-slate-900 border-slate-800 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_40px_-10px_rgba(37,99,235,0.25)]'
-                  : 'bg-white border-slate-200 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_40px_-10px_rgba(0,50,150,0.14)]'
+                  : 'bg-white border-slate-200 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_40px_-10px_rgba(49,140,221,0.18)] hover:border-[#318cdd]/50'
               }`}
             >
               <div>
@@ -86,7 +88,9 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                       SPEC 0{idx + 1}
                     </span>
                     <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-md backdrop-blur-md ${
-                      isDark ? 'bg-blue-950/90 text-blue-300 border border-blue-800/60' : 'bg-white/95 text-blue-700'
+                      isDark
+                        ? 'bg-blue-950/90 text-blue-300 border border-blue-800/60'
+                        : 'bg-white/95 text-[#d02426] border border-red-100 shadow-sm'
                     }`}>
                       {program.badge}
                     </span>
@@ -98,7 +102,9 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                       <Award className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
                       <span className="truncate">{program.targetRace}</span>
                     </span>
-                    <span className="font-mono bg-blue-600/90 text-white px-2 py-0.5 rounded text-[10px] font-bold flex-shrink-0">
+                    <span className={`font-mono text-white px-2 py-0.5 rounded text-[10px] font-bold flex-shrink-0 ${
+                      !isDark ? 'bg-[#318cdd]' : 'bg-blue-600/90'
+                    }`}>
                       {program.duration}
                     </span>
                   </div>
@@ -125,7 +131,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                     {program.highlights.slice(0, 3).map((h, i) => (
                       <div key={i} className={`flex items-center gap-2 text-xs ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
                         <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 ${
-                          isDark ? 'bg-blue-950/80 text-blue-400' : 'bg-blue-50 text-blue-600'
+                          isDark ? 'bg-blue-950/80 text-blue-400' : 'bg-[#318cdd]/10 text-[#318cdd]'
                         }`}>
                           <Check className="w-2.5 h-2.5 stroke-[3]" />
                         </div>
@@ -145,7 +151,11 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
 
                 <button
                   onClick={() => onRegister(program)}
-                  className="py-2.5 px-5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-blue-500/20 hover:scale-105 flex items-center gap-1.5"
+                  className={`py-2.5 px-5 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md hover:scale-105 flex items-center gap-1.5 ${
+                    !isDark
+                      ? 'bg-[#318cdd] hover:bg-[#2575c0] shadow-[#318cdd]/25'
+                      : 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/20'
+                  }`}
                 >
                   <span>Register</span>
                   <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />

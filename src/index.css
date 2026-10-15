@@ -25,19 +25,22 @@
     --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
   }
 
-  /* 🏔️ SWISS CLEAN - VERSION 1: LOGO MATCH (Light • Cobalt & Sprint Red) */
+  /* 🏔️ SWISS CLEAN - VERSION 1: LOGO MATCH (Light • Cerulean Blue & Sprint Red) */
   body[data-theme='swiss-light'], body[data-theme='olympic-clean'], body[data-theme='street-crew'] {
     --bg-page: #ffffff;
     --text-primary: #0f172a;
     --text-secondary: #475569;
     --text-heading: #020617;
-    --accent: #0055ff;
+    --accent: #318cdd;
+    --accent-red: #d02426;
+    --accent-orange: #ef7f1a;
     --accent-contrast: #ffffff;
     --border-color: #e2e8f0;
     --card-bg: #ffffff;
     --card-hover: #f8fafc;
     --card-inner: #f1f5f9;
-    --badge-bg: rgba(0, 85, 255, 0.08);
+    --badge-bg: rgba(49, 140, 221, 0.09);
+    --badge-red-bg: rgba(208, 36, 38, 0.09);
     --hero-overlay-from: #ffffff;
     --hero-overlay-via: rgba(255, 255, 255, 0.88);
     --hero-img-filter: contrast(1.06) brightness(1.02);
@@ -45,7 +48,7 @@
     --input-bg: #ffffff;
     --input-border: #cbd5e1;
     --logo-filter: none;
-    --card-shadow: 0 14px 30px -8px rgba(0, 50, 150, 0.08);
+    --card-shadow: 0 14px 30px -8px rgba(49, 140, 221, 0.12);
   }
 
   /* 🌌 SWISS CLEAN - VERSION 2: LOGO CONTRAST (Dark • Deep Obsidian & Luminous Accents) */

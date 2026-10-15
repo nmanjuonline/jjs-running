@@ -59,7 +59,9 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                   }}
                   className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 ${
                     isActive
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
+                      ? !isDark
+                        ? 'bg-[#318cdd] text-white shadow-md shadow-[#318cdd]/25'
+                        : 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
                       : isDark
                         ? 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
                         : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
@@ -84,7 +86,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
               placeholder="Search neighborhood or TCH..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className={`w-full pl-9 pr-3 py-2 text-xs rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
+              className={`w-full pl-9 pr-3 py-2 text-xs rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#318cdd]/30 ${
                 isDark
                   ? 'border-slate-800 bg-slate-900 text-slate-100 placeholder:text-slate-500'
                   : 'border-slate-200 bg-white text-slate-900 placeholder:text-slate-400'
@@ -109,7 +111,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                     isSelected
                       ? isDark
                         ? 'bg-blue-950/50 border-l-4 border-blue-500'
-                        : 'bg-blue-50/80 border-l-4 border-blue-600'
+                        : 'bg-[#318cdd]/10 border-l-4 border-[#318cdd]'
                       : isDark
                         ? 'hover:bg-slate-800/60 text-slate-300'
                         : 'hover:bg-slate-50 text-slate-700'
@@ -117,7 +119,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                 >
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <h4 className={`text-sm font-black truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      <h4 className={`text-sm font-black truncate ${isDark ? 'text-white' : 'text-slate-950'}`}>
                         {center.name}
                       </h4>
                       <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${
@@ -130,15 +132,15 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                       {center.venue}
                     </p>
                     <p className={`text-[11px] mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                      TCH: <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>{center.tch}</strong>
+                      TCH: <strong className={!isDark ? 'text-[#d02426]' : isDark ? 'text-slate-200' : 'text-slate-800'}>{center.tch}</strong>
                     </p>
                   </div>
 
                   <div className="flex items-center gap-1.5 flex-shrink-0">
-                    <span className={`text-[10px] font-mono font-bold ${isSelected ? 'text-blue-500' : 'text-slate-400'}`}>
+                    <span className={`text-[10px] font-mono font-bold ${isSelected ? (!isDark ? 'text-[#318cdd]' : 'text-blue-500') : 'text-slate-400'}`}>
                       5:30 AM
                     </span>
-                    <ChevronRight className={`w-3.5 h-3.5 ${isSelected ? 'text-blue-500' : 'text-slate-400'}`} />
+                    <ChevronRight className={`w-3.5 h-3.5 ${isSelected ? (!isDark ? 'text-[#318cdd]' : 'text-blue-500') : 'text-slate-400'}`} />
                   </div>
                 </div>
               );
@@ -152,7 +154,9 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${
-                      isDark ? 'bg-blue-950/80 text-blue-300 border border-blue-800/60' : 'bg-blue-50 text-blue-700'
+                      isDark
+                        ? 'bg-blue-950/80 text-blue-300 border border-blue-800/60'
+                        : 'bg-[#318cdd]/10 text-[#1d72bd] border border-[#318cdd]/20'
                     }`}>
                       <MapPin className="w-3.5 h-3.5" />
                       {currentCenter.city} • Active Training Ground
@@ -176,7 +180,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
 
                   <div className={`p-4 rounded-2xl border ${isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/80'}`}>
                     <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Training Center Head (TCH)</span>
-                    <p className="text-xs font-bold mt-1 flex items-center gap-1.5 text-blue-400">
+                    <p className={`text-xs font-bold mt-1 flex items-center gap-1.5 ${!isDark ? 'text-[#d02426]' : 'text-blue-400'}`}>
                       <UserCheck className="w-4 h-4 stroke-[2.5]" />
                       {currentCenter.tch}
                     </p>
@@ -196,12 +200,16 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                 <div className={`pt-4 border-t flex flex-col sm:flex-row items-center justify-between gap-4 ${isDark ? 'border-slate-800' : 'border-slate-100'}`}>
                   <div className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                     <span>Coached by </span>
-                    <strong className={isDark ? 'text-white' : 'text-slate-900'}>{currentCenter.tch} (TCH)</strong>
+                    <strong className={!isDark ? 'text-[#d02426]' : 'text-white'}>{currentCenter.tch} (TCH)</strong>
                   </div>
 
                   <button
                     onClick={() => onBookTrial(currentCenter)}
-                    className="w-full sm:w-auto py-3 px-6 rounded-2xl text-xs font-black uppercase tracking-wider transition-all shadow-md shadow-blue-500/20 hover:scale-105 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+                    className={`w-full sm:w-auto py-3 px-6 rounded-2xl text-xs font-black uppercase tracking-wider transition-all hover:scale-105 flex items-center justify-center gap-2 text-white shadow-md ${
+                      !isDark
+                        ? 'bg-[#d02426] hover:bg-[#b51c1e] shadow-red-500/25'
+                        : 'bg-blue-600 hover:bg-blue-700 shadow-blue-500/20'
+                    }`}
                   >
                     <span>Book Free Trial Run at {currentCenter.name}</span>
                     <ChevronRight className="w-4 h-4 stroke-[2.5]" />
