@@ -51,6 +51,17 @@ export default function App() {
         color: 'var(--text-primary)'
       }}
     >
+      {/* Sleek Top Announcement Bar (Above Navbar) */}
+      <LiveTicker
+        onActionClick={(target) => {
+          if (target === 'register') {
+            handleOpenRegister();
+          } else {
+            scrollToSection(target);
+          }
+        }}
+      />
+
       {/* Navigation */}
       <Navbar
         currentTheme={theme}
@@ -59,10 +70,6 @@ export default function App() {
         onScrollTo={scrollToSection}
       />
 
-      {/* Animated Live Milestones Ticker (Constrained to 100% width) */}
-      <div className="w-full max-w-full overflow-hidden">
-        <LiveTicker />
-      </div>
 
       {/* Hero Section */}
       <Hero

@@ -1,150 +1,165 @@
-import React from 'react';
-import { Flame, Trophy, Clock, Smartphone, MapPin, Zap, Award, Activity } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Flame, Trophy, Clock, Smartphone, MapPin, Award, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 
-export default function LiveTicker() {
-  const items = [
+export default function LiveTicker({ onActionClick }) {
+  const updates = [
     {
-      tag: 'DAILY DISPATCH',
+      badge: 'LIVE WIRE',
+      badgeColor: '#d02426',
       icon: Flame,
-      text: '450+ runners completed morning workouts across Bengaluru, Pune & Kolkata',
-      tagColor: '#ef7f1a' // Amber Spark
+      text: '450+ runners completed morning workout across 30+ centers today',
+      actionText: 'Find Squad',
+      actionTarget: 'centers'
     },
     {
-      tag: 'RACE PREP',
+      badge: 'RACE PREP',
+      badgeColor: '#d02426',
       icon: Trophy,
       text: 'TCS World 10K & Tata Mumbai Marathon (TMM) training blocks now active',
-      tagColor: '#d02426' // Sprint Red
+      actionText: 'View Programs',
+      actionTarget: 'programs'
     },
     {
-      tag: 'WEEKEND LSD',
+      badge: 'WEEKEND LSD',
+      badgeColor: '#318cdd',
       icon: Clock,
       text: '5:30 AM Long Slow Distance gathering across all 30+ morning centers',
-      tagColor: '#318cdd' // Cerulean Blue
+      actionText: 'Explore Centers',
+      actionTarget: 'centers'
     },
     {
-      tag: 'HONOR ROLL',
+      badge: 'ONCA APP',
+      badgeColor: '#318cdd',
+      icon: Smartphone,
+      text: 'Track real-time stride cadence, heart-rate zones & coach telemetry',
+      actionText: 'Get the App',
+      actionTarget: 'app'
+    },
+    {
+      badge: 'HONOR ROLL',
+      badgeColor: '#ef7f1a',
       icon: Award,
       text: '100+ World Major Marathon finishes: Boston, Berlin, London, Tokyo & Comrades',
-      tagColor: '#d02426' // Sprint Red
+      actionText: 'Runner Stories',
+      actionTarget: 'stories'
     },
     {
-      tag: 'ONCA APP',
-      icon: Smartphone,
-      text: 'Real-time stride cadence, heart-rate zones & coach telemetry tracking',
-      tagColor: '#318cdd' // Cerulean Blue
-    },
-    {
-      tag: 'EXPANSION',
+      badge: 'NEW SQUADS',
+      badgeColor: '#ef7f1a',
       icon: MapPin,
-      text: 'New training centers open: Baner Balewadi (Pune) & Bellandur (Bengaluru)',
-      tagColor: '#ef7f1a' // Amber Spark
-    },
-    {
-      tag: 'RECOVERY',
-      icon: Zap,
-      text: 'Weekly mobility, strength & physiotherapy clinics every Saturday',
-      tagColor: '#318cdd' // Cerulean Blue
-    },
-    {
-      tag: 'PACING',
-      icon: Activity,
-      text: 'Dedicated mentor-led pace buses from 5:00/km to 7:30/km for all levels',
-      tagColor: '#d02426' // Sprint Red
+      text: 'New centers now open: Baner Balewadi (Pune) & Bellandur (Bengaluru)',
+      actionText: 'Book Free Trial',
+      actionTarget: 'register'
     }
   ];
 
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [animating, setAnimating] = useState(false);
+
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      handleNext();
+    }, 4500);
+
+    return () => clearInterval(interval);
+  }, [currentIndex, isPaused]);
+
+  const changeSlide = (nextIndex) => {
+    setAnimating(true);
+    setTimeout(() => {
+      setCurrentIndex(nextIndex);
+      setAnimating(false);
+    }, 200);
+  };
+
+  const handleNext = () => {
+    changeSlide((currentIndex + 1) % updates.length);
+  };
+
+  const handlePrev = () => {
+    changeSlide((currentIndex - 1 + updates.length) % updates.length);
+  };
+
+  const current = updates[currentIndex];
+  const Icon = current.icon;
+
+  const handleAction = (e) => {
+    e.stopPropagation();
+    if (onActionClick && current.actionTarget) {
+      onActionClick(current.actionTarget);
+    }
+  };
+
   return (
     <div
-      className="w-full overflow-hidden border-y transition-colors group select-none flex items-stretch"
-      style={{
-        backgroundColor: 'var(--card-bg)',
-        borderColor: 'var(--border-color)',
-        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.03)'
-      }}
+      className="w-full bg-[#090d16] text-white border-b border-white/10 text-xs select-none transition-colors duration-300 z-50 relative"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
     >
-      {/* Static Left "LIVE WIRE" Badge (Never overlaps or chops scrolling text) */}
-      <div
-        className="flex-shrink-0 flex items-center gap-2 px-3 sm:px-5 py-2.5 border-r select-none z-20"
-        style={{
-          backgroundColor: 'var(--card-bg)',
-          borderColor: 'var(--border-color)'
-        }}
-      >
-        <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-[#d02426]"></span>
-        </span>
-        <span className="font-mono text-[11px] font-black tracking-widest text-[#d02426] uppercase">
-          LIVE
-        </span>
-        <span className="hidden sm:inline font-mono text-[11px] font-bold tracking-wider text-slate-400 dark:text-slate-500">
-          WIRE
-        </span>
-      </div>
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 flex items-center justify-between min-h-[36px]">
+        {/* Left: Dynamic Live Update */}
+        <div className="flex-1 flex items-center justify-center sm:justify-start gap-2 sm:gap-3 min-w-0 pr-2">
+          {/* Pulsing Live Pill */}
+          <div className="flex-shrink-0 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-500/15 border border-red-500/30">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#d02426]"></span>
+            </span>
+            <span className="font-mono text-[9px] sm:text-[10px] font-black tracking-widest text-red-400 uppercase">
+              {current.badge}
+            </span>
+          </div>
 
-      {/* Marquee Window (Smooth feather masks at both ends) */}
-      <div className="flex-1 overflow-hidden relative flex items-center py-2.5 min-w-0">
-        {/* Left Gradient Fade Mask */}
-        <div
-          className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-16 z-10"
-          style={{
-            background: 'linear-gradient(to right, var(--card-bg), transparent)'
-          }}
-        />
+          {/* Rotating Message with Smooth Transition */}
+          <div
+            className={`flex items-center gap-2 truncate transition-all duration-300 ease-out ${
+              animating ? 'opacity-0 -translate-y-1' : 'opacity-100 translate-y-0'
+            }`}
+          >
+            <Icon className="w-3.5 h-3.5 flex-shrink-0 hidden md:inline-block text-[#318cdd]" />
+            <span className="text-slate-200 text-[11px] sm:text-xs font-medium truncate">
+              {current.text}
+            </span>
 
-        {/* Right Gradient Fade Mask */}
-        <div
-          className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-16 z-10"
-          style={{
-            background: 'linear-gradient(to left, var(--card-bg), transparent)'
-          }}
-        />
+            {/* Clickable Action Link */}
+            {current.actionText && (
+              <button
+                onClick={handleAction}
+                className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-[#318cdd] hover:text-white transition-colors underline underline-offset-2 flex-shrink-0 ml-1 cursor-pointer"
+              >
+                <span>{current.actionText}</span>
+                <ArrowRight className="w-3 h-3" />
+              </button>
+            )}
+          </div>
+        </div>
 
-        {/* Seamless Infinite Marquee Track */}
-        <div
-          className="flex items-center gap-10 whitespace-nowrap animate-ticker group-hover:[animation-play-state:paused] cursor-default"
-          style={{ animationDuration: '44s' }}
-        >
-          {[...items, ...items].map((item, idx) => {
-            const Icon = item.icon;
-            return (
-              <div key={idx} className="flex items-center gap-2 text-xs">
-                {/* Category Icon */}
-                <Icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: item.tagColor }} />
-
-                {/* Editorial Category Tag */}
-                <span
-                  className="font-mono text-[10px] sm:text-[11px] font-black tracking-wider uppercase"
-                  style={{ color: item.tagColor }}
-                >
-                  {item.tag}
-                </span>
-
-                {/* Divider Slash */}
-                <span className="text-slate-300 dark:text-slate-700 font-normal select-none">/</span>
-
-                {/* Announcement Text - Clean, High Contrast */}
-                <span
-                  className="font-semibold text-xs sm:text-[13px] tracking-normal"
-                  style={{ color: 'var(--text-primary)' }}
-                >
-                  {item.text}
-                </span>
-
-                {/* Brand Accent Separator */}
-                <span
-                  className="opacity-35 mx-4 select-none text-[10px]"
-                  style={{ color: 'var(--accent)' }}
-                >
-                  ◆
-                </span>
-              </div>
-            );
-          })}
+        {/* Right Controls: Index indicator & Prev/Next Arrows */}
+        <div className="hidden sm:flex items-center gap-1 flex-shrink-0 text-slate-400 pl-3 border-l border-white/10">
+          <span className="font-mono text-[10px] text-slate-400 mr-1 tracking-wider">
+            {currentIndex + 1}/{updates.length}
+          </span>
+          <button
+            onClick={handlePrev}
+            className="p-1 rounded hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+            aria-label="Previous update"
+            title="Previous update"
+          >
+            <ChevronLeft className="w-3.5 h-3.5" />
+          </button>
+          <button
+            onClick={handleNext}
+            className="p-1 rounded hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+            aria-label="Next update"
+            title="Next update"
+          >
+            <ChevronRight className="w-3.5 h-3.5" />
+          </button>
         </div>
       </div>
     </div>
   );
 }
-
-
