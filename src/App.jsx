@@ -15,16 +15,18 @@ import JJSLogo from './components/JJSLogo';
 import { Sparkles, ArrowRight, ShieldCheck, Zap, Activity, Flame, Sun } from 'lucide-react';
 
 export default function App() {
-  const theme = 'olympic-clean';
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('jjs_theme_variant') || 'swiss-light';
+  });
 
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
   const [modalInitialData, setModalInitialData] = useState(null);
   const [calcForceExpand, setCalcForceExpand] = useState(false);
 
   useEffect(() => {
-    document.body.setAttribute('data-theme', 'olympic-clean');
-    localStorage.removeItem('jjs_theme');
-  }, []);
+    document.body.setAttribute('data-theme', theme);
+    localStorage.setItem('jjs_theme_variant', theme);
+  }, [theme]);
 
   const handleOpenRegister = (data = null) => {
     setModalInitialData(data);
@@ -42,9 +44,17 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col font-sans selection:bg-blue-600 selection:text-white transition-colors duration-300 w-full max-w-full overflow-x-hidden bg-white text-slate-900">
+    <div
+      className="min-h-screen flex flex-col font-sans selection:bg-blue-600 selection:text-white transition-colors duration-300 w-full max-w-full overflow-x-hidden"
+      style={{
+        backgroundColor: 'var(--bg-page)',
+        color: 'var(--text-primary)'
+      }}
+    >
       {/* Navigation */}
       <Navbar
+        currentTheme={theme}
+        setTheme={setTheme}
         onOpenRegister={() => handleOpenRegister()}
         onScrollTo={scrollToSection}
       />
@@ -67,14 +77,27 @@ export default function App() {
         {/* Programs Section */}
         <section id="programs" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-10">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-bold uppercase tracking-wider mb-2 shadow-sm">
+            <span
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-2 border shadow-sm"
+              style={{
+                backgroundColor: 'var(--badge-bg)',
+                borderColor: 'var(--border-color)',
+                color: 'var(--accent)'
+              }}
+            >
               <Zap className="w-3.5 h-3.5" />
               Scientific Periodization
             </span>
-            <h2 className="text-3xl sm:text-5xl font-black tracking-tight uppercase text-slate-950">
+            <h2
+              className="text-3xl sm:text-5xl font-black tracking-tight uppercase"
+              style={{ color: 'var(--text-heading)' }}
+            >
               Flagship Training Programs
             </h2>
-            <p className="text-xs sm:text-base mt-2 text-slate-600">
+            <p
+              className="text-xs sm:text-base mt-2"
+              style={{ color: 'var(--text-secondary)' }}
+            >
               From couch-to-5K beginners to sub-3-hour Boston Qualifiers. Backed by 12 years of empirical sports science and certified Training Center Heads (TCH).
             </p>
           </div>
@@ -95,14 +118,27 @@ export default function App() {
         <section id="centers" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-4 sm:mb-6">
             <div>
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-bold uppercase tracking-wider mb-1.5 shadow-sm">
+              <span
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-1.5 border shadow-sm"
+                style={{
+                  backgroundColor: 'var(--badge-bg)',
+                  borderColor: 'var(--border-color)',
+                  color: 'var(--accent)'
+                }}
+              >
                 <Activity className="w-3.5 h-3.5" />
                 Neighborhood Grounds
               </span>
-              <h2 className="text-2xl sm:text-4xl font-black tracking-tight uppercase text-slate-950">
+              <h2
+                className="text-2xl sm:text-4xl font-black tracking-tight uppercase"
+                style={{ color: 'var(--text-heading)' }}
+              >
                 30+ Centers &amp; Training Center Heads
               </h2>
-              <p className="text-xs sm:text-sm mt-1 max-w-xl text-slate-600">
+              <p
+                className="text-xs sm:text-sm mt-1 max-w-xl"
+                style={{ color: 'var(--text-secondary)' }}
+              >
                 Select your city and neighborhood center below to view morning timings, designated grounds, and connect with your Training Center Head (TCH).
               </p>
             </div>

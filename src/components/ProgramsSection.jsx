@@ -23,9 +23,11 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
       });
 
   // =========================================================================
-  // 1. SWISS CLEAN (Light • Swiss Minimalist / High-Performance On Running)
+  // 1. SWISS CLEAN (Light Logo Match & Dark Logo Contrast)
   // =========================================================================
-  if (currentTheme === 'olympic-clean' || currentTheme === 'street-crew') {
+  if (currentTheme === 'olympic-clean' || currentTheme === 'street-crew' || currentTheme === 'swiss-light' || currentTheme === 'swiss-dark') {
+    const isDark = currentTheme === 'swiss-dark';
+
     return (
       <div className="space-y-6">
         {/* Category Filter Pills - Sleek Minimalist Tabs */}
@@ -39,7 +41,9 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                 className={`px-4 py-2 text-xs font-bold tracking-wide rounded-full transition-all duration-200 flex-shrink-0 ${
                   isActive
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
-                    : 'bg-slate-100 hover:bg-slate-200/80 text-slate-700'
+                    : isDark
+                      ? 'bg-slate-800/80 hover:bg-slate-700 text-slate-300'
+                      : 'bg-slate-100 hover:bg-slate-200/80 text-slate-700'
                 }`}
               >
                 {cat}
@@ -49,7 +53,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
         </div>
 
         {/* Mobile Swipe Hint */}
-        <div className="md:hidden flex items-center justify-between text-xs text-slate-500 font-medium px-1">
+        <div className={`md:hidden flex items-center justify-between text-xs font-medium px-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
           <span>👈 Swipe horizontally to view all</span>
           <span>{filtered.length} Programs</span>
         </div>
@@ -59,7 +63,11 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
           {filtered.map((program, idx) => (
             <div
               key={program.id}
-              className="w-[86vw] sm:w-[350px] md:w-auto flex-shrink-0 snap-center bg-white rounded-3xl border border-slate-200 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_40px_-10px_rgba(0,50,150,0.14)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between overflow-hidden group"
+              className={`w-[86vw] sm:w-[350px] md:w-auto flex-shrink-0 snap-center rounded-3xl border transition-all duration-300 flex flex-col justify-between overflow-hidden group hover:-translate-y-1.5 ${
+                isDark
+                  ? 'bg-slate-900 border-slate-800 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_40px_-10px_rgba(37,99,235,0.25)]'
+                  : 'bg-white border-slate-200 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_40px_-10px_rgba(0,50,150,0.14)]'
+              }`}
             >
               <div>
                 {/* Official JJS Program Image Strip */}
@@ -77,7 +85,9 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                     <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-black/60 text-white backdrop-blur-md">
                       SPEC 0{idx + 1}
                     </span>
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/95 text-blue-700 shadow-md backdrop-blur-md">
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-md backdrop-blur-md ${
+                      isDark ? 'bg-blue-950/90 text-blue-300 border border-blue-800/60' : 'bg-white/95 text-blue-700'
+                    }`}>
                       {program.badge}
                     </span>
                   </div>
@@ -96,26 +106,28 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
 
                 {/* Card Body */}
                 <div className="p-5 sm:p-6 space-y-3">
-                  <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
-                    <span className="font-semibold text-slate-700">{program.frequency}</span>
+                  <div className={`flex items-center gap-2 text-xs font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                    <span className={`font-semibold ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>{program.frequency}</span>
                     <span>•</span>
                     <span className="truncate">{program.level}</span>
                   </div>
 
-                  <h3 className="text-xl font-black text-slate-950 tracking-tight leading-snug">
+                  <h3 className={`text-xl font-black tracking-tight leading-snug ${isDark ? 'text-white' : 'text-slate-950'}`}>
                     {program.title}
                   </h3>
 
-                  <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">
+                  <p className={`text-xs leading-relaxed line-clamp-2 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                     {program.description}
                   </p>
 
                   {/* Highlights Checklist */}
-                  <div className="pt-3 border-t border-slate-100 space-y-1.5">
+                  <div className={`pt-3 border-t space-y-1.5 ${isDark ? 'border-slate-800' : 'border-slate-100'}`}>
                     {program.highlights.slice(0, 3).map((h, i) => (
-                      <div key={i} className="flex items-center gap-2 text-xs text-slate-700">
-                        <div className="w-4 h-4 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
-                          <Check className="w-2.5 h-2.5 text-blue-600 stroke-[3]" />
+                      <div key={i} className={`flex items-center gap-2 text-xs ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                        <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 ${
+                          isDark ? 'bg-blue-950/80 text-blue-400' : 'bg-blue-50 text-blue-600'
+                        }`}>
+                          <Check className="w-2.5 h-2.5 stroke-[3]" />
                         </div>
                         <span className="truncate">{h}</span>
                       </div>
@@ -125,9 +137,9 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
               </div>
 
               {/* Bottom Price & Register */}
-              <div className="p-5 sm:p-6 pt-0 border-t border-slate-100 flex items-center justify-between gap-3 mt-4">
+              <div className={`p-5 sm:p-6 pt-0 border-t flex items-center justify-between gap-3 mt-4 ${isDark ? 'border-slate-800' : 'border-slate-100'}`}>
                 <div>
-                  <span className="text-2xl font-black text-slate-950 block leading-none">{program.price}</span>
+                  <span className={`text-2xl font-black block leading-none ${isDark ? 'text-white' : 'text-slate-950'}`}>{program.price}</span>
                   <span className="text-[10px] text-slate-400 uppercase font-medium">{program.tax}</span>
                 </div>
 

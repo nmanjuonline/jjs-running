@@ -4,38 +4,40 @@ import JJSLogo from './JJSLogo';
 
 export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOpenCalc }) {
   // =========================================================================
-  // THEME 1: SWISS CLEAN / OLYMPIC MINIMAL (Light • On Running Performance)
+  // THEME 1: SWISS CLEAN / OLYMPIC MINIMAL (Light Logo Match & Dark Logo Contrast)
   // =========================================================================
-  if (currentTheme === 'olympic-clean' || currentTheme === 'street-crew') {
+  if (currentTheme === 'olympic-clean' || currentTheme === 'street-crew' || currentTheme === 'swiss-light' || currentTheme === 'swiss-dark') {
+    const isDark = currentTheme === 'swiss-dark';
+
     return (
-      <section className="relative overflow-hidden pt-6 pb-14 lg:py-18 bg-white text-slate-900 transition-colors">
+      <section className={`relative overflow-hidden pt-6 pb-14 lg:py-18 transition-colors duration-300 ${isDark ? 'bg-[#090d16] text-slate-100' : 'bg-white text-slate-900'}`}>
         {/* Subtle geometric grid background */}
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-70" />
-        <div className="absolute top-0 right-1/4 -z-10 w-96 h-96 bg-blue-50 rounded-full blur-3xl pointer-events-none" />
+        <div className={`absolute inset-0 -z-10 bg-[size:3.5rem_3.5rem] ${isDark ? 'bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] opacity-30' : 'bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] opacity-70'}`} />
+        <div className={`absolute top-0 right-1/4 -z-10 w-96 h-96 rounded-full blur-3xl pointer-events-none ${isDark ? 'bg-blue-900/25' : 'bg-blue-50'}`} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Column: Clean Swiss Minimalist Typography & CTAs */}
             <div className="lg:col-span-7 space-y-6">
               {/* Sleek Status Badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-bold tracking-wide shadow-sm">
-                <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+              <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wide shadow-sm border ${isDark ? 'bg-blue-950/70 border-blue-800/80 text-blue-400' : 'bg-blue-50 border-blue-200/80 text-blue-700'}`}>
+                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
                 <span>INDIA'S PREMIER RUNNING ACADEMY • 30+ CENTERS</span>
               </div>
 
               {/* Main Headline */}
               <div className="space-y-2">
-                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight text-slate-950 leading-[0.98]">
+                <h1 className={`text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[0.98] ${isDark ? 'text-white' : 'text-slate-950'}`}>
                   RUN WITH SCIENCE.
                   <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                  <span className={`text-transparent bg-clip-text ${isDark ? 'bg-gradient-to-r from-blue-400 to-indigo-400' : 'bg-gradient-to-r from-blue-600 to-indigo-600'}`}>
                     CONQUER EVERY MILE.
                   </span>
                 </h1>
               </div>
 
               {/* Refined Copy */}
-              <p className="text-base sm:text-lg text-slate-600 max-w-xl leading-relaxed">
+              <p className={`text-base sm:text-lg max-w-xl leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
                 Join 15,000+ runners powered by systematic periodization, heart-rate zone pacing, and certified Training Center Heads (TCH) across 30+ training grounds in Bengaluru, Pune, and Kolkata.
               </p>
 
@@ -51,41 +53,41 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
 
                 <button
                   onClick={onExploreCenters}
-                  className="py-3.5 px-6 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 text-xs sm:text-sm font-bold border border-slate-200 transition-all shadow-sm hover:shadow hover:-translate-y-0.5 flex items-center gap-2"
+                  className={`py-3.5 px-6 rounded-2xl text-xs sm:text-sm font-bold border transition-all shadow-sm hover:shadow hover:-translate-y-0.5 flex items-center gap-2 ${isDark ? 'bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-800' : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200'}`}
                 >
-                  <MapPin className="w-4 h-4 text-emerald-600 stroke-[2.5]" />
+                  <MapPin className="w-4 h-4 text-emerald-500 stroke-[2.5]" />
                   <span>Find Your Center (30+)</span>
                 </button>
 
                 <button
                   onClick={onOpenCalc}
-                  className="py-3.5 px-3 text-xs font-mono font-bold uppercase text-slate-500 hover:text-blue-600 underline underline-offset-4 flex items-center gap-1.5 transition-colors"
+                  className={`py-3.5 px-3 text-xs font-mono font-bold uppercase underline underline-offset-4 flex items-center gap-1.5 transition-colors ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}
                 >
-                  <Activity className="w-4 h-4 text-blue-600" />
+                  <Activity className="w-4 h-4 text-blue-500" />
                   <span>Pace Calculator</span>
                 </button>
               </div>
 
               {/* Clean Metric Counters */}
-              <div className="pt-4 border-t border-slate-100 grid grid-cols-3 gap-4 max-w-lg">
-                <div className="p-3 rounded-2xl bg-slate-50/80 border border-slate-100">
-                  <span className="block text-2xl sm:text-3xl font-black text-slate-900">15,000+</span>
-                  <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Runners Coached</span>
+              <div className={`pt-4 border-t grid grid-cols-3 gap-4 max-w-lg ${isDark ? 'border-slate-800/80' : 'border-slate-100'}`}>
+                <div className={`p-3 rounded-2xl border ${isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-slate-50/80 border-slate-100'}`}>
+                  <span className={`block text-2xl sm:text-3xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>15,000+</span>
+                  <span className={`text-[11px] font-medium uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Runners Coached</span>
                 </div>
-                <div className="p-3 rounded-2xl bg-blue-50/60 border border-blue-100/80">
-                  <span className="block text-2xl sm:text-3xl font-black text-blue-700">30+</span>
-                  <span className="text-[11px] font-medium text-slate-600 uppercase tracking-wider">Active Grounds</span>
+                <div className={`p-3 rounded-2xl border ${isDark ? 'bg-blue-950/60 border-blue-900/80' : 'bg-blue-50/60 border-blue-100/80'}`}>
+                  <span className={`block text-2xl sm:text-3xl font-black ${isDark ? 'text-blue-400' : 'text-blue-700'}`}>30+</span>
+                  <span className={`text-[11px] font-medium uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>Active Grounds</span>
                 </div>
-                <div className="p-3 rounded-2xl bg-slate-50/80 border border-slate-100">
-                  <span className="block text-2xl sm:text-3xl font-black text-emerald-600">98.4%</span>
-                  <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Injury-Free Rate</span>
+                <div className={`p-3 rounded-2xl border ${isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-slate-50/80 border-slate-100'}`}>
+                  <span className={`block text-2xl sm:text-3xl font-black ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>98.4%</span>
+                  <span className={`text-[11px] font-medium uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Injury-Free Rate</span>
                 </div>
               </div>
             </div>
 
             {/* Right Column: Hero Runner Image with Modern Elevated Card */}
             <div className="lg:col-span-5">
-              <div className="rounded-3xl p-3 bg-white border border-slate-200 shadow-[0_20px_40px_-10px_rgba(0,50,150,0.12)] relative overflow-hidden group">
+              <div className={`rounded-3xl p-3 border relative overflow-hidden group ${isDark ? 'bg-slate-900 border-slate-800 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.6)]' : 'bg-white border-slate-200 shadow-[0_20px_40px_-10px_rgba(0,50,150,0.12)]'}`}>
                 <div className="relative h-80 sm:h-96 w-full rounded-2xl overflow-hidden bg-slate-950">
                   <img
                     src="/images/jjs/home_2.jpg"

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Menu, X, ChevronRight, MapPin, Activity, ShieldCheck } from 'lucide-react';
+import { Menu, X, ChevronRight, Sun, Moon } from 'lucide-react';
 import JJSLogo from './JJSLogo';
 
-export default function Navbar({ onOpenRegister, onScrollTo }) {
+export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenRegister, onScrollTo }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const isDark = currentTheme === 'swiss-dark';
 
   const navItems = [
     { label: 'Programs', id: 'programs' },
@@ -72,8 +74,42 @@ export default function Navbar({ onOpenRegister, onScrollTo }) {
             ))}
           </nav>
 
-          {/* Right Action: Register CTA */}
-          <div className="hidden sm:flex items-center gap-3">
+          {/* Right Action: Theme Switcher & Register CTA */}
+          <div className="hidden sm:flex items-center gap-2.5">
+            {/* 2-Option Swiss Theme Switcher */}
+            <div
+              className="flex items-center p-1 rounded-full border text-[11px] font-bold shadow-sm"
+              style={{
+                backgroundColor: 'var(--card-inner)',
+                borderColor: 'var(--border-color)'
+              }}
+            >
+              <button
+                onClick={() => setTheme && setTheme('swiss-light')}
+                className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
+                  !isDark
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'hover:opacity-80 text-slate-400'
+                }`}
+                title="Logo Match: Clean Swiss White with Cobalt & Sprint Red matching the official logo"
+              >
+                <Sun className="w-3.5 h-3.5" />
+                <span>Logo Match</span>
+              </button>
+              <button
+                onClick={() => setTheme && setTheme('swiss-dark')}
+                className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
+                  isDark
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'hover:opacity-80 text-slate-600'
+                }`}
+                title="Logo Contrast: Deep Midnight Obsidian making the logo pop in high contrast"
+              >
+                <Moon className="w-3.5 h-3.5" />
+                <span>Logo Contrast</span>
+              </button>
+            </div>
+
             <button
               onClick={() => onOpenRegister()}
               className="py-2.5 px-5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-md shadow-blue-500/20 hover:scale-105 flex items-center gap-1.5 whitespace-nowrap bg-blue-600 hover:bg-blue-700 text-white"
@@ -83,8 +119,21 @@ export default function Navbar({ onOpenRegister, onScrollTo }) {
             </button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="flex items-center gap-2 sm:hidden">
+          {/* Mobile Actions: Contrast Toggle & Trial Button */}
+          <div className="flex items-center gap-1.5 sm:hidden">
+            <button
+              onClick={() => setTheme && setTheme(isDark ? 'swiss-light' : 'swiss-dark')}
+              className="p-2 rounded-xl border flex-shrink-0"
+              style={{
+                backgroundColor: 'var(--card-inner)',
+                borderColor: 'var(--border-color)',
+                color: 'var(--text-primary)'
+              }}
+              aria-label="Toggle logo contrast theme"
+              title={isDark ? 'Switch to Logo Match' : 'Switch to Logo Contrast'}
+            >
+              {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
+            </button>
             <button
               onClick={() => onOpenRegister()}
               className="px-3 py-1.5 rounded-full text-[11px] font-black uppercase tracking-wider bg-blue-600 text-white shadow-sm flex items-center gap-1"
