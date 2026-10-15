@@ -74,37 +74,43 @@ export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenR
 
           {/* Right Action: Theme Switcher & Register CTA */}
           <div className="hidden sm:flex items-center gap-2.5">
-            {/* 2-Option Swiss Theme Switcher */}
+            {/* Sleek Light / Dark Segmented Switcher */}
             <div
-              className="flex items-center p-1 rounded-full border text-[11px] font-bold shadow-sm"
+              className="flex items-center p-1 rounded-full border shadow-sm transition-colors flex-shrink-0"
               style={{
                 backgroundColor: 'var(--card-inner)',
                 borderColor: 'var(--border-color)'
               }}
+              role="radiogroup"
+              aria-label="Theme mode"
             >
               <button
                 onClick={() => setTheme && setTheme('swiss-light')}
-                className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
+                className={`px-3 py-1.5 rounded-full transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap text-xs font-bold select-none ${
                   !isDark
                     ? 'bg-[#318cdd] text-white shadow-sm'
-                    : 'hover:opacity-80 text-slate-400'
+                    : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white'
                 }`}
-                title="Logo Match: Clean Swiss White with Cerulean Blue (#318cdd) & Sprint Red (#d02426) matching the official logo"
+                title="Light Mode (Official Logo Match)"
+                aria-checked={!isDark}
+                role="radio"
               >
-                <Sun className="w-3.5 h-3.5" />
-                <span>Logo Match</span>
+                <Sun className={`w-3.5 h-3.5 flex-shrink-0 transition-transform ${!isDark ? 'text-white' : 'text-slate-500 dark:text-slate-400'}`} />
+                <span>Light</span>
               </button>
               <button
                 onClick={() => setTheme && setTheme('swiss-dark')}
-                className={`px-3 py-1.5 rounded-full transition-all flex items-center gap-1.5 ${
+                className={`px-3 py-1.5 rounded-full transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap text-xs font-bold select-none ${
                   isDark
                     ? 'bg-[#318cdd] text-white shadow-sm'
-                    : 'hover:opacity-80 text-slate-600'
+                    : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white'
                 }`}
-                title="Logo Contrast: Deep Midnight Obsidian making the logo pop in high contrast"
+                title="Dark Mode (Logo Contrast)"
+                aria-checked={isDark}
+                role="radio"
               >
-                <Moon className="w-3.5 h-3.5" />
-                <span>Logo Contrast</span>
+                <Moon className={`w-3.5 h-3.5 flex-shrink-0 transition-transform ${isDark ? 'text-white' : 'text-slate-500 dark:text-slate-400'}`} />
+                <span>Dark</span>
               </button>
             </div>
 
@@ -128,7 +134,7 @@ export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenR
                 color: 'var(--text-primary)'
               }}
               aria-label="Toggle logo contrast theme"
-              title={isDark ? 'Switch to Logo Match' : 'Switch to Logo Contrast'}
+              title={isDark ? 'Switch to Light Mode (Logo Match)' : 'Switch to Dark Mode (Logo Contrast)'}
             >
               {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
             </button>
