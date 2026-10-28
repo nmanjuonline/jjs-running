@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { MapPin, Clock, UserCheck, Search, ShieldCheck, ChevronRight, Navigation, Award, Zap, Flame, Sun, Activity, Compass, Radio, ExternalLink } from 'lucide-react';
+import { MapPin, Clock, UserCheck, Search, ShieldCheck, ChevronRight, Navigation, Award, Zap, Flame, Sun, Activity, Compass, Radio } from 'lucide-react';
 import { centersData } from '../data/centersData';
 
 const CITIES = ['All Cities', 'Bengaluru', 'Pune', 'Kolkata', 'Remote'];
@@ -43,7 +43,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
           : 'border-slate-200 shadow-[0_15px_35px_-10px_rgba(0,50,150,0.08)] bg-white'
       }`}>
         {/* Top Minimalist Filter Bar */}
-        <div className={`p-4 sm:p-5 border-b flex flex-col md:flex-row items-center justify-between gap-4 ${
+        <div className={`px-4 py-3 sm:px-5 sm:py-3.5 border-b flex flex-col md:flex-row items-center justify-between gap-3 ${
           isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/70'
         }`}>
           <div className="flex flex-wrap items-center gap-1.5 w-full md:w-auto">
@@ -60,7 +60,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                     const firstInCity = centersData.find(c => city === 'All Cities' || c.city === city);
                     if (firstInCity) setSelectedCenterId(firstInCity.id);
                   }}
-                  className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 ${
+                  className={`px-3 py-1 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 ${
                     isActive
                       ? 'bg-[#318cdd] text-white shadow-md shadow-[#318cdd]/25'
                       : isDark
@@ -80,14 +80,14 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
           </div>
 
           {/* Search Box */}
-          <div className="relative w-full md:w-72">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <div className="relative w-full md:w-64">
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               placeholder="Search neighborhood or TCH..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className={`w-full pl-9 pr-3 py-2 text-xs rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#318cdd]/30 ${
+              className={`w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#318cdd]/30 ${
                 isDark
                   ? 'border-slate-800 bg-slate-900 text-slate-100 placeholder:text-slate-500'
                   : 'border-slate-200 bg-white text-slate-900 placeholder:text-slate-400'
@@ -97,9 +97,9 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
         </div>
 
         {/* Master Detail Split */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[440px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[380px]">
           {/* Left Column: Center List */}
-          <div className={`lg:col-span-5 border-b lg:border-b-0 lg:border-r max-h-[460px] overflow-y-auto divide-y ${
+          <div className={`lg:col-span-5 border-b lg:border-b-0 lg:border-r max-h-[400px] overflow-y-auto divide-y ${
             isDark ? 'border-slate-800 divide-slate-800/80' : 'border-slate-100 divide-slate-100'
           }`}>
             {filteredCenters.map((center) => {
@@ -108,7 +108,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                 <div
                   key={center.id}
                   onClick={() => setSelectedCenterId(center.id)}
-                  className={`p-4 cursor-pointer transition-all flex items-center justify-between gap-3 text-left ${
+                  className={`p-3 sm:px-4 sm:py-2.5 cursor-pointer transition-all flex items-center justify-between gap-3 text-left ${
                     isSelected
                       ? isDark
                         ? 'bg-[#318cdd]/15 border-l-4 border-[#318cdd]'
@@ -149,107 +149,92 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
           </div>
 
           {/* Right Column: Sleek Spec Sheet */}
-          <div className={`lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between relative ${isDark ? 'bg-slate-900' : 'bg-white'}`}>
+          <div className={`lg:col-span-7 p-4 sm:p-5 flex flex-col justify-between relative ${isDark ? 'bg-slate-900' : 'bg-white'}`}>
             {currentCenter && (
-              <div className="space-y-6">
+              <div className="space-y-3.5">
                 <div>
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${
-                      isDark
-                        ? 'bg-[#318cdd]/15 text-[#4ca6f5] border border-[#318cdd]/30'
-                        : 'bg-[#318cdd]/10 text-[#1d72bd] border border-[#318cdd]/20'
-                    }`}>
-                      <MapPin className="w-3.5 h-3.5" />
-                      {currentCenter.city} • Active Training Ground
-                    </span>
-                    <span className="text-xs font-mono font-bold text-emerald-500 flex items-center gap-1">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-2.5 min-w-0">
+                      <h3 className={`text-xl sm:text-2xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                        {currentCenter.name}
+                      </h3>
+                      <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
+                        isDark
+                          ? 'bg-[#318cdd]/15 text-[#4ca6f5] border border-[#318cdd]/30'
+                          : 'bg-[#318cdd]/10 text-[#1d72bd] border border-[#318cdd]/20'
+                      }`}>
+                        <MapPin className="w-3 h-3" />
+                        {currentCenter.id === 'bengaluru-jayanagar'
+                          ? `${currentCenter.city} • Academy HQ`
+                          : currentCenter.city === 'Remote'
+                          ? 'Global • Virtual Campus'
+                          : currentCenter.city}
+                      </span>
+                    </div>
+
+                    <span className="text-xs font-mono font-bold text-emerald-500 flex items-center gap-1 flex-shrink-0">
                       <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                       {currentCenter.runnersCount}
                     </span>
                   </div>
-
-                  <h3 className={`text-2xl sm:text-3xl font-black tracking-tight mt-1 ${isDark ? 'text-white' : 'text-slate-950'}`}>
-                    {currentCenter.name}
-                  </h3>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                  <div className={`p-4 rounded-2xl border ${isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/80'}`}>
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">Training Ground</span>
-                      {mapUrl && (
-                        <a
-                          href={mapUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={`text-[11px] font-bold flex items-center gap-1 transition-colors ${
-                            isDark ? 'text-[#4ca6f5] hover:text-white' : 'text-[#318cdd] hover:text-[#1d72bd]'
-                          }`}
-                          title="Open Google Maps location"
-                        >
-                          <span>Open Map</span>
-                          <ExternalLink className="w-3 h-3" />
-                        </a>
-                      )}
-                    </div>
-                    <p className={`text-xs font-bold leading-snug ${isDark ? 'text-white' : 'text-slate-900'}`}>{currentCenter.venue}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div className={`p-3 rounded-xl border ${isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/80'}`}>
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Training Ground</span>
+                    <p className={`text-xs font-bold mt-0.5 leading-snug ${isDark ? 'text-white' : 'text-slate-900'}`}>{currentCenter.venue}</p>
                   </div>
 
-                  <div className={`p-4 rounded-2xl border ${isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/80'}`}>
+                  <div className={`p-3 rounded-xl border ${isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/80'}`}>
                     <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Training Center Head (TCH)</span>
-                    <p className="text-xs font-bold mt-1 flex items-center gap-1.5 text-[#d02426]">
-                      <UserCheck className="w-4 h-4 stroke-[2.5]" />
+                    <p className="text-xs font-bold mt-0.5 flex items-center gap-1.5 text-[#d02426]">
+                      <UserCheck className="w-3.5 h-3.5 stroke-[2.5]" />
                       {currentCenter.tch}
                     </p>
                   </div>
 
-                  <div className={`p-4 rounded-2xl border ${isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/80'}`}>
+                  <div className={`p-3 rounded-xl border ${isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/80'}`}>
                     <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Morning Timings</span>
-                    <p className={`text-xs font-bold mt-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>Tue, Thu, Sat &amp; Sun @ 5:30 AM</p>
+                    <p className={`text-xs font-bold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>Tue, Thu, Sat &amp; Sun @ 5:30 AM</p>
                   </div>
 
-                  <div className={`p-4 rounded-2xl border ${isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/80'}`}>
+                  <div className={`p-3 rounded-xl border ${isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/80'}`}>
                     <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Pace Groups</span>
-                    <p className="text-xs font-bold text-emerald-500 mt-1">Walk-Run to Boston Qualifier</p>
+                    <p className="text-xs font-bold text-emerald-500 mt-0.5">Walk-Run to Ultra Runners</p>
                   </div>
 
                   {currentCenter.vicinity && (
-                    <div className={`p-4 rounded-2xl border sm:col-span-2 ${isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/80'}`}>
+                    <div className={`p-3 rounded-xl border sm:col-span-2 ${isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/80'}`}>
                       <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Vicinity &amp; Nearby Areas</span>
-                      <p className={`text-xs mt-1 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>{currentCenter.vicinity}</p>
+                      <p className={`text-xs mt-0.5 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>{currentCenter.vicinity}</p>
                     </div>
                   )}
                 </div>
 
-                <div className={`pt-4 border-t flex flex-col sm:flex-row items-center justify-between gap-4 ${isDark ? 'border-slate-800' : 'border-slate-100'}`}>
-                  <div className="flex flex-wrap items-center gap-3">
-                    {mapUrl && (
-                      <a
-                        href={mapUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all border shadow-sm ${
-                          isDark
-                            ? 'bg-slate-800 hover:bg-slate-700 text-[#4ca6f5] border-slate-700'
-                            : 'bg-blue-50 hover:bg-blue-100 text-[#1d72bd] border-blue-200'
-                        }`}
-                        title="Open Google Maps location"
-                      >
-                        <Navigation className="w-3.5 h-3.5 text-[#318cdd]" />
-                        <span>Google Maps</span>
-                      </a>
-                    )}
-                    <div className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                      <span>Coached by </span>
-                      <strong className="text-[#d02426]">{currentCenter.tch} (TCH)</strong>
-                    </div>
-                  </div>
+                {/* Streamlined Action Bar: Clean Maps Directions + High-Conversion CTA */}
+                <div className={`pt-3 border-t flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 ${isDark ? 'border-slate-800' : 'border-slate-100'}`}>
+                  {mapUrl ? (
+                    <a
+                      href={mapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all border ${
+                        isDark
+                          ? 'bg-slate-800/90 hover:bg-slate-700 text-slate-200 border-slate-700/80 hover:border-slate-600'
+                          : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200 hover:border-slate-300 shadow-sm'
+                      }`}
+                      title="Open Google Maps location"
+                    >
+                      <Navigation className="w-3.5 h-3.5 text-[#318cdd]" />
+                      <span>Directions on Maps</span>
+                    </a>
+                  ) : <div />}
 
                   <button
                     onClick={() => onBookTrial(currentCenter)}
-                    className="w-full sm:w-auto py-3 px-6 rounded-2xl text-xs font-black uppercase tracking-wider transition-all hover:scale-105 flex items-center justify-center gap-2 text-white shadow-md bg-[#d02426] hover:bg-[#b51c1e] shadow-red-500/25"
+                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all duration-200 flex items-center justify-center gap-2 text-white bg-gradient-to-r from-[#d02426] to-[#b51c1e] hover:from-[#b51c1e] hover:to-[#9a1719] shadow-md shadow-red-600/25 hover:shadow-lg hover:shadow-red-600/35 hover:-translate-y-0.5 active:translate-y-0"
                   >
-                    <span>Book Free Trial Run at {currentCenter.name}</span>
+                    <span>Book Free Trial Run</span>
                     <ChevronRight className="w-4 h-4 stroke-[2.5]" />
                   </button>
                 </div>
@@ -355,95 +340,83 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
           </div>
 
           {/* Right Column: Selected Ground Spotlight */}
-          <div className="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between bg-white relative">
+          <div className="lg:col-span-7 p-4 sm:p-5 flex flex-col justify-between bg-white relative">
             {currentCenter && (
-              <div className="space-y-6">
+              <div className="space-y-3.5">
                 <div>
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-orange-50 border border-orange-200/80 text-orange-700">
-                      <Sun className="w-3.5 h-3.5 text-amber-500" />
-                      {currentCenter.city} • Morning Stride Ground
-                    </span>
-                    <span className="text-xs font-mono font-bold text-emerald-600 flex items-center gap-1">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-2.5 min-w-0">
+                      <h3 className="text-xl sm:text-2xl font-black tracking-tight text-zinc-950">
+                        {currentCenter.name}
+                      </h3>
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-orange-50 border border-orange-200/80 text-orange-700">
+                        <Sun className="w-3 h-3 text-amber-500" />
+                        {currentCenter.id === 'bengaluru-jayanagar'
+                          ? `${currentCenter.city} • Academy HQ`
+                          : currentCenter.city === 'Remote'
+                          ? 'Global • Virtual Campus'
+                          : currentCenter.city}
+                      </span>
+                    </div>
+
+                    <span className="text-xs font-mono font-bold text-emerald-600 flex items-center gap-1 flex-shrink-0">
                       <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                       {currentCenter.runnersCount}
                     </span>
                   </div>
-
-                  <h3 className="text-2xl sm:text-3xl font-black tracking-tight text-zinc-950 mt-1">
-                    {currentCenter.name}
-                  </h3>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                  <div className="p-4 rounded-2xl border border-orange-100 bg-orange-50/40">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">Training Ground</span>
-                      {mapUrl && (
-                        <a
-                          href={mapUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-[11px] font-bold text-orange-600 hover:text-orange-800 flex items-center gap-1 transition-colors"
-                        >
-                          <span>Open Map</span>
-                          <ExternalLink className="w-3 h-3" />
-                        </a>
-                      )}
-                    </div>
-                    <p className="text-xs font-bold text-zinc-900 leading-snug">{currentCenter.venue}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div className="p-3 rounded-xl border border-orange-100 bg-orange-50/40">
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 block">Training Ground</span>
+                    <p className="text-xs font-bold text-zinc-900 mt-0.5 leading-snug">{currentCenter.venue}</p>
                   </div>
 
-                  <div className="p-4 rounded-2xl border border-orange-100 bg-orange-50/40">
+                  <div className="p-3 rounded-xl border border-orange-100 bg-orange-50/40">
                     <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 block">Training Center Head (TCH)</span>
-                    <p className="text-xs font-bold mt-1 flex items-center gap-1.5 text-orange-700">
-                      <UserCheck className="w-4 h-4 stroke-[2.5]" />
+                    <p className="text-xs font-bold mt-0.5 flex items-center gap-1.5 text-orange-700">
+                      <UserCheck className="w-3.5 h-3.5 stroke-[2.5]" />
                       {currentCenter.tch}
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-2xl border border-orange-100 bg-orange-50/40">
+                  <div className="p-3 rounded-xl border border-orange-100 bg-orange-50/40">
                     <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 block">Morning Timings</span>
-                    <p className="text-xs font-bold text-zinc-900 mt-1">{currentCenter.timings || 'Tue, Thu, Sat & Sun @ 5:30 AM'}</p>
+                    <p className="text-xs font-bold text-zinc-900 mt-0.5">{currentCenter.timings || 'Tue, Thu, Sat & Sun @ 5:30 AM'}</p>
                   </div>
 
-                  <div className="p-4 rounded-2xl border border-orange-100 bg-orange-50/40">
+                  <div className="p-3 rounded-xl border border-orange-100 bg-orange-50/40">
                     <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 block">Pace Groups</span>
-                    <p className="text-xs font-bold text-emerald-600 mt-1">{currentCenter.level || 'Walk-Run to Marathon PBs'}</p>
+                    <p className="text-xs font-bold text-emerald-600 mt-0.5">Walk-Run to Ultra Runners</p>
                   </div>
 
                   {currentCenter.vicinity && (
-                    <div className="p-4 rounded-2xl border border-orange-100 bg-orange-50/40 sm:col-span-2">
+                    <div className="p-3 rounded-xl border border-orange-100 bg-orange-50/40 sm:col-span-2">
                       <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 block">Vicinity &amp; Access Radius</span>
-                      <p className="text-xs font-semibold text-zinc-700 mt-1 leading-relaxed">{currentCenter.vicinity}</p>
+                      <p className="text-xs font-semibold text-zinc-700 mt-0.5 leading-relaxed">{currentCenter.vicinity}</p>
                     </div>
                   )}
                 </div>
 
-                <div className="pt-4 border-t border-orange-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div className="flex flex-wrap items-center gap-3">
-                    {mapUrl && (
-                      <a
-                        href={mapUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold bg-orange-100/80 hover:bg-orange-200 text-orange-800 transition-colors border border-orange-200 shadow-sm"
-                      >
-                        <Navigation className="w-3.5 h-3.5 text-orange-600" />
-                        <span>Google Maps</span>
-                      </a>
-                    )}
-                    <div className="text-xs text-zinc-500">
-                      <span>Mentored by </span>
-                      <strong className="text-zinc-900">{currentCenter.tch} (TCH)</strong>
-                    </div>
-                  </div>
+                <div className="pt-3 border-t border-orange-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+                  {mapUrl ? (
+                    <a
+                      href={mapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-bold bg-orange-100/80 hover:bg-orange-200 text-orange-800 transition-colors border border-orange-200 shadow-sm"
+                      title="Open Google Maps location"
+                    >
+                      <Navigation className="w-3.5 h-3.5 text-orange-600" />
+                      <span>Directions on Maps</span>
+                    </a>
+                  ) : <div />}
 
                   <button
                     onClick={() => onBookTrial(currentCenter)}
-                    className="w-full sm:w-auto py-3 px-6 rounded-2xl text-xs font-black uppercase tracking-wider transition-all shadow-md shadow-orange-500/25 hover:scale-105 flex items-center justify-center gap-2 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white"
+                    className="w-full sm:w-auto px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold tracking-tight transition-all duration-200 flex items-center justify-center gap-2 text-white bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 shadow-md shadow-orange-500/25 hover:shadow-lg hover:shadow-orange-500/35 hover:-translate-y-0.5 active:translate-y-0"
                   >
-                    <span>Book Sunrise Trial at {currentCenter.name}</span>
+                    <span>Book Sunrise Trial</span>
                     <ChevronRight className="w-4 h-4 stroke-[2.5]" />
                   </button>
                 </div>
@@ -551,38 +524,27 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
             {currentCenter && (
               <div className="space-y-6">
                 <div>
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-[#ccff00]/10 border border-[#ccff00]/30 text-xs font-mono text-[#ccff00]">
-                      <Radio className="w-3.5 h-3.5" />
-                      SECTOR {currentCenter.city.toUpperCase()} // ACTIVE
-                    </span>
-                    <span className="text-xs font-mono text-[#ccff00] flex items-center gap-1">
+                  <div className="flex items-start sm:items-center justify-between gap-3">
+                    <h3 className="text-2xl sm:text-3xl font-black uppercase text-white">
+                      {currentCenter.name}
+                    </h3>
+                    <span className="text-xs font-mono text-[#ccff00] flex items-center gap-1 flex-shrink-0 pt-1 sm:pt-0">
                       <span className="w-2 h-2 rounded-full bg-[#ccff00] animate-pulse" />
                       {currentCenter.runnersCount}
                     </span>
                   </div>
 
-                  <h3 className="text-2xl sm:text-3xl font-black uppercase text-white mt-1">
-                    {currentCenter.name}
-                  </h3>
+                  <div className="flex items-center gap-2 mt-2">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-[#ccff00]/10 border border-[#ccff00]/30 text-xs font-mono text-[#ccff00]">
+                      <Radio className="w-3.5 h-3.5" />
+                      SECTOR {currentCenter.city.toUpperCase()} // ACTIVE
+                    </span>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono">
                   <div className="p-3.5 rounded-2xl bg-black/60 border border-white/5">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-[10px] text-slate-500 uppercase">GROUND VENUE</span>
-                      {mapUrl && (
-                        <a
-                          href={mapUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-[10px] text-[#ccff00] hover:underline flex items-center gap-1"
-                        >
-                          <span>Open Map</span>
-                          <ExternalLink className="w-3 h-3" />
-                        </a>
-                      )}
-                    </div>
+                    <span className="text-[10px] text-slate-500 uppercase block">GROUND VENUE</span>
                     <p className="text-xs font-bold text-white mt-1">{currentCenter.venue}</p>
                   </div>
 
@@ -609,30 +571,24 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                   )}
                 </div>
 
-                <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div className="flex flex-wrap items-center gap-3 font-mono">
-                    {mapUrl && (
-                      <a
-                        href={mapUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold bg-[#ccff00]/15 hover:bg-[#ccff00]/25 text-[#ccff00] transition-colors border border-[#ccff00]/40"
-                      >
-                        <Navigation className="w-3.5 h-3.5 text-[#ccff00]" />
-                        <span>GPS MAP</span>
-                      </a>
-                    )}
-                    <div className="text-xs font-mono text-slate-400">
-                      <span>DIRECTOR: </span>
-                      <strong className="text-white">{currentCenter.tch} (TCH)</strong>
-                    </div>
-                  </div>
+                <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 font-mono">
+                  {mapUrl ? (
+                    <a
+                      href={mapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs font-mono font-bold bg-[#ccff00]/15 hover:bg-[#ccff00]/25 text-[#ccff00] transition-colors border border-[#ccff00]/40"
+                    >
+                      <Navigation className="w-3.5 h-3.5 text-[#ccff00]" />
+                      <span>GPS TELEMETRY MAP</span>
+                    </a>
+                  ) : <div />}
 
                   <button
                     onClick={() => onBookTrial(currentCenter)}
-                    className="w-full sm:w-auto py-3 px-6 rounded-2xl text-xs font-mono font-black uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(204,255,0,0.3)] hover:scale-105 flex items-center justify-center gap-2 bg-[#ccff00] text-black"
+                    className="w-full sm:w-auto px-7 py-3 rounded-xl text-xs font-mono font-black uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(204,255,0,0.3)] hover:scale-105 flex items-center justify-center gap-2 bg-[#ccff00] text-black"
                   >
-                    <span>INITIALIZE TRIAL AT {currentCenter.name}</span>
+                    <span>INITIALIZE TRIAL RUN</span>
                     <ChevronRight className="w-4 h-4 stroke-[3]" />
                   </button>
                 </div>
@@ -738,38 +694,27 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
           {currentCenter && (
             <div className="space-y-6">
               <div>
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-[#ff1e42]/20 border border-[#ff1e42]/40 text-xs font-mono font-bold text-[#ff1e42]">
-                    <Flame className="w-3.5 h-3.5 fill-[#ff1e42]" />
-                    STAGING BASE // {currentCenter.city.toUpperCase()}
-                  </span>
-                  <span className="text-xs font-mono text-[#ff1e42] font-black flex items-center gap-1">
+                <div className="flex items-start sm:items-center justify-between gap-3">
+                  <h3 className="text-2xl sm:text-3xl font-black uppercase text-white tracking-tight">
+                    {currentCenter.name}
+                  </h3>
+                  <span className="text-xs font-mono text-[#ff1e42] font-black flex items-center gap-1 flex-shrink-0 pt-1 sm:pt-0">
                     <span className="w-2 h-2 rounded-full bg-[#ff1e42] animate-ping" />
                     {currentCenter.runnersCount}
                   </span>
                 </div>
 
-                <h3 className="text-2xl sm:text-3xl font-black uppercase text-white tracking-tight mt-1">
-                  {currentCenter.name}
-                </h3>
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-[#ff1e42]/20 border border-[#ff1e42]/40 text-xs font-mono font-bold text-[#ff1e42]">
+                    <Flame className="w-3.5 h-3.5 fill-[#ff1e42]" />
+                    STAGING BASE // {currentCenter.city.toUpperCase()}
+                  </span>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono">
                 <div className="p-3.5 rounded-xl bg-zinc-950 border border-zinc-800">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[10px] text-zinc-500 uppercase">DEPLOYED GROUND</span>
-                    {mapUrl && (
-                      <a
-                        href={mapUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[10px] text-[#ff1e42] hover:underline flex items-center gap-1"
-                      >
-                        <span>Open Map</span>
-                        <ExternalLink className="w-3 h-3" />
-                      </a>
-                    )}
-                  </div>
+                  <span className="text-[10px] text-zinc-500 uppercase block">DEPLOYED GROUND</span>
                   <p className="text-xs font-bold text-white mt-1">{currentCenter.venue}</p>
                 </div>
 
@@ -796,30 +741,24 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                 )}
               </div>
 
-              <div className="pt-4 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex flex-wrap items-center gap-3 font-mono">
-                  {mapUrl && (
-                    <a
-                      href={mapUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-[#ff1e42]/20 hover:bg-[#ff1e42]/30 text-white transition-colors border border-[#ff1e42]/50 shadow-sm"
-                    >
-                      <Navigation className="w-3.5 h-3.5 text-[#ff1e42]" />
-                      <span>GPS MAP</span>
-                    </a>
-                  )}
-                  <div className="text-xs font-mono text-zinc-400">
-                    <span>COMMANDER: </span>
-                    <strong className="text-white">{currentCenter.tch} (TCH)</strong>
-                  </div>
-                </div>
+              <div className="pt-4 border-t border-zinc-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 font-mono">
+                {mapUrl ? (
+                  <a
+                    href={mapUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-xs font-mono font-bold bg-[#ff1e42]/20 hover:bg-[#ff1e42]/30 text-white transition-colors border border-[#ff1e42]/50 shadow-sm"
+                  >
+                    <Navigation className="w-3.5 h-3.5 text-[#ff1e42]" />
+                    <span>GPS MAP DISPATCH</span>
+                  </a>
+                ) : <div />}
 
                 <button
                   onClick={() => onBookTrial(currentCenter)}
-                  className="w-full sm:w-auto py-3 px-6 rounded-xl text-xs font-mono font-black uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(255,30,66,0.35)] hover:bg-white hover:text-black flex items-center justify-center gap-2 bg-[#ff1e42] text-white"
+                  className="w-full sm:w-auto px-7 py-3 rounded-xl text-xs font-mono font-black uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(255,30,66,0.35)] hover:bg-white hover:text-black flex items-center justify-center gap-2 bg-[#ff1e42] text-white"
                 >
-                  <span>LOCK TRIAL AT {currentCenter.name}</span>
+                  <span>LOCK TRIAL SPOT</span>
                   <ChevronRight className="w-4 h-4 stroke-[3]" />
                 </button>
               </div>

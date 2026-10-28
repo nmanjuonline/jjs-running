@@ -105,7 +105,7 @@ export default function App() {
               className="text-xs sm:text-base mt-2 max-w-2xl mx-auto leading-relaxed"
               style={{ color: 'var(--text-secondary)' }}
             >
-              Progressive weekly mileage, structured tempo splits, and weekend long-run pacing-tailored for first-time 5K finishers to Boston Marathon qualifiers.
+              Progressive weekly mileage, structured tempo splits, and weekend long-run pacing—tailored for first-time 5K runners to seasoned marathoners.
             </p>
           </div>
 
