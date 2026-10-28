@@ -37,7 +37,7 @@ export const eventsData = [
   },
   {
     id: 'jjs-monsoon-relay',
-    title: 'JJS Annual Monsoon Inter-Center Ekiden Relay',
+    title: 'JJs Annual Monsoon Inter-Center Ekiden Relay',
     category: 'Club Championship',
     date: 'Jul 26, 2027',
     location: 'Bangalore University Green Boulevard',

@@ -101,7 +101,7 @@ export const programsData = [
   },
   {
     id: 'remote-global',
-    title: 'JJS Virtual & Global Remote Academy',
+    title: 'JJs Virtual & Global Remote Academy',
     category: 'Virtual',
     badge: 'Anywhere',
     duration: 'Custom Subscription',

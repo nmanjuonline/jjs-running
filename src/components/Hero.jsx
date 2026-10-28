@@ -4,119 +4,131 @@ import JJSLogo from './JJSLogo';
 
 export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOpenCalc }) {
   // =========================================================================
-  // THEME 1: SWISS CLEAN / OLYMPIC MINIMAL (Light • On Running Performance)
+  // THEME 1: SWISS CLEAN / OLYMPIC MINIMAL (Wide Panoramic Banner • JJs Red & Blue)
   // =========================================================================
-  if (currentTheme === 'olympic-clean' || currentTheme === 'street-crew') {
+  if (currentTheme === 'olympic-clean' || currentTheme === 'street-crew' || currentTheme === 'swiss-light' || currentTheme === 'swiss-dark') {
+    const isDark = currentTheme === 'swiss-dark';
+
     return (
-      <section className="relative overflow-hidden pt-6 pb-14 lg:py-18 bg-white text-slate-900 transition-colors">
+      <section className={`relative overflow-hidden pt-4 pb-12 lg:py-16 transition-colors duration-300 ${isDark ? 'bg-[#090d16] text-slate-100' : 'bg-white text-slate-900'}`}>
         {/* Subtle geometric grid background */}
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-70" />
-        <div className="absolute top-0 right-1/4 -z-10 w-96 h-96 bg-blue-50 rounded-full blur-3xl pointer-events-none" />
+        <div className={`absolute inset-0 -z-10 bg-[size:3.5rem_3.5rem] ${isDark ? 'bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] opacity-30' : 'bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] opacity-70'}`} />
+        <div className={`absolute top-0 right-1/4 -z-10 w-96 h-96 rounded-full blur-3xl pointer-events-none ${isDark ? 'bg-blue-900/25' : 'bg-blue-50'}`} />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Left Column: Clean Swiss Minimalist Typography & CTAs */}
-            <div className="lg:col-span-7 space-y-6">
-              {/* Sleek Status Badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-bold tracking-wide shadow-sm">
-                <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
-                <span>INDIA'S PREMIER RUNNING ACADEMY • 30+ CENTERS</span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+          {/* Grand Panoramic Hero Card (Wide Image Section) */}
+          <div className={`rounded-3xl border overflow-hidden relative group shadow-[0_20px_50px_-15px_rgba(0,50,150,0.18)] ${
+            isDark ? 'border-slate-800 bg-slate-950 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.7)]' : 'border-slate-200/90 bg-white'
+          }`}>
+            <div className="relative h-80 sm:h-[420px] md:h-[480px] w-full overflow-hidden bg-slate-950">
+              <img
+                src="/images/jjs/login_bg1.jpg"
+                alt="JJs Running squad stride in morning light"
+                className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+              />
+              {/* Cinematic multi-stop gradient overlay for crisp contrast */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-slate-950/20" />
+              <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-950/30 to-transparent pointer-events-none" />
+
+              {/* Floating Top Pills (Diversified Information) */}
+              <div className="absolute top-4 left-4 flex flex-wrap items-center gap-2">
+                <span className="px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#d02426] text-white shadow-lg flex items-center gap-1.5">
+                  <Zap className="w-3.5 h-3.5 fill-white" />
+                  AEROBIC PERIODIZATION
+                </span>
+                <span className="hidden sm:inline-flex px-3 py-1 rounded-full text-xs font-bold bg-white/95 text-slate-900 backdrop-blur-md shadow-md">
+                  15,000+ Coached Runners
+                </span>
+                <span className="hidden md:inline-flex px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#318cdd]/25 border border-[#318cdd]/50 text-[#4ca6f5] backdrop-blur-md">
+                  3 CITIES • TUE, THU, SAT &amp; SUN @ 5:30 AM
+                </span>
               </div>
 
-              {/* Main Headline */}
-              <div className="space-y-2">
-                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight text-slate-950 leading-[0.98]">
-                  RUN WITH SCIENCE.
-                  <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                    CONQUER EVERY MILE.
-                  </span>
-                </h1>
-              </div>
+              {/* Integrated Bottom Hero Content Overlay */}
+              <div className="absolute bottom-0 inset-x-0 p-5 sm:p-8 md:p-10 text-white">
+                <div className="max-w-3xl space-y-3">
+                  <h1 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[0.96]">
+                    RUN WITH SCIENCE.
+                    <br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4ca6f5] via-[#318cdd] to-[#ff4d4f]">
+                      CONQUER EVERY MILE.
+                    </span>
+                  </h1>
 
-              {/* Refined Copy */}
-              <p className="text-base sm:text-lg text-slate-600 max-w-xl leading-relaxed">
-                Join 15,000+ runners powered by systematic periodization, heart-rate zone pacing, and certified Training Center Heads (TCH) across 30+ training grounds in Bengaluru, Pune, and Kolkata.
-              </p>
+                  <p className="text-xs sm:text-base text-slate-200 max-w-2xl leading-relaxed font-medium">
+                    Structured heart-rate zone training, cadence calibration, and injury-free marathon milestones led by certified Training Center Heads (TCH).
+                  </p>
 
-              {/* Modern Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3.5 pt-2">
-                <button
-                  onClick={onBookTrial}
-                  className="py-3.5 px-7 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(0,85,255,0.35)] hover:shadow-[0_15px_30px_-5px_rgba(0,85,255,0.45)] hover:-translate-y-0.5 flex items-center gap-2"
-                >
-                  <span>Book Free Trial Run</span>
-                  <ArrowRight className="w-4 h-4 stroke-[2.5]" />
-                </button>
+                  <div className="flex flex-wrap items-center gap-3 pt-2">
+                    <button
+                      onClick={onBookTrial}
+                      className="py-3 px-6 sm:px-7 rounded-2xl bg-[#d02426] hover:bg-[#b51c1e] text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(208,36,38,0.5)] hover:-translate-y-0.5 flex items-center gap-2"
+                    >
+                      <span>Book Free Trial Run</span>
+                      <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                    </button>
 
-                <button
-                  onClick={onExploreCenters}
-                  className="py-3.5 px-6 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 text-xs sm:text-sm font-bold border border-slate-200 transition-all shadow-sm hover:shadow hover:-translate-y-0.5 flex items-center gap-2"
-                >
-                  <MapPin className="w-4 h-4 text-emerald-600 stroke-[2.5]" />
-                  <span>Find Your Center (30+)</span>
-                </button>
+                    <button
+                      onClick={onExploreCenters}
+                      className="py-3 px-5 sm:px-6 rounded-2xl bg-white/95 hover:bg-white text-slate-900 text-xs sm:text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 flex items-center gap-2"
+                    >
+                      <MapPin className="w-4 h-4 text-[#318cdd] stroke-[2.5]" />
+                      <span>Explore Nearby Grounds</span>
+                    </button>
 
-                <button
-                  onClick={onOpenCalc}
-                  className="py-3.5 px-3 text-xs font-mono font-bold uppercase text-slate-500 hover:text-blue-600 underline underline-offset-4 flex items-center gap-1.5 transition-colors"
-                >
-                  <Activity className="w-4 h-4 text-blue-600" />
-                  <span>Pace Calculator</span>
-                </button>
-              </div>
-
-              {/* Clean Metric Counters */}
-              <div className="pt-4 border-t border-slate-100 grid grid-cols-3 gap-4 max-w-lg">
-                <div className="p-3 rounded-2xl bg-slate-50/80 border border-slate-100">
-                  <span className="block text-2xl sm:text-3xl font-black text-slate-900">15,000+</span>
-                  <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Runners Coached</span>
+                    <button
+                      onClick={onOpenCalc}
+                      className="py-3 px-4 rounded-2xl bg-black/40 hover:bg-black/60 text-white border border-white/20 backdrop-blur-md text-xs sm:text-sm font-mono font-bold uppercase transition-all hover:-translate-y-0.5 flex items-center gap-1.5"
+                    >
+                      <Activity className="w-4 h-4 text-[#4ca6f5]" />
+                      <span>Pace Calculator</span>
+                    </button>
+                  </div>
                 </div>
-                <div className="p-3 rounded-2xl bg-blue-50/60 border border-blue-100/80">
-                  <span className="block text-2xl sm:text-3xl font-black text-blue-700">30+</span>
-                  <span className="text-[11px] font-medium text-slate-600 uppercase tracking-wider">Active Grounds</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Clean Metric Counters Row Beneath Panoramic Banner */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            <div className={`p-4 rounded-2xl border transition-all ${
+              isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
+            }`}>
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className={`block text-2xl sm:text-3xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>15,000+</span>
+                  <span className={`text-[11px] font-semibold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Runners Coached • 12+ Years</span>
                 </div>
-                <div className="p-3 rounded-2xl bg-slate-50/80 border border-slate-100">
-                  <span className="block text-2xl sm:text-3xl font-black text-emerald-600">98.4%</span>
-                  <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Injury-Free Rate</span>
+                <div className="w-9 h-9 rounded-xl bg-[#d02426]/10 flex items-center justify-center text-[#d02426]">
+                  <Flame className="w-5 h-5 fill-[#d02426]" />
                 </div>
               </div>
             </div>
 
-            {/* Right Column: Hero Runner Image with Modern Elevated Card */}
-            <div className="lg:col-span-5">
-              <div className="rounded-3xl p-3 bg-white border border-slate-200 shadow-[0_20px_40px_-10px_rgba(0,50,150,0.12)] relative overflow-hidden group">
-                <div className="relative h-80 sm:h-96 w-full rounded-2xl overflow-hidden bg-slate-950">
-                  <img
-                    src="/images/jjs/home_2.jpg"
-                    alt="JJs Runners in morning stride at Cubbon Park"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/25 to-transparent" />
+            <div className={`p-4 rounded-2xl border transition-all ${
+              isDark ? 'bg-[#318cdd]/15 border-[#318cdd]/30' : 'bg-[#318cdd]/8 border-[#318cdd]/25 shadow-sm'
+            }`}>
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className={`block text-2xl sm:text-3xl font-black ${isDark ? 'text-[#4ca6f5]' : 'text-[#1d72bd]'}`}>30+</span>
+                  <span className={`text-[11px] font-semibold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-[#1d72bd]'}`}>Active Training Grounds</span>
+                </div>
+                <div className="w-9 h-9 rounded-xl bg-[#318cdd]/20 flex items-center justify-center text-[#318cdd]">
+                  <MapPin className="w-5 h-5" />
+                </div>
+              </div>
+            </div>
 
-                  {/* Top Floating Badge */}
-                  <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1 rounded-full text-[11px] font-bold text-slate-900 shadow-md flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                    <span>MORNING SQUAD • 05:30 AM</span>
-                  </div>
-
-                  {/* Bottom Info Overlay */}
-                  <div className="absolute bottom-3 inset-x-3 p-4 rounded-xl bg-slate-900/90 border border-white/10 backdrop-blur-md text-white flex items-center justify-between">
-                    <div>
-                      <span className="text-[10px] font-mono text-blue-400 font-bold uppercase tracking-wider block">
-                        TRAINING CENTER HEAD (TCH) ON GROUND
-                      </span>
-                      <span className="text-xs font-bold text-white mt-0.5 block">
-                        Tue, Thu, Sat &amp; Sun @ 5:30 AM
-                      </span>
-                    </div>
-                    <button
-                      onClick={onBookTrial}
-                      className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-md"
-                    >
-                      Join ➔
-                    </button>
-                  </div>
+            <div className={`p-4 rounded-2xl border transition-all ${
+              isDark ? 'bg-slate-900/80 border-slate-800' : 'bg-white border-slate-200/90 shadow-sm'
+            }`}>
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className={`block text-2xl sm:text-3xl font-black ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>98.4%</span>
+                  <span className={`text-[11px] font-semibold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Injury-Free Completion Rate</span>
+                </div>
+                <div className="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600">
+                  <CheckCircle2 className="w-5 h-5" />
                 </div>
               </div>
             </div>
@@ -158,7 +170,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
             </div>
           </div>
 
-          {/* Grand Panoramic Dawn Card with Authentic JJS Pack Photo */}
+          {/* Grand Panoramic Dawn Card with Authentic JJs Pack Photo */}
           <div className="rounded-3xl border border-orange-200/90 bg-white shadow-[0_20px_50px_-15px_rgba(255,72,0,0.15)] overflow-hidden relative group">
             <div className="relative h-72 sm:h-96 md:h-[440px] w-full overflow-hidden bg-zinc-950">
               <img

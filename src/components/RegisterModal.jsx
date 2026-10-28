@@ -110,9 +110,7 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
             <div className="mb-6">
               <div className="flex items-center justify-between gap-3 mb-3">
                 <JJSLogo className="h-9 sm:h-10 w-auto" />
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider"
-                  style={{ backgroundColor: 'var(--badge-bg)', color: 'var(--accent)' }}
-                >
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-red-50 text-[#d02426] border border-red-200/80">
                   <Sparkles className="w-3.5 h-3.5" />
                   Zero Obligation
                 </span>
@@ -237,11 +235,7 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 px-6 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-xl flex items-center justify-center gap-2 hover:scale-[1.01]"
-                style={{
-                  backgroundColor: 'var(--accent)',
-                  color: 'var(--accent-contrast)'
-                }}
+                className="w-full py-3.5 px-6 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-xl flex items-center justify-center gap-2 hover:scale-[1.01] bg-[#d02426] hover:bg-[#b51c1e] text-white shadow-red-500/25"
               >
                 {loading ? 'Registering on Roster...' : 'Confirm Registration / Free Trial'}
               </button>
