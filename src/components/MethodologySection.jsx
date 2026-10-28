@@ -80,7 +80,7 @@ export default function MethodologySection({ currentTheme = 'olympic-clean', onE
         </h2>
 
         <p className="text-xs sm:text-base opacity-75 leading-relaxed">
-          How JJs Running achieves a 98%+ injury-free rate across 15,000+ runners, transforming zero-running beginners into marathoners and Boston Qualifiers.
+          How JJs Running achieves a 98%+ injury-free rate across 15,000+ runners, transforming zero-running beginners into confident marathon finishers and endurance runners.
         </p>
       </div>
 

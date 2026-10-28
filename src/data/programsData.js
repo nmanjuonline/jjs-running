@@ -65,7 +65,7 @@ export const programsData = [
     category: 'Marathon',
     badge: 'Elite Track',
     duration: '20-24 Weeks',
-    level: 'Full Marathoners & Boston Qualifiers',
+    level: 'Full Marathoners & Competitive Runners',
     frequency: '5 Days / Week',
     price: '₹6,000',
     tax: '+ 5% GST',
@@ -74,7 +74,7 @@ export const programsData = [
       '30-34km supported simulation runs with hydration stations',
       'Glycogen depletion and re-fueling drills',
       'Heart rate zone & power meter tracking',
-      'BQ (Boston Qualifier) pacing squads'
+      'Targeted marathon pacing squads'
     ],
     image: '/images/jjs/1591953102.png',
     targetRace: 'Tata Mumbai Marathon / World Majors'
