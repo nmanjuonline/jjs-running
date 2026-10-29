@@ -624,102 +624,8 @@ function RadixLocationSelect({ value, onChange, error }) {
 }
 
 // =============================================================================
-// 4. Popover Race Timing Drum/Wheel Control (Option 3: iOS Cylinder Style)
+// 4. Popover Race Timing Spinner Control (HH : MM : SS)
 // =============================================================================
-const ITEM_HEIGHT = 38; // px
-const VISIBLE_COUNT = 5;
-const DRUM_HEIGHT = ITEM_HEIGHT * VISIBLE_COUNT; // 190px
-const DRUM_PADDING = (DRUM_HEIGHT - ITEM_HEIGHT) / 2; // 76px
-
-function DrumWheel({ items, value, onChange }) {
-  const containerRef = useRef(null);
-  const isScrollingRef = useRef(false);
-  const timeoutRef = useRef(null);
-
-  // Position the scroll accurately whenever value changes (unless actively user-scrolling)
-  useEffect(() => {
-    if (isScrollingRef.current) return;
-    const idx = items.indexOf(value);
-    if (idx !== -1 && containerRef.current) {
-      const targetTop = idx * ITEM_HEIGHT;
-      if (Math.abs(containerRef.current.scrollTop - targetTop) > 1) {
-        containerRef.current.scrollTop = targetTop;
-      }
-      // Guarantee alignment after DOM paint / popover entrance
-      const timer = setTimeout(() => {
-        if (containerRef.current && !isScrollingRef.current) {
-          containerRef.current.scrollTop = targetTop;
-        }
-      }, 30);
-      return () => clearTimeout(timer);
-    }
-  }, [value, items]);
-
-  const handleScroll = (e) => {
-    isScrollingRef.current = true;
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-
-    const target = e.currentTarget;
-    timeoutRef.current = setTimeout(() => {
-      isScrollingRef.current = false;
-      const index = Math.round(target.scrollTop / ITEM_HEIGHT);
-      const boundedIndex = Math.max(0, Math.min(items.length - 1, index));
-      if (items[boundedIndex] !== undefined && items[boundedIndex] !== value) {
-        onChange(items[boundedIndex]);
-      }
-    }, 100);
-  };
-
-  const handleItemClick = (item, idx) => {
-    onChange(item);
-    if (containerRef.current) {
-      containerRef.current.scrollTo({
-        top: idx * ITEM_HEIGHT,
-        behavior: 'smooth'
-      });
-    }
-  };
-
-  return (
-    <div
-      ref={containerRef}
-      onScroll={handleScroll}
-      className="w-16 sm:w-18 overflow-y-auto snap-y snap-mandatory no-scrollbar select-none"
-      style={{
-        height: `${DRUM_HEIGHT}px`,
-        paddingTop: `${DRUM_PADDING}px`,
-        paddingBottom: `${DRUM_PADDING}px`,
-        scrollSnapType: 'y mandatory',
-        WebkitOverflowScrolling: 'touch',
-        scrollbarWidth: 'none',
-        msOverflowStyle: 'none'
-      }}
-    >
-      {items.map((item, idx) => {
-        const isSelected = item === value;
-        return (
-          <button
-            type="button"
-            key={item}
-            onClick={() => handleItemClick(item, idx)}
-            style={{
-              height: `${ITEM_HEIGHT}px`,
-              scrollSnapAlign: 'center'
-            }}
-            className={`w-full flex items-center justify-center font-mono transition-all duration-150 cursor-pointer ${
-              isSelected
-                ? 'text-[#318cdd] font-black text-lg sm:text-xl scale-110 opacity-100'
-                : 'text-current opacity-30 font-medium text-xs sm:text-sm hover:opacity-75 scale-90'
-            }`}
-          >
-            {item}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
 function PopoverTimePicker({ value, onChange, disabled = false, error = '' }) {
   const [open, setOpen] = useState(false);
 
@@ -744,21 +650,37 @@ function PopoverTimePicker({ value, onChange, disabled = false, error = '' }) {
     [onChange]
   );
 
-  const hoursList = useMemo(() => {
-    const curH = parseInt(hours, 10) || 0;
-    const maxH = Math.max(23, curH);
-    return Array.from({ length: maxH + 1 }, (_, i) => String(i).padStart(2, '0'));
-  }, [hours]);
+  const adjustHours = (delta) => {
+    const cur = parseInt(hours, 10) || 0;
+    const next = (cur + delta + 100) % 100;
+    updateTiming(next, minutes, seconds);
+  };
 
-  const minutesList = useMemo(
-    () => Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0')),
-    []
-  );
+  const adjustMinutes = (delta) => {
+    const cur = parseInt(minutes, 10) || 0;
+    const next = (cur + delta + 60) % 60;
+    updateTiming(hours, next, seconds);
+  };
 
-  const secondsList = useMemo(
-    () => Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0')),
-    []
-  );
+  const adjustSeconds = (delta) => {
+    const cur = parseInt(seconds, 10) || 0;
+    const next = (cur + delta + 60) % 60;
+    updateTiming(hours, minutes, next);
+  };
+
+  const handleDirectChange = (unit, val) => {
+    const clean = val.replace(/[^0-9]/g, '').slice(-2);
+    if (unit === 'hours') {
+      const num = Math.min(99, Number(clean) || 0);
+      updateTiming(num, minutes, seconds);
+    } else if (unit === 'minutes') {
+      const num = Math.min(59, Number(clean) || 0);
+      updateTiming(hours, num, seconds);
+    } else if (unit === 'seconds') {
+      const num = Math.min(59, Number(clean) || 0);
+      updateTiming(hours, minutes, num);
+    }
+  };
 
   if (disabled) {
     return (
@@ -804,7 +726,7 @@ function PopoverTimePicker({ value, onChange, disabled = false, error = '' }) {
         <Popover.Content
           sideOffset={8}
           align="end"
-          className="z-[9999] rounded-2xl border shadow-2xl p-4 sm:p-5 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100 w-[270px] sm:w-[290px]"
+          className="z-[9999] rounded-2xl border shadow-2xl p-4 sm:p-5 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100"
           style={{
             backgroundColor: 'var(--card-bg)',
             borderColor: 'var(--border-color)',
@@ -835,81 +757,192 @@ function PopoverTimePicker({ value, onChange, disabled = false, error = '' }) {
             </span>
           </div>
 
-          {/* Drum Picker Cylinder Body */}
-          <div
-            className="relative rounded-xl p-1 overflow-hidden"
-            style={{ backgroundColor: 'var(--card-inner)' }}
-          >
-            {/* Active Center Highlight Lens */}
-            <div
-              className="absolute left-1 right-1 top-1/2 -translate-y-1/2 rounded-lg border border-[#318cdd]/40 bg-[#318cdd]/15 pointer-events-none z-0 shadow-xs"
-              style={{ height: `${ITEM_HEIGHT}px` }}
-            />
+          {/* Time Spinner Columns */}
+          <div className="flex items-center justify-center gap-2 sm:gap-3 font-mono select-none">
+            {/* Hours Column */}
+            <div className="flex flex-col items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => adjustHours(1)}
+                className="w-10 h-8 flex items-center justify-center rounded-lg border transition-all hover:scale-105 active:scale-95 cursor-pointer hover:bg-[#318cdd]/15 text-[#318cdd]"
+                style={{
+                  backgroundColor: 'var(--card-inner)',
+                  borderColor: 'var(--border-color)'
+                }}
+                aria-label="Increment hours"
+              >
+                <ChevronUp className="w-5 h-5 stroke-[2.5]" />
+              </button>
 
-            {/* Top 3D Cylinder Fade */}
-            <div
-              className="absolute top-0 left-0 right-0 h-16 pointer-events-none z-10"
-              style={{
-                background: 'linear-gradient(to bottom, var(--card-inner) 25%, transparent 100%)'
-              }}
-            />
-
-            {/* Bottom 3D Cylinder Fade */}
-            <div
-              className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none z-10"
-              style={{
-                background: 'linear-gradient(to top, var(--card-inner) 25%, transparent 100%)'
-              }}
-            />
-
-            {/* The 3 Scroll Drum Wheels */}
-            <div className="relative z-5 flex items-center justify-center gap-1 sm:gap-2">
-              <DrumWheel
-                items={hoursList}
+              <input
+                type="text"
+                inputMode="numeric"
+                maxLength={2}
                 value={hours}
-                onChange={(val) => updateTiming(val, minutes, seconds)}
+                onChange={(e) => handleDirectChange('hours', e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'ArrowUp') adjustHours(1);
+                  if (e.key === 'ArrowDown') adjustHours(-1);
+                }}
+                className="w-12 h-11 text-center text-lg sm:text-xl font-black rounded-lg border bg-transparent focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40"
+                style={{
+                  backgroundColor: 'var(--card-inner)',
+                  borderColor: 'var(--border-color)',
+                  color: 'var(--text-heading)'
+                }}
+                aria-label="Hours"
               />
-              <span className="text-lg font-black text-[#318cdd] opacity-60 select-none pb-0.5">:</span>
-              <DrumWheel
-                items={minutesList}
+
+              <button
+                type="button"
+                onClick={() => adjustHours(-1)}
+                className="w-10 h-8 flex items-center justify-center rounded-lg border transition-all hover:scale-105 active:scale-95 cursor-pointer hover:bg-[#318cdd]/15 text-[#318cdd]"
+                style={{
+                  backgroundColor: 'var(--card-inner)',
+                  borderColor: 'var(--border-color)'
+                }}
+                aria-label="Decrement hours"
+              >
+                <ChevronDown className="w-5 h-5 stroke-[2.5]" />
+              </button>
+
+              <span className="text-[10px] uppercase font-bold tracking-wider opacity-60" style={{ color: 'var(--text-secondary)' }}>
+                Hours
+              </span>
+            </div>
+
+            <span className="text-xl sm:text-2xl font-black opacity-40 -mt-5">:</span>
+
+            {/* Minutes Column */}
+            <div className="flex flex-col items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => adjustMinutes(1)}
+                className="w-10 h-8 flex items-center justify-center rounded-lg border transition-all hover:scale-105 active:scale-95 cursor-pointer hover:bg-[#318cdd]/15 text-[#318cdd]"
+                style={{
+                  backgroundColor: 'var(--card-inner)',
+                  borderColor: 'var(--border-color)'
+                }}
+                aria-label="Increment minutes"
+              >
+                <ChevronUp className="w-5 h-5 stroke-[2.5]" />
+              </button>
+
+              <input
+                type="text"
+                inputMode="numeric"
+                maxLength={2}
                 value={minutes}
-                onChange={(val) => updateTiming(hours, val, seconds)}
+                onChange={(e) => handleDirectChange('minutes', e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'ArrowUp') adjustMinutes(1);
+                  if (e.key === 'ArrowDown') adjustMinutes(-1);
+                }}
+                className="w-12 h-11 text-center text-lg sm:text-xl font-black rounded-lg border bg-transparent focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40"
+                style={{
+                  backgroundColor: 'var(--card-inner)',
+                  borderColor: 'var(--border-color)',
+                  color: 'var(--text-heading)'
+                }}
+                aria-label="Minutes"
               />
-              <span className="text-lg font-black text-[#318cdd] opacity-60 select-none pb-0.5">:</span>
-              <DrumWheel
-                items={secondsList}
+
+              <button
+                type="button"
+                onClick={() => adjustMinutes(-1)}
+                className="w-10 h-8 flex items-center justify-center rounded-lg border transition-all hover:scale-105 active:scale-95 cursor-pointer hover:bg-[#318cdd]/15 text-[#318cdd]"
+                style={{
+                  backgroundColor: 'var(--card-inner)',
+                  borderColor: 'var(--border-color)'
+                }}
+                aria-label="Decrement minutes"
+              >
+                <ChevronDown className="w-5 h-5 stroke-[2.5]" />
+              </button>
+
+              <span className="text-[10px] uppercase font-bold tracking-wider opacity-60" style={{ color: 'var(--text-secondary)' }}>
+                Mins
+              </span>
+            </div>
+
+            <span className="text-xl sm:text-2xl font-black opacity-40 -mt-5">:</span>
+
+            {/* Seconds Column */}
+            <div className="flex flex-col items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => adjustSeconds(1)}
+                className="w-10 h-8 flex items-center justify-center rounded-lg border transition-all hover:scale-105 active:scale-95 cursor-pointer hover:bg-[#318cdd]/15 text-[#318cdd]"
+                style={{
+                  backgroundColor: 'var(--card-inner)',
+                  borderColor: 'var(--border-color)'
+                }}
+                aria-label="Increment seconds"
+              >
+                <ChevronUp className="w-5 h-5 stroke-[2.5]" />
+              </button>
+
+              <input
+                type="text"
+                inputMode="numeric"
+                maxLength={2}
                 value={seconds}
-                onChange={(val) => updateTiming(hours, minutes, val)}
+                onChange={(e) => handleDirectChange('seconds', e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'ArrowUp') adjustSeconds(1);
+                  if (e.key === 'ArrowDown') adjustSeconds(-1);
+                }}
+                className="w-12 h-11 text-center text-lg sm:text-xl font-black rounded-lg border bg-transparent focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40"
+                style={{
+                  backgroundColor: 'var(--card-inner)',
+                  borderColor: 'var(--border-color)',
+                  color: 'var(--text-heading)'
+                }}
+                aria-label="Seconds"
               />
+
+              <button
+                type="button"
+                onClick={() => adjustSeconds(-1)}
+                className="w-10 h-8 flex items-center justify-center rounded-lg border transition-all hover:scale-105 active:scale-95 cursor-pointer hover:bg-[#318cdd]/15 text-[#318cdd]"
+                style={{
+                  backgroundColor: 'var(--card-inner)',
+                  borderColor: 'var(--border-color)'
+                }}
+                aria-label="Decrement seconds"
+              >
+                <ChevronDown className="w-5 h-5 stroke-[2.5]" />
+              </button>
+
+              <span className="text-[10px] uppercase font-bold tracking-wider opacity-60" style={{ color: 'var(--text-secondary)' }}>
+                Secs
+              </span>
             </div>
           </div>
 
-          {/* Drum Column Labels */}
-          <div
-            className="grid grid-cols-3 text-center pt-2 text-[10px] uppercase font-bold tracking-wider opacity-60"
-            style={{ color: 'var(--text-secondary)' }}
-          >
-            <span>Hours</span>
-            <span>Mins</span>
-            <span>Secs</span>
-          </div>
-
-          {/* Popover Footer */}
+          {/* Action Footer */}
           <div
             className="pt-3 mt-3 border-t flex items-center justify-between"
             style={{ borderColor: 'var(--border-color)' }}
           >
             <button
               type="button"
-              onClick={() => updateTiming('00', '00', '00')}
-              className="text-xs font-semibold px-2 py-1 rounded-md opacity-70 hover:opacity-100 hover:bg-[#318cdd]/10 transition-colors cursor-pointer"
-              style={{ color: 'var(--text-secondary)' }}
+              onClick={() => {
+                onChange('');
+                setOpen(false);
+              }}
+              className="text-xs font-semibold px-2 py-1 rounded-md text-[#d02426] hover:bg-[#d02426]/10 transition-colors cursor-pointer"
             >
-              Reset
+              Clear
             </button>
             <button
               type="button"
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                if (!value) {
+                  updateTiming(hours, minutes, seconds);
+                }
+                setOpen(false);
+              }}
               className="px-4 py-1.5 rounded-lg text-xs font-bold text-white bg-[#318cdd] hover:bg-[#256eb0] transition-colors cursor-pointer shadow-xs active:scale-95"
             >
               Done
