@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, Flame, ArrowUpRight, Calendar, Users, Award, ChevronRight, Zap, Sun, Clock, ShieldCheck, Activity } from 'lucide-react';
+import { Check, ArrowUpRight, Award, Sun } from 'lucide-react';
 import { programsData } from '../data/programsData';
 
 const CATEGORIES = ['All Programs', 'Beginner', '10K', 'Half Marathon', 'Marathon', 'Ultra Trail', 'Virtual'];

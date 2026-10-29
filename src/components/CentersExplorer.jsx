@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { MapPin, Clock, UserCheck, Search, ShieldCheck, ChevronRight, ChevronDown, Navigation, Award, Zap, Flame, Sun, Activity, Compass, Radio } from 'lucide-react';
+import { MapPin, Clock, UserCheck, Search, ChevronRight, ChevronDown, Navigation, Zap, Flame, Sun, Compass, Radio } from 'lucide-react';
 import { centersData } from '../data/centersData';
 
 const CITIES = ['All Cities', 'Bengaluru', 'Pune', 'Kolkata', 'Remote'];
@@ -128,7 +128,20 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                 isDark ? 'divide-slate-800/70' : 'divide-slate-200/80'
               }`}
             >
-              {filteredCenters.map((center) => {
+              {filteredCenters.length === 0 ? (
+                <div className="p-6 text-center space-y-2.5">
+                  <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                    No training centers found matching "{searchQuery}".
+                  </p>
+                  <button
+                    onClick={() => { setSearchQuery(''); setSelectedCity('All Cities'); }}
+                    className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#318cdd] text-white hover:bg-[#2573b8] transition-all cursor-pointer shadow-sm"
+                  >
+                    Clear Filter &amp; Show All
+                  </button>
+                </div>
+              ) : (
+                filteredCenters.map((center) => {
                 const isSelected = currentCenter && currentCenter.id === center.id;
                 return (
                   <div
@@ -190,7 +203,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                     </div>
                   </div>
                 );
-              })}
+              }))}
             </div>
           </div>
 

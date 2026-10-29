@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Flame, Shield, MapPin, Play, Activity, Sparkles, ChevronRight, ChevronLeft, Award, Clock, Compass, Zap, CheckCircle2, Sun, Quote } from 'lucide-react';
+import { ArrowRight, Flame, MapPin, Activity, ChevronRight, ChevronLeft, Zap, CheckCircle2, Sun, Quote } from 'lucide-react';
 
 const HERO_IMAGES = [
   {
@@ -28,7 +28,7 @@ const HERO_IMAGES = [
     isCoach: true
   }
 ];
-import JJSLogo from './JJSLogo';
+
 
 export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOpenCalc }) {
   const [activeSlide, setActiveSlide] = useState(0);

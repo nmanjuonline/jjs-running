@@ -1,7 +1,7 @@
 import React from 'react';
 import { ShieldCheck, Heart, Zap, Activity, Coffee, Users, Calendar, Award, CheckCircle2, ChevronRight, Compass } from 'lucide-react';
 
-export default function MethodologySection({ currentTheme = 'olympic-clean', onExploreCenters }) {
+export default function MethodologySection({ onExploreCenters }) {
   const pillars = [
     {
       icon: Heart,
