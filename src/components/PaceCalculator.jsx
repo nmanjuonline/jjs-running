@@ -423,7 +423,7 @@ export default function PaceCalculator({ onSelectProgram, defaultExpanded = fals
                 <span className="text-xs opacity-75 font-medium">Ready to hit this time?</span>
                 <button
                   onClick={handleSelectProgramCTA}
-                  className="py-2 px-4 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-md hover:scale-105 flex items-center gap-1.5 text-white bg-[#d02426] hover:bg-[#b51c1e] cursor-pointer"
+                  className="py-2 px-4 rounded-xl text-xs font-black tracking-wider transition-all duration-200 shadow-md hover:scale-105 flex items-center gap-1.5 text-white bg-[#d02426] hover:bg-[#b51c1e] cursor-pointer"
                 >
                   <span>Train with JJs</span>
                   <ArrowRight className="w-3.5 h-3.5" />

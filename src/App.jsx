@@ -11,7 +11,7 @@ import RaceCalendar from './components/RaceCalendar';
 import Testimonials from './components/Testimonials';
 import RegisterModal from './components/RegisterModal';
 import Footer from './components/Footer';
-import JJSLogo from './components/JJSLogo';
+import JJsLogo from './components/JJsLogo';
 import { Sparkles, ArrowRight, ShieldCheck, Activity, Award } from 'lucide-react';
 
 export default function App() {
@@ -249,7 +249,7 @@ export default function App() {
             }}
           >
             <div className="mx-auto flex items-center justify-center mb-4">
-              <JJSLogo className="h-12 sm:h-14 w-auto" />
+              <JJsLogo className="h-12 sm:h-14 w-auto" />
             </div>
             <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight mb-2 uppercase"
               style={{ color: 'var(--text-heading)' }}

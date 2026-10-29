@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, CheckCircle2, ShieldCheck, Sparkles, ArrowRight } from 'lucide-react';
 import { centersData } from '../data/centersData';
 import { programsData } from '../data/programsData';
-import JJSLogo from './JJSLogo';
+import JJsLogo from './JJsLogo';
 
 export default function RegisterModal({ isOpen, onClose, initialData = null }) {
   const [formData, setFormData] = useState({
@@ -203,7 +203,7 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
           <div>
             <div className="mb-5 sm:mb-6 pr-10">
               <div className="flex items-center gap-3 mb-2.5">
-                <JJSLogo className="h-8 sm:h-9 w-auto" />
+                <JJsLogo className="h-8 sm:h-9 w-auto" />
                 <span
                   className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider border shadow-xs"
                   style={{
@@ -216,7 +216,7 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
                   100% Free First Trial Run
                 </span>
               </div>
-              <h3 id="modal-title" className="text-xl sm:text-2xl font-black tracking-tight uppercase" style={{ color: 'var(--text-heading)' }}>
+              <h3 id="modal-title" className="text-xl sm:text-2xl font-black tracking-tight" style={{ color: 'var(--text-heading)' }}>
                 Join JJs Running / Free Trial
               </h3>
               <p className="text-xs mt-1 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
