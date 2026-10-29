@@ -515,7 +515,7 @@ function RaceTimingInput({ value, onChange, disabled = false, error = '' }) {
   if (disabled) {
     return (
       <div
-        className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm font-mono opacity-50 flex items-center justify-between"
+        className="w-full px-3.5 py-2.5 sm:py-3 min-h-[44px] sm:min-h-[48px] rounded-xl border text-xs sm:text-sm font-mono opacity-50 flex items-center justify-between"
         style={{
           backgroundColor: 'var(--card-inner)',
           borderColor: 'var(--border-color)',
@@ -530,7 +530,7 @@ function RaceTimingInput({ value, onChange, disabled = false, error = '' }) {
 
   return (
     <div
-      className={`w-full px-3 py-1.5 sm:py-2 rounded-xl border flex items-center justify-between transition-all focus-within:ring-2 focus-within:ring-[#318cdd]/40 ${
+      className={`w-full px-3.5 py-2 sm:py-2.5 min-h-[44px] sm:min-h-[48px] rounded-xl border flex items-center justify-between transition-all focus-within:ring-2 focus-within:ring-[#318cdd]/40 ${
         error ? 'border-red-500 bg-red-500/5' : ''
       }`}
       style={{
@@ -1268,8 +1268,8 @@ export default function ProgramRegistrationModal({
               </div>
 
               {/* Row 6: Residential Address & Pin Code + Location Preference */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
+                <div className="flex flex-col h-full">
                   <label
                     htmlFor="reg-address"
                     className="block text-xs sm:text-sm font-bold mb-1.5"
@@ -1279,10 +1279,9 @@ export default function ProgramRegistrationModal({
                   </label>
                   <textarea
                     id="reg-address"
-                    rows={4}
                     placeholder="Enter full postal address"
                     {...register('residentialAddress')}
-                    className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 resize-none ${
+                    className={`w-full flex-1 min-h-[115px] px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 resize-none ${
                       errors.residentialAddress ? 'border-red-500 bg-red-500/5' : ''
                     }`}
                     style={{
@@ -1298,7 +1297,7 @@ export default function ProgramRegistrationModal({
                   )}
                 </div>
 
-                <div className="space-y-4">
+                <div className="flex flex-col justify-between gap-3 sm:gap-3.5">
                   <div>
                     <label
                       htmlFor="reg-pincode"
