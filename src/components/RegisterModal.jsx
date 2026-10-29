@@ -4,7 +4,7 @@ import { centersData } from '../data/centersData';
 import { programsData } from '../data/programsData';
 import JJSLogo from './JJSLogo';
 
-export default function RegisterModal({ isOpen, onClose, initialData = null }) {
+export default function RegisterModal({ isOpen, onClose, initialData = null, onSwitchToProgram }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -123,6 +123,16 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
               <p className="text-xs text-gray-400 mt-1">
                 Experience a coached morning session at any of our 30+ grounds across India or remote.
               </p>
+              {onSwitchToProgram && (
+                <button
+                  type="button"
+                  onClick={() => { handleReset(); onSwitchToProgram(initialData); }}
+                  className="mt-2 text-xs font-bold text-[#318cdd] hover:underline cursor-pointer flex items-center gap-1"
+                >
+                  <span>Ready to join full training squad directly? Register for Program</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">

@@ -3,7 +3,7 @@ import { ArrowUp, Mail, Phone, MapPin, CheckCircle2 } from 'lucide-react';
 
 import JJSLogo from './JJSLogo';
 
-export default function Footer({ onScrollTo, onOpenRegister }) {
+export default function Footer({ onScrollTo, onOpenRegister, onOpenProgramRegister }) {
   const [subscribed, setSubscribed] = useState(false);
   const [email, setEmail] = useState('');
 
@@ -170,6 +170,12 @@ export default function Footer({ onScrollTo, onOpenRegister }) {
             >
               <ArrowUp className="w-3.5 h-3.5" />
               <span>Back to Top</span>
+            </button>
+            <button
+              onClick={() => onOpenProgramRegister && onOpenProgramRegister()}
+              className="font-bold cursor-pointer hover:underline text-[#318cdd]"
+            >
+              Program Registration
             </button>
           </div>
         </div>

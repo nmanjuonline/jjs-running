@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Menu, X, ChevronRight, MapPin, Activity, ShieldCheck } from 'lucide-react';
+import { Menu, X, ArrowRight } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import JJSLogo from './JJSLogo';
 
-export default function Navbar({ currentTheme, setTheme, onOpenRegister, onScrollTo }) {
+export default function Navbar({ currentTheme = 'olympic-clean', setTheme, onOpenRegister, onOpenProgramRegister, onScrollTo }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
@@ -16,12 +16,16 @@ export default function Navbar({ currentTheme, setTheme, onOpenRegister, onScrol
   ];
 
   const handleNavClick = (id) => {
-    onScrollTo(id);
     setMobileMenuOpen(false);
+    // Allow drawer collapse to settle before calculating scroll position
+    setTimeout(() => {
+      if (onScrollTo) onScrollTo(id);
+    }, 120);
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b backdrop-blur-xl transition-all duration-300"
+    <header
+      className="sticky top-0 z-40 w-full border-b backdrop-blur-xl transition-all duration-300"
       style={{
         backgroundColor: 'var(--nav-bg)',
         borderColor: 'var(--border-color)',
@@ -37,20 +41,19 @@ export default function Navbar({ currentTheme, setTheme, onOpenRegister, onScrol
           >
             {/* Transparent Logo */}
             <div className="flex items-center transition-transform group-hover:scale-105 flex-shrink-0">
-              <JJSLogo className="h-10 sm:h-12 w-auto" />
+              <JJsLogo className="h-10 sm:h-12 w-auto" />
             </div>
 
             <div>
               <div className="flex items-center gap-1.5 sm:gap-2">
-                <span className="font-black tracking-tight text-sm sm:text-lg lg:text-xl leading-none"
+                <span
+                  className="font-black tracking-tight text-sm sm:text-lg lg:text-xl leading-none"
                   style={{ color: 'var(--text-heading)' }}
                 >
                   JJs Running
                 </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded font-black tracking-wider uppercase hidden sm:inline-block"
-                  style={{ backgroundColor: 'var(--badge-bg)', color: 'var(--accent)' }}
-                >
-                  JJS
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded font-black tracking-wider hidden sm:inline-block bg-[#d02426]/10 text-[#d02426] border border-[#d02426]/30">
+                  JJs
                 </span>
               </div>
               <span className="text-[9px] sm:text-[10px] tracking-wider uppercase font-semibold hidden sm:block mt-0.5 opacity-70">
@@ -60,12 +63,12 @@ export default function Navbar({ currentTheme, setTheme, onOpenRegister, onScrol
           </div>
 
           {/* Desktop Nav Links */}
-          <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-xs font-bold tracking-wide uppercase">
+          <nav className="hidden lg:flex items-center gap-5 xl:gap-7 text-xs font-bold tracking-wide uppercase">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
-                className="hover:opacity-100 transition-opacity opacity-75 whitespace-nowrap"
+                className="hover:opacity-100 transition-opacity opacity-75 whitespace-nowrap cursor-pointer hover:text-[#318cdd]"
                 style={{ color: 'var(--text-primary)' }}
               >
                 {item.label}
@@ -73,35 +76,35 @@ export default function Navbar({ currentTheme, setTheme, onOpenRegister, onScrol
             ))}
           </nav>
 
-          {/* Right Actions: Theme Selector & Register CTA */}
-          <div className="hidden sm:flex items-center gap-2.5">
+          {/* Right Action: Theme Switcher & Register CTA */}
+          <div className="hidden sm:flex items-center gap-3">
             <ThemeToggle currentTheme={currentTheme} setTheme={setTheme} compact={true} />
 
+            {/* Desktop CTA Button */}
             <button
-              onClick={() => onOpenRegister()}
-              className="px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-md hover:scale-105 flex items-center gap-1 whitespace-nowrap"
-              style={{
-                backgroundColor: 'var(--accent)',
-                color: 'var(--accent-contrast)'
-              }}
+              onClick={() => { if (onOpenRegister) onOpenRegister(); }}
+              className="py-2.5 px-4 lg:px-5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-md hover:scale-105 flex items-center gap-1.5 text-white bg-[#d02426] hover:bg-[#b51c1e] shadow-red-500/20 cursor-pointer flex-shrink-0 whitespace-nowrap"
             >
-              <span>Join Academy</span>
-              <ChevronRight className="w-3.5 h-3.5" />
+              <span>Book Free Trial</span>
+              <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
             </button>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Actions: Accessible Menu Button (>=44x44px Touch Targets) */}
           <div className="flex items-center gap-2 sm:hidden">
             <ThemeToggle currentTheme={currentTheme} setTheme={setTheme} compact={true} />
+
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl border flex-shrink-0"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl border flex-shrink-0 cursor-pointer"
               style={{
                 backgroundColor: 'var(--card-inner)',
                 borderColor: 'var(--border-color)',
                 color: 'var(--text-primary)'
               }}
-              aria-label="Toggle menu"
+              aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -111,7 +114,9 @@ export default function Navbar({ currentTheme, setTheme, onOpenRegister, onScrol
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden p-4 border-t space-y-3 shadow-xl max-w-full"
+        <div
+          id="mobile-navigation"
+          className="lg:hidden p-4 border-t space-y-3 shadow-xl max-w-full"
           style={{
             backgroundColor: 'var(--card-bg)',
             borderColor: 'var(--border-color)'
@@ -122,7 +127,7 @@ export default function Navbar({ currentTheme, setTheme, onOpenRegister, onScrol
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
-                className="text-left py-2 px-3 rounded-xl font-bold text-sm tracking-wide transition-colors hover:bg-black/5 dark:hover:bg-white/5"
+                className="text-left py-2.5 px-3 rounded-xl font-bold text-sm tracking-wide transition-colors hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer"
                 style={{ color: 'var(--text-primary)' }}
               >
                 {item.label}
@@ -130,17 +135,27 @@ export default function Navbar({ currentTheme, setTheme, onOpenRegister, onScrol
             ))}
           </div>
 
-          <div className="pt-2 border-t" style={{ borderColor: 'var(--border-color)' }}>
+          <div className="pt-2 border-t space-y-2" style={{ borderColor: 'var(--border-color)' }}>
             <button
-              onClick={() => { setMobileMenuOpen(false); onOpenRegister(); }}
-              className="w-full py-3 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg"
-              style={{
-                backgroundColor: 'var(--accent)',
-                color: 'var(--accent-contrast)'
-              }}
+              onClick={() => { setMobileMenuOpen(false); if (onOpenRegister) onOpenRegister(); }}
+              className="w-full py-3.5 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 cursor-pointer bg-[#d02426] text-white hover:bg-[#b51c1e]"
             >
-              Join Squad / Free Trial Run
+              <span>Book Free Trial (1st Run Free)</span>
+              <ArrowRight className="w-4 h-4 stroke-[2.5]" />
             </button>
+
+            {onOpenProgramRegister && (
+              <button
+                onClick={() => { setMobileMenuOpen(false); onOpenProgramRegister(); }}
+                className="w-full py-3 rounded-xl text-xs font-bold uppercase tracking-wider border flex items-center justify-center gap-2 cursor-pointer hover:bg-black/5 dark:hover:bg-white/5"
+                style={{
+                  borderColor: 'var(--border-color)',
+                  color: 'var(--text-heading)'
+                }}
+              >
+                <span>Program Registration</span>
+              </button>
+            )}
           </div>
         </div>
       )}

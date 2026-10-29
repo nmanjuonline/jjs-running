@@ -10,6 +10,7 @@ import OncaAppSection from './components/OncaAppSection';
 import RaceCalendar from './components/RaceCalendar';
 import Testimonials from './components/Testimonials';
 import RegisterModal from './components/RegisterModal';
+import ProgramRegistrationModal from './components/ProgramRegistrationModal';
 import Footer from './components/Footer';
 import ThemeToggle from './components/ThemeToggle';
 import JJSLogo from './components/JJSLogo';
@@ -24,8 +25,14 @@ export default function App() {
     return saved;
   });
 
-  const [registerModalOpen, setRegisterModalOpen] = useState(false);
-  const [modalInitialData, setModalInitialData] = useState(null);
+  // Free Trial Modal State
+  const [trialModalOpen, setTrialModalOpen] = useState(false);
+  const [trialInitialData, setTrialInitialData] = useState(null);
+
+  // Official Program Registration Modal State (from Program card Register button)
+  const [programModalOpen, setProgramModalOpen] = useState(false);
+  const [selectedProgramForRegister, setSelectedProgramForRegister] = useState(null);
+
   const [calcForceExpand, setCalcForceExpand] = useState(false);
 
   useEffect(() => {
@@ -33,9 +40,16 @@ export default function App() {
     localStorage.setItem('jjs_theme', theme);
   }, [theme]);
 
-  const handleOpenRegister = (data = null) => {
-    setModalInitialData(data);
-    setRegisterModalOpen(true);
+  // Open Free Trial flow
+  const handleOpenTrial = (data = null) => {
+    setTrialInitialData(data);
+    setTrialModalOpen(true);
+  };
+
+  // Open Official Program Registration flow
+  const handleOpenProgramRegister = (program = null) => {
+    setSelectedProgramForRegister(program);
+    setProgramModalOpen(true);
   };
 
   const scrollToSection = (id) => {
@@ -49,35 +63,53 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col font-sans selection:bg-amber-400 selection:text-black transition-colors duration-300 w-full max-w-full overflow-x-hidden">
+    <div
+      className="min-h-screen flex flex-col font-sans selection:bg-blue-600 selection:text-white transition-colors duration-300 w-full max-w-full overflow-x-hidden"
+      style={{
+        backgroundColor: 'var(--bg-page)',
+        color: 'var(--text-primary)'
+      }}
+    >
+      {/* Skip to Main Content Link for Keyboard and Screen Readers (WCAG 2.1 AA) */}
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+
       {/* Floating Theme Control (Visible on Desktop / Tablets to avoid mobile overflow) */}
       <div className="hidden sm:flex fixed bottom-6 right-6 z-50 shadow-2xl flex-col items-end gap-2">
         <ThemeToggle currentTheme={theme} setTheme={setTheme} />
       </div>
 
+      {/* Sleek Top Announcement Bar (Above Navbar) */}
+      <LiveTicker
+        onActionClick={(target) => {
+          if (target === 'register') {
+            handleOpenTrial();
+          } else {
+            scrollToSection(target);
+          }
+        }}
+      />
+
       {/* Navigation */}
       <Navbar
         currentTheme={theme}
         setTheme={setTheme}
-        onOpenRegister={() => handleOpenRegister()}
+        onOpenRegister={() => handleOpenTrial()}
+        onOpenProgramRegister={(prog) => handleOpenProgramRegister(prog)}
         onScrollTo={scrollToSection}
       />
-
-      {/* Animated Live Milestones Ticker (Constrained to 100% width) */}
-      <div className="w-full max-w-full overflow-hidden">
-        <LiveTicker />
-      </div>
 
       {/* Hero Section */}
       <Hero
         currentTheme={theme}
-        onBookTrial={() => handleOpenRegister()}
+        onBookTrial={() => handleOpenTrial()}
         onExploreCenters={() => scrollToSection('centers')}
         onOpenCalc={() => scrollToSection('calculator')}
       />
 
-      {/* Main Content Sections - Compact spacing for effortless mobile scrolling */}
-      <main className="flex-1 space-y-12 sm:space-y-20 py-4 sm:py-8 w-full max-w-full overflow-hidden">
+      {/* Main Content Sections - Accessible Anchor with Keyboard Focus */}
+      <main id="main-content" tabIndex={-1} className="flex-1 space-y-12 sm:space-y-20 py-4 sm:py-8 w-full max-w-full overflow-hidden focus:outline-none">
         {/* Programs Section */}
         <section id="programs" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-10">
@@ -144,7 +176,7 @@ export default function App() {
 
           <ProgramsSection
             currentTheme={theme}
-            onRegister={(program) => handleOpenRegister(program)}
+            onRegister={(program) => handleOpenProgramRegister(program)}
           />
         </section>
 
@@ -226,13 +258,13 @@ export default function App() {
         <section id="calculator" className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <PaceCalculator
             forceExpand={calcForceExpand}
-            onSelectProgram={(programId) => handleOpenRegister({ id: programId })}
+            onSelectProgram={(programId) => handleOpenProgramRegister({ id: programId })}
           />
         </section>
 
         {/* Mobile App Telemetry HUD Section */}
         <section id="app" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <OncaAppSection onGetApp={() => handleOpenRegister()} />
+          <OncaAppSection onGetApp={() => handleOpenTrial()} />
         </section>
 
         {/* Race Calendar & Camp Countdown */}
@@ -254,7 +286,7 @@ export default function App() {
             </p>
           </div>
 
-          <RaceCalendar onJoinCamp={(race) => handleOpenRegister({ program: race.title })} />
+          <RaceCalendar onJoinCamp={(race) => handleOpenProgramRegister({ title: race.title, category: 'Race Camp' })} />
         </section>
 
         {/* Runner Stories / Transformations */}
@@ -303,19 +335,15 @@ export default function App() {
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3">
               <button
-                onClick={() => handleOpenRegister()}
-                className="py-3 px-6 sm:px-8 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all duration-300 shadow-xl hover:scale-105 flex items-center gap-2"
-                style={{
-                  backgroundColor: 'var(--accent)',
-                  color: 'var(--accent-contrast)'
-                }}
+                onClick={() => handleOpenTrial()}
+                className="py-3 px-6 sm:px-8 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all duration-300 shadow-xl hover:scale-105 flex items-center gap-2 text-white bg-[#d02426] hover:bg-[#b51c1e] shadow-red-500/25 cursor-pointer"
               >
                 <span>Book Free Trial Run</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
               <button
                 onClick={() => scrollToSection('centers')}
-                className="py-3 px-5 rounded-xl text-xs sm:text-sm font-bold border transition-all hover:scale-105 shadow-sm"
+                className="py-3 px-5 rounded-xl text-xs sm:text-sm font-bold border transition-all hover:scale-105 shadow-sm cursor-pointer"
                 style={{
                   backgroundColor: 'var(--card-inner)',
                   borderColor: 'var(--border-color)',
@@ -330,13 +358,26 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <Footer onScrollTo={scrollToSection} onOpenRegister={() => handleOpenRegister()} />
+      <Footer
+        onScrollTo={scrollToSection}
+        onOpenRegister={() => handleOpenTrial()}
+        onOpenProgramRegister={(prog) => handleOpenProgramRegister(prog)}
+      />
 
-      {/* Interactive Registration Modal */}
+      {/* 1. Free Trial Modal (Lightweight First Morning Session) */}
       <RegisterModal
-        isOpen={registerModalOpen}
-        onClose={() => setRegisterModalOpen(false)}
-        initialData={modalInitialData}
+        isOpen={trialModalOpen}
+        onClose={() => setTrialModalOpen(false)}
+        initialData={trialInitialData}
+        onSwitchToProgram={(data) => handleOpenProgramRegister(data)}
+      />
+
+      {/* 2. Official Program Registration Modal (Full Form matching Screenshot) */}
+      <ProgramRegistrationModal
+        isOpen={programModalOpen}
+        onClose={() => setProgramModalOpen(false)}
+        selectedProgram={selectedProgramForRegister}
+        onSwitchToTrial={() => handleOpenTrial()}
       />
     </div>
   );
