@@ -17,8 +17,11 @@ export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenR
   ];
 
   const handleNavClick = (id) => {
-    onScrollTo(id);
     setMobileMenuOpen(false);
+    // Allow drawer collapse to settle before calculating scroll position
+    setTimeout(() => {
+      onScrollTo(id);
+    }, 120);
   };
 
   return (

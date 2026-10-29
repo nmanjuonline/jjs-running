@@ -39,7 +39,15 @@ export default function App() {
     }
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+      const nav = document.querySelector('header');
+      const navHeight = nav ? nav.offsetHeight : 72;
+      const elementPosition = el.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - navHeight - 16;
+
+      window.scrollTo({
+        top: Math.max(0, offsetPosition),
+        behavior: 'smooth'
+      });
     }
   };
 
