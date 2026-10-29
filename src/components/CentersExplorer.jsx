@@ -97,23 +97,26 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
         </div>
 
         {/* Master Detail Split */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 lg:min-h-[380px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 lg:h-[530px]">
           {/* Left Column: Center List with Distinct Directory Styling */}
-          <div className={`lg:col-span-5 border-b-2 lg:border-b-0 lg:border-r flex flex-col ${
+          <div className={`lg:col-span-5 border-b-2 lg:border-b-0 lg:border-r flex flex-col h-full ${
             isDark ? 'border-slate-800 bg-slate-950/40' : 'border-slate-200 bg-slate-50/50'
           }`}>
             {/* Scrollable Directory Header */}
-            <div className={`px-4 py-2 border-b flex items-center justify-between text-[11px] font-mono tracking-wider ${
+            <div className={`px-4 py-2.5 border-b flex-shrink-0 flex items-center justify-between text-[11px] font-mono tracking-wider ${
               isDark ? 'border-slate-800 bg-slate-950/80 text-slate-400' : 'border-slate-200 bg-slate-100/80 text-slate-500'
             }`}>
-              <span className="font-bold uppercase">Training Centers ({filteredCenters.length})</span>
-              <span className="flex items-center gap-1 text-[10px] text-[#318cdd] font-bold">
-                <span>Scroll to browse</span>
+              <span className="font-bold uppercase tracking-wider">Training Centers ({filteredCenters.length})</span>
+              <span className="hidden lg:inline text-[10px] text-slate-400 font-mono">
+                SELECT A GROUND
+              </span>
+              <span className="lg:hidden flex items-center gap-1 text-[10px] text-[#318cdd] font-bold">
+                <span>Scroll list</span>
                 <ChevronDown className="w-3 h-3 animate-bounce" />
               </span>
             </div>
 
-            <div className={`max-h-56 sm:max-h-64 lg:max-h-[420px] overflow-y-auto divide-y shadow-inner ${
+            <div className={`max-h-56 sm:max-h-64 lg:max-h-none flex-1 min-h-0 overflow-y-auto divide-y ${
               isDark ? 'divide-slate-800/70' : 'divide-slate-200/80'
             }`}>
               {filteredCenters.map((center) => {
@@ -122,33 +125,38 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                   <div
                     key={center.id}
                     onClick={() => setSelectedCenterId(center.id)}
-                    className={`p-3 sm:px-4 sm:py-2.5 cursor-pointer transition-all flex items-center justify-between gap-3 text-left ${
+                    className={`p-3.5 sm:px-4 sm:py-3 cursor-pointer transition-all flex items-center justify-between gap-3 text-left ${
                       isSelected
                         ? isDark
-                          ? 'bg-[#318cdd]/20 border-l-4 border-[#318cdd]'
-                          : 'bg-[#318cdd]/10 border-l-4 border-[#318cdd]'
+                          ? 'bg-gradient-to-r from-[#318cdd]/20 via-[#318cdd]/10 to-transparent border-l-4 border-[#318cdd]'
+                          : 'bg-gradient-to-r from-[#318cdd]/10 via-[#318cdd]/5 to-transparent border-l-4 border-[#318cdd]'
                         : isDark
-                          ? 'hover:bg-slate-800/60 text-slate-300'
-                          : 'hover:bg-slate-100 text-slate-700'
+                          ? 'border-l-4 border-transparent hover:bg-slate-800/50 text-slate-300'
+                          : 'border-l-4 border-transparent hover:bg-slate-100/80 text-slate-700'
                     }`}
                   >
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <h4 className={`text-sm font-black truncate ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                        <h4 className={`text-sm font-black truncate ${
+                          isSelected
+                            ? isDark ? 'text-white' : 'text-slate-950 font-black'
+                            : isDark ? 'text-slate-200' : 'text-slate-800'
+                        }`}>
                           {center.name}
                         </h4>
                         <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${
-                          isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200/80 text-slate-700'
+                          isSelected
+                            ? isDark ? 'bg-[#318cdd]/30 text-[#60a5fa]' : 'bg-[#318cdd]/20 text-[#1d72bd]'
+                            : isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200/80 text-slate-600'
                         }`}>
                           {center.city}
                         </span>
-                        {isSelected && (
-                          <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-[#318cdd] text-white uppercase tracking-wider">
-                            Active
-                          </span>
-                        )}
                       </div>
-                      <p className={`text-xs truncate mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                      <p className={`text-xs truncate mt-0.5 ${
+                        isSelected
+                          ? isDark ? 'text-slate-300' : 'text-slate-600'
+                          : isDark ? 'text-slate-400' : 'text-slate-500'
+                      }`}>
                         {center.venue}
                       </p>
                       <p className={`text-[11px] mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
@@ -160,7 +168,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                       <span className={`text-[10px] font-mono font-bold ${isSelected ? 'text-[#318cdd]' : 'text-slate-400'}`}>
                         5:30 AM
                       </span>
-                      <ChevronRight className={`w-3.5 h-3.5 ${isSelected ? 'text-[#318cdd]' : 'text-slate-400'}`} />
+                      <ChevronRight className={`w-3.5 h-3.5 transition-transform ${isSelected ? 'text-[#318cdd] translate-x-0.5' : 'text-slate-400/60'}`} />
                     </div>
                   </div>
                 );
@@ -169,7 +177,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
           </div>
 
           {/* Right Column: Distinct Ground Details Spotlight */}
-          <div className={`lg:col-span-7 p-4 sm:p-5 flex flex-col justify-between relative ${
+          <div className={`lg:col-span-7 p-4 sm:p-5 lg:p-6 flex flex-col justify-between h-full relative overflow-y-auto ${
             isDark ? 'bg-slate-900' : 'bg-white'
           }`}>
             {/* Mobile Distinct Section Banner */}
@@ -182,14 +190,15 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
               </span>
               <span className="text-[10px] font-mono">Tap list above to change</span>
             </div>
+
             {currentCenter && (
-              <div className="space-y-3.5">
-                <div>
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className="flex flex-wrap items-center gap-2.5 min-w-0">
-                      <h3 className={`text-xl sm:text-2xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-950'}`}>
-                        {currentCenter.name}
-                      </h3>
+              <div className="flex flex-col justify-between h-full space-y-3.5">
+                {/* Header */}
+                <div className="pb-3 border-b flex flex-wrap items-center justify-between gap-3 flex-shrink-0"
+                  style={{ borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)' }}
+                >
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
                       <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
                         isDark
                           ? 'bg-[#318cdd]/15 text-[#4ca6f5] border border-[#318cdd]/30'
@@ -200,60 +209,117 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                           ? `${currentCenter.city} • Academy HQ`
                           : currentCenter.city === 'Remote'
                           ? 'Global • Virtual Campus'
-                          : currentCenter.city}
+                          : `${currentCenter.city} Chapter`}
                       </span>
                     </div>
+                    <h3 className={`text-xl sm:text-2xl lg:text-3xl font-black tracking-tight truncate ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                      {currentCenter.name}
+                    </h3>
+                  </div>
 
-                    <span className="text-xs font-mono font-bold text-emerald-500 flex items-center gap-1 flex-shrink-0">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                      {currentCenter.runnersCount}
-                    </span>
+                  <div className={`px-3 py-1.5 rounded-xl border flex items-center gap-2 flex-shrink-0 ${
+                    isDark ? 'bg-slate-950/80 border-slate-800 text-emerald-400' : 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                  }`}>
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-xs font-mono font-bold">{currentCenter.runnersCount}</span>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  <div className={`p-3 rounded-xl border ${isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/80'}`}>
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Training Ground</span>
-                    <p className={`text-xs font-bold mt-0.5 leading-snug ${isDark ? 'text-white' : 'text-slate-900'}`}>{currentCenter.venue}</p>
-                  </div>
-
-                  <div className={`p-3 rounded-xl border ${isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/80'}`}>
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Training Center Head (TCH)</span>
-                    <p className="text-xs font-bold mt-0.5 flex items-center gap-1.5 text-[#d02426]">
-                      <UserCheck className="w-3.5 h-3.5 stroke-[2.5]" />
-                      {currentCenter.tch}
+                {/* Info Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 py-1">
+                  <div className={`p-3 lg:p-3.5 rounded-2xl border transition-all ${
+                    isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200/80 bg-slate-50/70'
+                  }`}>
+                    <div className="flex items-center gap-1.5 text-slate-400 mb-1">
+                      <Compass className="w-3.5 h-3.5 text-[#318cdd]" />
+                      <span className="text-[10px] font-mono uppercase tracking-wider font-semibold">Training Ground</span>
+                    </div>
+                    <p className={`text-xs sm:text-sm font-bold leading-snug ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
+                      {currentCenter.venue}
                     </p>
                   </div>
 
-                  <div className={`p-3 rounded-xl border ${isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/80'}`}>
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Morning Timings</span>
-                    <p className={`text-xs font-bold mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>Tue, Thu, Sat &amp; Sun @ 5:30 AM</p>
+                  <div className={`p-3 lg:p-3.5 rounded-2xl border transition-all ${
+                    isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200/80 bg-slate-50/70'
+                  }`}>
+                    <div className="flex items-center gap-1.5 text-slate-400 mb-1">
+                      <UserCheck className="w-3.5 h-3.5 text-[#d02426]" />
+                      <span className="text-[10px] font-mono uppercase tracking-wider font-semibold">Training Center Head (TCH)</span>
+                    </div>
+                    <p className="text-xs sm:text-sm font-bold text-[#d02426]">
+                      {currentCenter.tch}
+                    </p>
+                    <span className="text-[10px] text-slate-500 font-medium block mt-0.5">
+                      Certified Running Coach &amp; Pacing Lead
+                    </span>
                   </div>
 
-                  <div className={`p-3 rounded-xl border ${isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/80'}`}>
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Pace Groups</span>
-                    <p className="text-xs font-bold text-emerald-500 mt-0.5">Walk-Run to Ultra Runners</p>
+                  <div className={`p-3 lg:p-3.5 rounded-2xl border transition-all ${
+                    isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200/80 bg-slate-50/70'
+                  }`}>
+                    <div className="flex items-center gap-1.5 text-slate-400 mb-1">
+                      <Clock className="w-3.5 h-3.5 text-amber-500" />
+                      <span className="text-[10px] font-mono uppercase tracking-wider font-semibold">Morning Schedule</span>
+                    </div>
+                    <p className={`text-xs sm:text-sm font-bold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
+                      Tue, Thu, Sat &amp; Sun @ 5:30 AM
+                    </p>
+                    <span className="text-[10px] text-slate-500 font-medium block mt-0.5">
+                      75–90 min drills &amp; endurance mileage
+                    </span>
+                  </div>
+
+                  <div className={`p-3 lg:p-3.5 rounded-2xl border transition-all ${
+                    isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200/80 bg-slate-50/70'
+                  }`}>
+                    <div className="flex items-center gap-1.5 text-slate-400 mb-1">
+                      <Zap className="w-3.5 h-3.5 text-emerald-400" />
+                      <span className="text-[10px] font-mono uppercase tracking-wider font-semibold">Pace Cohorts</span>
+                    </div>
+                    <p className="text-xs sm:text-sm font-bold text-emerald-500">
+                      Walk-Run to Ultra Runners
+                    </p>
+                    <span className="text-[10px] text-slate-500 font-medium block mt-0.5">
+                      Structured pace clusters led by pacers
+                    </span>
                   </div>
 
                   {currentCenter.vicinity && (
-                    <div className={`p-3 rounded-xl border sm:col-span-2 ${isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/80'}`}>
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Vicinity &amp; Nearby Areas</span>
-                      <p className={`text-xs mt-0.5 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>{currentCenter.vicinity}</p>
+                    <div className={`p-3 lg:p-3.5 rounded-2xl border sm:col-span-2 ${
+                      isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200/80 bg-slate-50/70'
+                    }`}>
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold block mb-1.5">
+                        Vicinity &amp; Nearby Neighborhoods
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {currentCenter.vicinity.split(/,\s*/).map((area, idx) => (
+                          <span
+                            key={idx}
+                            className={`text-[11px] px-2 py-0.5 rounded-md font-medium ${
+                              isDark ? 'bg-slate-900 text-slate-300 border border-slate-800' : 'bg-white text-slate-700 border border-slate-200 shadow-xs'
+                            }`}
+                          >
+                            {area}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
 
-                {/* Streamlined Action Bar: Clean Maps Directions + High-Conversion CTA */}
-                <div className={`pt-3 border-t flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 ${isDark ? 'border-slate-800' : 'border-slate-100'}`}>
+                {/* Action Bar */}
+                <div className={`pt-3 border-t flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mt-auto flex-shrink-0 ${
+                  isDark ? 'border-slate-800' : 'border-slate-100'
+                }`}>
                   {mapUrl ? (
                     <a
                       href={mapUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all border ${
+                      className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all border ${
                         isDark
                           ? 'bg-slate-800/90 hover:bg-slate-700 text-slate-200 border-slate-700/80 hover:border-slate-600'
-                          : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200 hover:border-slate-300 shadow-sm'
+                          : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200 shadow-sm'
                       }`}
                       title="Open Google Maps location"
                     >
@@ -264,7 +330,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
 
                   <button
                     onClick={() => onBookTrial(currentCenter)}
-                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all duration-200 flex items-center justify-center gap-2 text-white bg-gradient-to-r from-[#d02426] to-[#b51c1e] hover:from-[#b51c1e] hover:to-[#9a1719] shadow-md shadow-red-600/25 hover:shadow-lg hover:shadow-red-600/35 hover:-translate-y-0.5 active:translate-y-0"
+                    className="w-full sm:w-auto px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all duration-200 flex items-center justify-center gap-2 text-white bg-gradient-to-r from-[#d02426] to-[#b51c1e] hover:from-[#b51c1e] hover:to-[#9a1719] shadow-md shadow-red-600/25 hover:shadow-lg hover:shadow-red-600/35 hover:-translate-y-0.5 active:translate-y-0"
                   >
                     <span>Book Free Trial Run</span>
                     <ChevronRight className="w-4 h-4 stroke-[2.5]" />
