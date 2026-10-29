@@ -49,14 +49,14 @@ export default function MethodologySection({ currentTheme = 'olympic-clean', onE
     {
       day: 'Saturday',
       time: '05:30 AM',
-      focus: 'Hills & Maintenance',
-      description: 'Incline elevation training, technical footwork drills, and aerobic base maintenance.'
+      focus: 'The Signature SLR',
+      description: 'Progressive Slow Long Run (SLR) with dedicated on-route hydration, electrolyte fueling, and pace mentors.'
     },
     {
       day: 'Sunday',
       time: '05:30 AM',
-      focus: 'The Signature SLR',
-      description: 'Progressive Slow Long Run (SLR) with full hydration support, followed by post-run chai and debrief.'
+      focus: 'Recovery Run & Mobility',
+      description: 'Easy aerobic recovery run, joint mobility, cool-down stretching circle, and post-run debrief with filter coffee.'
     }
   ];
 
@@ -236,7 +236,7 @@ export default function MethodologySection({ currentTheme = 'olympic-clean', onE
               <div className="p-3 rounded-xl border space-y-1" style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}>
                 <Coffee className="w-4 h-4 text-amber-500" />
                 <h5 className="text-xs font-bold" style={{ color: 'var(--text-heading)' }}>Post-Run Chai & Debrief</h5>
-                <p className="text-[10px] opacity-65">The signature Sunday morning cool-down, stretching circle, and filter coffee.</p>
+                <p className="text-[10px] opacity-65">The signature Sunday morning recovery run, stretching circle, and filter coffee.</p>
               </div>
 
               <div className="p-3 rounded-xl border space-y-1" style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}>
