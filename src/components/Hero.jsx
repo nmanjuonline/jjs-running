@@ -45,7 +45,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
               </div>
 
               {/* Integrated Bottom Hero Content Overlay */}
-              <div className="relative z-10 text-white max-w-3xl space-y-3 sm:space-y-4 mt-auto sm:mt-0 sm:absolute sm:bottom-0 sm:inset-x-0 sm:p-8 md:p-10">
+              <div className="relative z-10 text-white max-w-4xl space-y-3 sm:space-y-4 mt-auto sm:mt-0 sm:absolute sm:bottom-0 sm:inset-x-0 sm:p-8 md:p-10">
                   <h1 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[0.96]">
                     RUN WITH SCIENCE.
                     <br />
@@ -58,10 +58,10 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                     Structured heart-rate zone training, cadence calibration, and injury-free marathon milestones led by certified Training Center Heads (TCH).
                   </p>
 
-                  <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3 pt-2">
+                  <div className="flex flex-col sm:flex-row sm:flex-nowrap items-stretch sm:items-center gap-2.5 sm:gap-3 pt-2">
                     <button
                       onClick={onBookTrial}
-                      className="py-3 px-6 sm:px-7 rounded-2xl bg-[#d02426] hover:bg-[#b51c1e] text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(208,36,38,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                      className="py-3 px-6 sm:px-7 rounded-2xl bg-[#d02426] hover:bg-[#b51c1e] text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(208,36,38,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap flex-shrink-0"
                     >
                       <span>Book Free Trial Run</span>
                       <ArrowRight className="w-4 h-4 stroke-[2.5]" />
@@ -69,7 +69,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
 
                     <button
                       onClick={onExploreCenters}
-                      className="py-3 px-5 sm:px-6 rounded-2xl bg-white/95 hover:bg-white text-slate-900 text-xs sm:text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                      className="py-3 px-5 sm:px-6 rounded-2xl bg-white/95 hover:bg-white text-slate-900 text-xs sm:text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap flex-shrink-0"
                     >
                       <MapPin className="w-4 h-4 text-[#318cdd] stroke-[2.5]" />
                       <span>Explore Nearby Grounds</span>
@@ -77,7 +77,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
 
                     <button
                       onClick={onOpenCalc}
-                      className="py-3 px-4 rounded-2xl bg-black/40 hover:bg-black/60 text-white border border-white/20 backdrop-blur-md text-xs sm:text-sm font-mono font-bold uppercase transition-all hover:-translate-y-0.5 flex items-center justify-center gap-1.5"
+                      className="py-3 px-4 rounded-2xl bg-black/40 hover:bg-black/60 text-white border border-white/20 backdrop-blur-md text-xs sm:text-sm font-mono font-bold uppercase transition-all hover:-translate-y-0.5 flex items-center justify-center gap-1.5 whitespace-nowrap flex-shrink-0"
                     >
                       <Activity className="w-4 h-4 text-[#4ca6f5]" />
                       <span>Pace Calculator</span>
@@ -190,7 +190,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
               </div>
 
               {/* Integrated Bottom Hero Content Overlay */}
-              <div className="relative z-10 text-white max-w-3xl space-y-3 sm:space-y-4 mt-auto sm:mt-0 sm:absolute sm:bottom-0 sm:inset-x-0 sm:p-8 md:p-10">
+              <div className="relative z-10 text-white max-w-4xl space-y-3 sm:space-y-4 mt-auto sm:mt-0 sm:absolute sm:bottom-0 sm:inset-x-0 sm:p-8 md:p-10">
                   <h1 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[0.96]">
                     WAKE UP WITH PURPOSE.
                     <br />
@@ -202,10 +202,10 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                     India’s warmest distance running community. Structured 5:30 AM sessions with designated pace mentors, heart-rate zone conditioning, and injury-free marathon milestones.
                   </p>
 
-                  <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3 pt-2">
+                  <div className="flex flex-col sm:flex-row sm:flex-nowrap items-stretch sm:items-center gap-2.5 sm:gap-3 pt-2">
                     <button
                       onClick={onBookTrial}
-                      className="py-3 px-6 sm:px-7 rounded-2xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(255,72,0,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                      className="py-3 px-6 sm:px-7 rounded-2xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(255,72,0,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap flex-shrink-0"
                     >
                       <span>Book Free Sunrise Trial</span>
                       <ArrowRight className="w-4 h-4 stroke-[2.5]" />
@@ -213,7 +213,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
 
                     <button
                       onClick={onExploreCenters}
-                      className="py-3 px-5 sm:px-6 rounded-2xl bg-white/95 hover:bg-white text-zinc-900 text-xs sm:text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                      className="py-3 px-5 sm:px-6 rounded-2xl bg-white/95 hover:bg-white text-zinc-900 text-xs sm:text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap flex-shrink-0"
                     >
                       <MapPin className="w-4 h-4 text-orange-600 stroke-[2.5]" />
                       <span>Find Your Morning Ground</span>

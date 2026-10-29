@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, ChevronRight, Sun, Moon } from 'lucide-react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
 import JJSLogo from './JJSLogo';
 
 export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenRegister, onScrollTo }) {
@@ -114,13 +114,7 @@ export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenR
               </button>
             </div>
 
-            <button
-              onClick={() => onOpenRegister()}
-              className="py-2.5 px-5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-md hover:scale-105 flex items-center gap-1.5 whitespace-nowrap text-white bg-[#d02426] hover:bg-[#b51c1e] shadow-red-500/25"
-            >
-              <span>Book Free Trial</span>
-              <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
-            </button>
+
           </div>
 
           {/* Mobile Actions: Contrast Toggle & Trial Button */}
@@ -138,12 +132,7 @@ export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenR
             >
               {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
             </button>
-            <button
-              onClick={() => onOpenRegister()}
-              className="px-3 py-1.5 rounded-full text-[11px] font-black uppercase tracking-wider text-white shadow-sm flex items-center gap-1 bg-[#d02426]"
-            >
-              <span>Trial</span>
-            </button>
+
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-xl border flex-shrink-0"
