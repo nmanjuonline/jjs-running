@@ -20,10 +20,16 @@ import {
   Search,
   Calendar as CalendarIcon,
   Lock,
-  MapPin
+  MapPin,
+  User,
+  Trophy,
+  CreditCard,
+  ArrowRight,
+  ArrowLeft
 } from 'lucide-react';
 import { centersData } from '../data/centersData';
 import { programsData } from '../data/programsData';
+import JJsLogo from './JJsLogo';
 
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
 
@@ -295,7 +301,7 @@ function RadixCalendarPicker({ value, onChange, error }) {
                 aria-label="Select month"
                 value={viewMonth}
                 onChange={(e) => setViewMonth(Number(e.target.value))}
-                className="bg-transparent font-bold text-xs sm:text-sm rounded-lg px-2 py-1 transition-colors hover:bg-[#318cdd]/10 focus:outline-none focus:ring-1 focus:ring-[#318cdd]/40 cursor-pointer"
+                className="bg-transparent font-bold text-xs sm:text-sm rounded-lg px-2 py-1 transition-colors hover:bg-[#318cdd]/10 outline-none focus:outline-none focus-visible:ring-1 focus-visible:ring-[#318cdd]/50 cursor-pointer"
                 style={{ color: 'var(--text-heading)' }}
               >
                 {MONTH_NAMES.map((name, idx) => (
@@ -313,7 +319,7 @@ function RadixCalendarPicker({ value, onChange, error }) {
                 aria-label="Select year"
                 value={viewYear}
                 onChange={(e) => setViewYear(Number(e.target.value))}
-                className="bg-transparent font-bold text-xs sm:text-sm rounded-lg px-2 py-1 transition-colors hover:bg-[#318cdd]/10 focus:outline-none focus:ring-1 focus:ring-[#318cdd]/40 cursor-pointer"
+                className="bg-transparent font-bold text-xs sm:text-sm rounded-lg px-2 py-1 transition-colors hover:bg-[#318cdd]/10 outline-none focus:outline-none focus-visible:ring-1 focus-visible:ring-[#318cdd]/50 cursor-pointer"
                 style={{ color: 'var(--text-heading)' }}
               >
                 {CALENDAR_YEARS.map((year) => (
@@ -334,31 +340,31 @@ function RadixCalendarPicker({ value, onChange, error }) {
                 type="button"
                 onClick={prevMonth}
                 aria-label="Previous month"
-                className="w-7 h-7 flex items-center justify-center rounded-lg border transition-all hover:bg-[#318cdd]/15 hover:border-[#318cdd]/40 cursor-pointer active:scale-95 text-[var(--text-heading)] focus:outline-none focus:ring-1 focus:ring-[#318cdd]/40"
+                className="w-7 h-7 flex items-center justify-center rounded-lg border transition-all hover:bg-[#318cdd]/15 hover:border-[#318cdd]/40 cursor-pointer active:scale-95 text-[var(--text-heading)] outline-none focus:outline-none focus-visible:ring-1 focus-visible:ring-[#318cdd]/50"
                 style={{
                   backgroundColor: 'var(--card-inner)',
                   borderColor: 'var(--border-color)'
                 }}
               >
-                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft className="w-4 h-4 opacity-75 hover:opacity-100" />
               </button>
               <button
                 type="button"
                 onClick={nextMonth}
                 aria-label="Next month"
-                className="w-7 h-7 flex items-center justify-center rounded-lg border transition-all hover:bg-[#318cdd]/15 hover:border-[#318cdd]/40 cursor-pointer active:scale-95 text-[var(--text-heading)] focus:outline-none focus:ring-1 focus:ring-[#318cdd]/40"
+                className="w-7 h-7 flex items-center justify-center rounded-lg border transition-all hover:bg-[#318cdd]/15 hover:border-[#318cdd]/40 cursor-pointer active:scale-95 text-[var(--text-heading)] outline-none focus:outline-none focus-visible:ring-1 focus-visible:ring-[#318cdd]/50"
                 style={{
                   backgroundColor: 'var(--card-inner)',
                   borderColor: 'var(--border-color)'
                 }}
               >
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-4 h-4 opacity-75 hover:opacity-100" />
               </button>
             </div>
           </div>
 
           {/* Weekday Row */}
-          <div className="grid grid-cols-7 gap-1 text-center py-1 mb-1 font-mono">
+          <div className="grid grid-cols-7 gap-1 text-center py-1 mb-1 font-sans">
             {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
               <span
                 key={d}
@@ -371,7 +377,7 @@ function RadixCalendarPicker({ value, onChange, error }) {
           </div>
 
           {/* Days Grid */}
-          <div className="grid grid-cols-7 gap-1 text-center font-mono select-none">
+          <div className="grid grid-cols-7 gap-1 text-center font-sans select-none">
             {Array.from({ length: firstDayOfWeek }).map((_, i) => (
               <div key={`empty-${i}`} className="w-8 h-8" />
             ))}
@@ -993,6 +999,7 @@ export default function ProgramRegistrationModal({
     control,
     setValue,
     reset,
+    trigger,
     formState: { errors }
   } = useForm({
     resolver: zodResolver(registrationSchema),
@@ -1044,12 +1051,15 @@ export default function ProgramRegistrationModal({
   const dialogRef = useRef(null);
 
   const baseFee = useMemo(() => {
-    if (!activeProgram?.price) return 6300;
+    if (!activeProgram?.price) return 6000;
     const numeric = parseInt(activeProgram.price.replace(/[^0-9]/g, ''), 10);
-    return isNaN(numeric) ? 6300 : numeric;
+    return isNaN(numeric) ? 6000 : numeric;
   }, [activeProgram]);
 
-  const finalFee = Math.max(0, baseFee - promoDiscount);
+  const taxableAmount = Math.max(0, baseFee - promoDiscount);
+  // 5% GST as specified across training programs
+  const gstAmount = Math.round(taxableAmount * 0.05);
+  const totalAmount = taxableAmount + gstAmount;
 
   const handleApplyPromo = () => {
     setPromoError('');
@@ -1078,11 +1088,50 @@ export default function ProgramRegistrationModal({
     }
   };
 
+  // Layout View Mode & Stepper State
+  const [viewMode, setViewMode] = useState('wizard'); // 'wizard' | 'all-in-one'
+  const [currentStep, setCurrentStep] = useState(1); // 1: Profile, 2: Ground, 3: Checkout
+
+  const handleNextStep = async () => {
+    let fields = [];
+    if (currentStep === 1) {
+      fields = [
+        'fullName',
+        'email',
+        'mobileNo',
+        'whatsappNo',
+        'emergencyName',
+        'emergencyNo',
+        'gender',
+        'tshirtSize',
+        'dob',
+        'bloodGroup'
+      ];
+    } else if (currentStep === 2) {
+      fields = [
+        'residentialAddress',
+        'pinZipCode',
+        'locationPreference',
+        'maxDistance1Year',
+        'pbEvent'
+      ];
+    }
+    const valid = await trigger(fields);
+    if (valid) {
+      setCurrentStep((s) => Math.min(3, s + 1));
+    }
+  };
+
+  const handlePrevStep = () => {
+    setCurrentStep((s) => Math.max(1, s - 1));
+  };
+
   const handleClose = useCallback(() => {
     setSubmitted(false);
     setPromoDiscount(0);
     setPromoMessage('');
     setPromoError('');
+    setCurrentStep(1);
     reset();
     onClose();
   }, [onClose, reset]);
@@ -1123,36 +1172,21 @@ export default function ProgramRegistrationModal({
       onClick={(e) => {
         if (e.target === e.currentTarget) handleClose();
       }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-md transition-all overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-end lg:items-center justify-center p-0 lg:p-6 bg-black/80 backdrop-blur-md transition-all overflow-hidden"
     >
       <div
-        className="w-full max-w-4xl rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-10 border shadow-2xl relative my-auto max-h-[94vh] overflow-y-auto transition-all"
+        className="w-full max-w-6xl rounded-t-3xl lg:rounded-3xl border shadow-2xl relative h-[94vh] lg:h-[88vh] max-h-[920px] flex flex-col lg:flex-row overflow-hidden transition-all"
         style={{
           backgroundColor: 'var(--card-bg)',
           borderColor: 'var(--border-color)',
           color: 'var(--text-primary)'
         }}
       >
-        {/* Close Button */}
-        <button
-          onClick={handleClose}
-          aria-label="Close registration dialog"
-          title="Close dialog"
-          className="absolute top-3.5 right-3.5 sm:top-6 sm:right-6 w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full border shadow-sm transition-all hover:scale-105 z-30 cursor-pointer"
-          style={{
-            backgroundColor: 'var(--card-inner)',
-            borderColor: 'var(--border-color)',
-            color: 'var(--text-heading)'
-          }}
-        >
-          <X className="w-5 h-5 stroke-[2.5]" />
-        </button>
-
         {submitted ? (
           /* =========================================================================
              CONFIRMATION / PAYMENT RECEIPT
              ========================================================================= */
-          <div className="text-center py-6 sm:py-10 space-y-6">
+          <div className="w-full h-full overflow-y-auto p-6 sm:p-10 flex flex-col items-center justify-center text-center space-y-6">
             <div
               className="w-20 h-20 rounded-full mx-auto flex items-center justify-center shadow-xl animate-bounce"
               style={{ backgroundColor: 'var(--badge-bg)', color: 'var(--accent)' }}
@@ -1184,7 +1218,7 @@ export default function ProgramRegistrationModal({
 
             {/* Official Registration Receipt Card */}
             <div
-              className="p-5 sm:p-6 rounded-2xl border text-left text-xs sm:text-sm space-y-3 max-w-lg mx-auto shadow-md"
+              className="p-5 sm:p-6 rounded-2xl border text-left text-xs sm:text-sm space-y-3 w-full max-w-lg mx-auto shadow-md"
               style={{
                 backgroundColor: 'var(--card-inner)',
                 borderColor: 'var(--border-color)'
@@ -1228,12 +1262,19 @@ export default function ProgramRegistrationModal({
                 </div>
               )}
 
+              <div className="flex items-center justify-between" style={{ color: 'var(--text-secondary)' }}>
+                <span>GST (5%):</span>
+                <span className="font-mono font-bold" style={{ color: 'var(--text-heading)' }}>
+                  +₹{gstAmount.toLocaleString('en-IN')}
+                </span>
+              </div>
+
               <div
                 className="flex items-center justify-between pt-3 border-t text-sm sm:text-base font-black"
                 style={{ borderColor: 'var(--border-color)', color: 'var(--text-heading)' }}
               >
                 <span>Total Amount Paid:</span>
-                <span className="font-mono text-[#d02426]">₹{finalFee.toLocaleString('en-IN')}</span>
+                <span className="font-mono text-[#d02426]">₹{totalAmount.toLocaleString('en-IN')}</span>
               </div>
             </div>
 
@@ -1251,42 +1292,162 @@ export default function ProgramRegistrationModal({
             </div>
           </div>
         ) : (
-          /* =========================================================================
-             OFFICIAL PROGRAM REGISTRATION FORM
-             ========================================================================= */
-          <div>
-            {/* Header: Title + Brand Underline */}
-            <div className="text-center mb-6 sm:mb-8 pr-8 sm:pr-0">
-              <h2
-                id="reg-title"
-                className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight"
-                style={{ color: 'var(--text-heading)' }}
-              >
-                Program Registration
-              </h2>
-              <div className="w-12 h-1 bg-[#d02426] mx-auto mt-2.5 rounded-full" />
+          <>
+            {/* =========================================================================
+               DESKTOP EDITORIAL LEFT PANE (42% width)
+               ========================================================================= */}
+            <div
+              className="hidden lg:flex lg:w-[42%] lg:max-w-[430px] flex-shrink-0 flex-col justify-between p-8 border-r overflow-y-auto no-scrollbar"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.015)',
+                borderColor: 'var(--border-color)'
+              }}
+            >
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <JJsLogo className="h-7 w-auto" />
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wide uppercase bg-[#d02426]/10 text-[#d02426] border border-[#d02426]/20">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d02426] animate-pulse" />
+                    Official Roster
+                  </span>
+                </div>
 
-              {/* Active Program Banner */}
-              {activeProgram && (
-                <div
-                  className="mt-4 inline-flex flex-wrap items-center justify-center gap-2 px-4 py-2 rounded-xl border text-xs shadow-xs"
-                  style={{
-                    backgroundColor: 'var(--card-inner)',
-                    borderColor: 'var(--border-color)'
-                  }}
+                <h2
+                  id="reg-title"
+                  className="text-2xl lg:text-3xl font-black tracking-tight"
+                  style={{ color: 'var(--text-heading)' }}
                 >
-                  <span className="font-semibold" style={{ color: 'var(--text-secondary)' }}>
-                    Selected Program:
-                  </span>
-                  <span className="font-bold text-[#318cdd]">{activeProgram.title}</span>
-                  <span className="opacity-40">•</span>
-                  <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
-                    {activeProgram.price}
-                  </span>
-                  {activeProgram.tax && (
-                    <span className="text-[10px] opacity-70">({activeProgram.tax})</span>
-                  )}
+                  {activeProgram?.title || 'Program Registration'}
+                </h2>
 
+                <div className="flex flex-wrap items-center gap-2 mt-2">
+                  {activeProgram?.category && (
+                    <span className="px-2.5 py-0.5 rounded-md text-xs font-bold bg-[#318cdd]/15 text-[#318cdd]">
+                      {activeProgram.category}
+                    </span>
+                  )}
+                  {activeProgram?.level && (
+                    <span className="text-xs opacity-75" style={{ color: 'var(--text-secondary)' }}>
+                      {activeProgram.level}
+                    </span>
+                  )}
+                </div>
+
+                {activeProgram?.description && (
+                  <p className="text-xs mt-3 leading-relaxed opacity-85" style={{ color: 'var(--text-secondary)' }}>
+                    {activeProgram.description}
+                  </p>
+                )}
+
+                {/* Specs 4-Box Grid */}
+                <div className="grid grid-cols-2 gap-2.5 my-5">
+                  <div
+                    className="p-3 rounded-xl border"
+                    style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}
+                  >
+                    <span className="block text-[10px] uppercase font-bold tracking-wider opacity-60" style={{ color: 'var(--text-secondary)' }}>
+                      Duration
+                    </span>
+                    <span className="text-xs font-black" style={{ color: 'var(--text-heading)' }}>
+                      {activeProgram?.duration || '12 Weeks'}
+                    </span>
+                  </div>
+                  <div
+                    className="p-3 rounded-xl border"
+                    style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}
+                  >
+                    <span className="block text-[10px] uppercase font-bold tracking-wider opacity-60" style={{ color: 'var(--text-secondary)' }}>
+                      Schedule
+                    </span>
+                    <span className="text-xs font-black" style={{ color: 'var(--text-heading)' }}>
+                      {activeProgram?.frequency || '3-4 Days/wk'}
+                    </span>
+                  </div>
+                  <div
+                    className="p-3 rounded-xl border"
+                    style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}
+                  >
+                    <span className="block text-[10px] uppercase font-bold tracking-wider opacity-60" style={{ color: 'var(--text-secondary)' }}>
+                      Target
+                    </span>
+                    <span className="text-xs font-black truncate block" style={{ color: 'var(--text-heading)' }}>
+                      {activeProgram?.targetRace || 'Race Finish Line'}
+                    </span>
+                  </div>
+                  <div
+                    className="p-3 rounded-xl border"
+                    style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}
+                  >
+                    <span className="block text-[10px] uppercase font-bold tracking-wider opacity-60" style={{ color: 'var(--text-secondary)' }}>
+                      Format
+                    </span>
+                    <span className="text-xs font-black" style={{ color: 'var(--text-heading)' }}>
+                      Ground + App Sync
+                    </span>
+                  </div>
+                </div>
+
+                {/* Highlights List */}
+                {activeProgram?.highlights && activeProgram.highlights.length > 0 && (
+                  <div className="space-y-2 mb-6">
+                    <span className="block text-[11px] font-bold uppercase tracking-wider opacity-70" style={{ color: 'var(--text-secondary)' }}>
+                      Included In This Track:
+                    </span>
+                    <div className="space-y-1.5">
+                      {activeProgram.highlights.map((h, i) => (
+                        <div key={i} className="flex items-start gap-2 text-xs" style={{ color: 'var(--text-heading)' }}>
+                          <Check className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                          <span>{h}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Anchored Left Pane Cost Breakdown */}
+              <div>
+                <div
+                  className="p-4 rounded-2xl border space-y-2.5 shadow-xs"
+                  style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}
+                >
+                  <div className="flex items-center justify-between text-xs" style={{ color: 'var(--text-secondary)' }}>
+                    <span>Base Fee:</span>
+                    <span className="font-mono font-bold" style={{ color: 'var(--text-heading)' }}>
+                      ₹{baseFee.toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                  {promoDiscount > 0 && (
+                    <div className="flex items-center justify-between text-xs text-emerald-600 dark:text-emerald-400 font-bold">
+                      <span>Promo Discount:</span>
+                      <span className="font-mono">-₹{promoDiscount.toLocaleString('en-IN')}</span>
+                    </div>
+                  )}
+                  <div className="flex items-center justify-between text-xs" style={{ color: 'var(--text-secondary)' }}>
+                    <span>GST (5%):</span>
+                    <span className="font-mono font-bold" style={{ color: 'var(--text-heading)' }}>
+                      +₹{gstAmount.toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                  <div
+                    className="flex items-center justify-between pt-2.5 border-t text-sm font-black"
+                    style={{ borderColor: 'var(--border-color)', color: 'var(--text-heading)' }}
+                  >
+                    <span>Total Payable:</span>
+                    <span className="font-mono text-[#d02426] text-base">
+                      ₹{totalAmount.toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-3 pt-3 border-t flex flex-col gap-2" style={{ borderColor: 'var(--border-color)' }}>
+                  <div className="flex items-center justify-between text-[11px] opacity-75" style={{ color: 'var(--text-secondary)' }}>
+                    <span className="flex items-center gap-1.5">
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                      256-Bit SSL Secured
+                    </span>
+                    <span className="font-mono text-[10px]">Direct Gateway</span>
+                  </div>
                   {onSwitchToTrial && (
                     <button
                       type="button"
@@ -1294,531 +1455,923 @@ export default function ProgramRegistrationModal({
                         handleClose();
                         onSwitchToTrial();
                       }}
-                      className="ml-2 text-[11px] font-bold text-[#d02426] hover:underline cursor-pointer flex items-center gap-1"
+                      className="text-[11px] font-bold text-[#d02426] hover:underline cursor-pointer flex items-center justify-center gap-1.5 py-1"
                     >
                       <Sparkles className="w-3 h-3" /> Looking for Free Trial instead?
                     </button>
                   )}
                 </div>
-              )}
+              </div>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-5">
-              {/* Row 1: Full Name & Email Address */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label
-                    htmlFor="reg-fullName"
-                    className="block text-xs sm:text-sm font-bold mb-1.5"
-                    style={{ color: 'var(--text-heading)' }}
-                  >
-                    Full Name <span className="text-[#d02426]">*</span>
-                  </label>
-                  <input
-                    id="reg-fullName"
-                    type="text"
-                    placeholder="Enter full name"
-                    {...register('fullName')}
-                    className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      errors.fullName ? 'border-red-500 bg-red-500/5' : ''
-                    }`}
-                    style={{
-                      backgroundColor: 'var(--card-inner)',
-                      borderColor: errors.fullName ? '#ef4444' : 'var(--border-color)',
-                      color: 'var(--text-heading)'
-                    }}
-                  />
-                  {errors.fullName && (
-                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.fullName.message}
-                    </p>
-                  )}
+            {/* =========================================================================
+               RIGHT PANE: FORM & CONTROLS
+               ========================================================================= */}
+            <div className="flex-1 flex flex-col h-full overflow-hidden relative">
+              {/* Mobile Grab Handle */}
+              <div className="lg:hidden flex items-center justify-center pt-2.5 pb-1 flex-shrink-0">
+                <div className="w-12 h-1.5 rounded-full bg-slate-500/30" />
+              </div>
+
+              {/* Right Header Bar with View Switcher */}
+              <div
+                className="h-14 sm:h-16 px-4 sm:px-6 lg:px-8 border-b flex items-center justify-between flex-shrink-0 gap-2"
+                style={{ borderColor: 'var(--border-color)' }}
+              >
+                <div className="flex items-center gap-2 truncate">
+                  <span className="lg:hidden font-black text-xs sm:text-sm uppercase tracking-tight truncate" style={{ color: 'var(--text-heading)' }}>
+                    {activeProgram?.title || 'Program Registration'}
+                  </span>
+                  <span className="hidden lg:inline text-xs font-bold uppercase tracking-wider opacity-60" style={{ color: 'var(--text-secondary)' }}>
+                    Athlete Registration
+                  </span>
                 </div>
 
-                <div>
-                  <label
-                    htmlFor="reg-email"
-                    className="block text-xs sm:text-sm font-bold mb-1.5"
-                    style={{ color: 'var(--text-heading)' }}
-                  >
-                    Email Address <span className="text-[#d02426]">*</span>
-                  </label>
-                  <input
-                    id="reg-email"
-                    type="email"
-                    placeholder="name@example.com"
-                    {...register('email')}
-                    className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      errors.email ? 'border-red-500 bg-red-500/5' : ''
+                {/* Interactive Mode Switcher Pill */}
+                <div
+                  className="flex items-center p-0.5 rounded-full border text-[11px] font-bold"
+                  style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setViewMode('wizard')}
+                    className={`px-2.5 sm:px-3 py-1 rounded-full transition-all cursor-pointer flex items-center gap-1.5 ${
+                      viewMode === 'wizard'
+                        ? 'bg-[#d02426] text-white shadow-xs'
+                        : 'opacity-70 hover:opacity-100'
                     }`}
+                    style={{ color: viewMode === 'wizard' ? '#ffffff' : 'var(--text-heading)' }}
+                  >
+                    <span>3-Step Wizard</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setViewMode('all-in-one')}
+                    className={`px-2.5 sm:px-3 py-1 rounded-full transition-all cursor-pointer flex items-center gap-1.5 ${
+                      viewMode === 'all-in-one'
+                        ? 'bg-[#318cdd] text-white shadow-xs'
+                        : 'opacity-70 hover:opacity-100'
+                    }`}
+                    style={{ color: viewMode === 'all-in-one' ? '#ffffff' : 'var(--text-heading)' }}
+                  >
+                    <span>All-in-One</span>
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-2.5 flex-shrink-0">
+                  {/* Close X Button */}
+                  <button
+                    onClick={handleClose}
+                    aria-label="Close registration dialog"
+                    title="Close dialog"
+                    className="w-9 h-9 sm:w-10 sm:h-10 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-full border shadow-sm transition-all hover:scale-105 cursor-pointer outline-none focus:outline-none"
                     style={{
                       backgroundColor: 'var(--card-inner)',
-                      borderColor: errors.email ? '#ef4444' : 'var(--border-color)',
+                      borderColor: 'var(--border-color)',
                       color: 'var(--text-heading)'
                     }}
-                  />
-                  {errors.email && (
-                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.email.message}
-                    </p>
-                  )}
+                  >
+                    <X className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
+                  </button>
                 </div>
               </div>
 
-              {/* Row 2: Mobile No & WhatsApp No */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label
-                    htmlFor="reg-mobile"
-                    className="block text-xs sm:text-sm font-bold mb-1.5"
-                    style={{ color: 'var(--text-heading)' }}
-                  >
-                    Mobile No <span className="text-[#d02426]">*</span>
-                  </label>
-                  <input
-                    id="reg-mobile"
-                    type="tel"
-                    inputMode="numeric"
-                    maxLength={10}
-                    placeholder="10-digit mobile number"
-                    {...register('mobileNo', {
-                      onChange: (e) => {
-                        const clean = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
-                        setValue('mobileNo', clean);
-                      }
-                    })}
-                    className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border font-mono text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      errors.mobileNo ? 'border-red-500 bg-red-500/5' : ''
-                    }`}
-                    style={{
-                      backgroundColor: 'var(--card-inner)',
-                      borderColor: errors.mobileNo ? '#ef4444' : 'var(--border-color)',
-                      color: 'var(--text-heading)'
-                    }}
-                  />
-                  {errors.mobileNo && (
-                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.mobileNo.message}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <label
-                      htmlFor="reg-whatsapp"
-                      className="block text-xs sm:text-sm font-bold"
-                      style={{ color: 'var(--text-heading)' }}
-                    >
-                      Whatsapp No <span className="text-[#d02426]">*</span>
-                    </label>
-                    <label className="flex items-center gap-1.5 text-[11px] cursor-pointer opacity-80 hover:opacity-100">
-                      <input
-                        type="checkbox"
-                        {...register('sameAsMobile')}
-                        className="rounded accent-[#d02426] cursor-pointer"
-                      />
-                      <span>Same as Mobile</span>
-                    </label>
+              {/* Scrollable Form Body */}
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6 no-scrollbar pb-28 lg:pb-8">
+                {/* Mobile Program Summary Banner */}
+                <div
+                  className="lg:hidden p-3.5 rounded-xl border flex items-center justify-between text-xs"
+                  style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}
+                >
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider opacity-60 block" style={{ color: 'var(--text-secondary)' }}>
+                      Selected Track
+                    </span>
+                    <span className="font-bold text-[#318cdd] text-sm">{activeProgram?.title}</span>
                   </div>
-                  <input
-                    id="reg-whatsapp"
-                    type="tel"
-                    inputMode="numeric"
-                    maxLength={10}
-                    placeholder="10-digit WhatsApp number"
-                    disabled={watchSameAsMobile}
-                    {...register('whatsappNo', {
-                      onChange: (e) => {
-                        const clean = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
-                        setValue('whatsappNo', clean);
-                      }
-                    })}
-                    className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border font-mono text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      watchSameAsMobile ? 'opacity-60 cursor-not-allowed' : ''
-                    } ${errors.whatsappNo ? 'border-red-500 bg-red-500/5' : ''}`}
-                    style={{
-                      backgroundColor: 'var(--card-inner)',
-                      borderColor: errors.whatsappNo ? '#ef4444' : 'var(--border-color)',
-                      color: 'var(--text-heading)'
-                    }}
-                  />
-                  {errors.whatsappNo && (
-                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.whatsappNo.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {/* Row 3: Emergency Contact Name & Emergency Contact No */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label
-                    htmlFor="reg-emergency-name"
-                    className="block text-xs sm:text-sm font-bold mb-1.5"
-                    style={{ color: 'var(--text-heading)' }}
-                  >
-                    Emergency Contact Name <span className="text-[#d02426]">*</span>
-                  </label>
-                  <input
-                    id="reg-emergency-name"
-                    type="text"
-                    placeholder="Relative, spouse, or friend"
-                    {...register('emergencyName')}
-                    className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      errors.emergencyName ? 'border-red-500 bg-red-500/5' : ''
-                    }`}
-                    style={{
-                      backgroundColor: 'var(--card-inner)',
-                      borderColor: errors.emergencyName ? '#ef4444' : 'var(--border-color)',
-                      color: 'var(--text-heading)'
-                    }}
-                  />
-                  {errors.emergencyName && (
-                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.emergencyName.message}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="reg-emergency-no"
-                    className="block text-xs sm:text-sm font-bold mb-1.5"
-                    style={{ color: 'var(--text-heading)' }}
-                  >
-                    Emergency Contact No <span className="text-[#d02426]">*</span>
-                  </label>
-                  <input
-                    id="reg-emergency-no"
-                    type="tel"
-                    inputMode="numeric"
-                    maxLength={10}
-                    placeholder="10-digit emergency number"
-                    {...register('emergencyNo', {
-                      onChange: (e) => {
-                        const clean = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
-                        setValue('emergencyNo', clean);
-                      }
-                    })}
-                    className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border font-mono text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      errors.emergencyNo ? 'border-red-500 bg-red-500/5' : ''
-                    }`}
-                    style={{
-                      backgroundColor: 'var(--card-inner)',
-                      borderColor: errors.emergencyNo ? '#ef4444' : 'var(--border-color)',
-                      color: 'var(--text-heading)'
-                    }}
-                  />
-                  {errors.emergencyNo && (
-                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.emergencyNo.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {/* Row 4: Gender & T-Shirt Size */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs sm:text-sm font-bold mb-2" style={{ color: 'var(--text-heading)' }}>
-                    Gender <span className="text-[#d02426]">*</span>
-                  </label>
-                  <div className="flex items-center gap-6 pt-1">
-                    {['Male', 'Female'].map((g) => (
-                      <label key={g} className="flex items-center gap-2 cursor-pointer text-xs sm:text-sm font-medium">
-                        <input
-                          type="radio"
-                          value={g}
-                          {...register('gender')}
-                          className="w-4 h-4 accent-[#318cdd] cursor-pointer"
-                        />
-                        <span style={{ color: 'var(--text-heading)' }}>{g}</span>
-                      </label>
-                    ))}
+                  <div className="text-right">
+                    <span className="font-mono font-black text-sm text-[#d02426]">
+                      ₹{totalAmount.toLocaleString('en-IN')}
+                    </span>
+                    <span className="text-[10px] block opacity-60" style={{ color: 'var(--text-secondary)' }}>
+                      Incl. 5% GST
+                    </span>
                   </div>
-                  {errors.gender && (
-                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.gender.message}
-                    </p>
-                  )}
                 </div>
 
-                <div>
-                  <label className="block text-xs sm:text-sm font-bold mb-2" style={{ color: 'var(--text-heading)' }}>
-                    T-Shirt Size <span className="text-[#d02426]">*</span>
-                  </label>
-                  <div className="flex flex-wrap items-center gap-4 sm:gap-5 pt-1">
-                    {TSHIRT_SIZES.map((size) => (
-                      <label key={size} className="flex items-center gap-1.5 cursor-pointer text-xs sm:text-sm font-medium">
-                        <input
-                          type="radio"
-                          value={size}
-                          {...register('tshirtSize')}
-                          className="w-4 h-4 accent-[#318cdd] cursor-pointer"
-                        />
-                        <span style={{ color: 'var(--text-heading)' }}>{size}</span>
-                      </label>
-                    ))}
+                {/* 3-Step Wizard Stepper Tabs */}
+                {viewMode === 'wizard' && (
+                  <div className="space-y-3 mb-2">
+                    <div className="grid grid-cols-3 gap-2">
+                      {[
+                        { step: 1, label: 'Runner Profile' },
+                        { step: 2, label: 'Training Ground' },
+                        { step: 3, label: 'Waiver & Pay' }
+                      ].map(({ step, label }) => {
+                        const isActive = currentStep === step;
+                        const isPassed = currentStep > step;
+
+                        return (
+                          <button
+                            key={step}
+                            type="button"
+                            onClick={async () => {
+                              if (step < currentStep) {
+                                setCurrentStep(step);
+                              } else if (step > currentStep) {
+                                await handleNextStep();
+                              }
+                            }}
+                            className={`p-2 sm:p-2.5 rounded-xl border text-left transition-all cursor-pointer flex items-center gap-2 ${
+                              isActive
+                                ? 'border-[#318cdd] ring-1 ring-[#318cdd]/40'
+                                : isPassed
+                                ? 'border-emerald-500/40'
+                                : 'opacity-60 hover:opacity-90'
+                            }`}
+                            style={{
+                              backgroundColor: isActive
+                                ? 'rgba(49, 140, 221, 0.08)'
+                                : isPassed
+                                ? 'rgba(16, 185, 129, 0.06)'
+                                : 'var(--card-inner)',
+                              borderColor: isActive
+                                ? '#318cdd'
+                                : isPassed
+                                ? 'rgba(16, 185, 129, 0.4)'
+                                : 'var(--border-color)'
+                            }}
+                          >
+                            <div
+                              className="w-5 h-5 sm:w-6 sm:h-6 rounded-md flex items-center justify-center text-[10px] sm:text-xs font-black flex-shrink-0"
+                              style={{
+                                backgroundColor: isActive
+                                  ? '#318cdd'
+                                  : isPassed
+                                  ? '#10b981'
+                                  : 'var(--card-inner)',
+                                color: isActive || isPassed ? '#ffffff' : 'var(--text-secondary)'
+                              }}
+                            >
+                              {isPassed ? <Check className="w-3 h-3 stroke-[3]" /> : `0${step}`}
+                            </div>
+                            <div className="truncate min-w-0">
+                              <span className="text-[9px] uppercase font-bold tracking-wider opacity-60 block truncate" style={{ color: 'var(--text-secondary)' }}>
+                                Step 0{step}
+                              </span>
+                              <span className="text-[11px] sm:text-xs font-bold truncate block" style={{ color: 'var(--text-heading)' }}>
+                                {label}
+                              </span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Stepper Progress Line */}
+                    <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--card-inner)' }}>
+                      <div
+                        className="h-full bg-gradient-to-r from-[#318cdd] to-[#d02426] transition-all duration-300 rounded-full"
+                        style={{ width: `${(currentStep / 3) * 100}%` }}
+                      />
+                    </div>
                   </div>
-                  {errors.tshirtSize && (
-                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.tshirtSize.message}
-                    </p>
-                  )}
-                </div>
-              </div>
+                )}
 
-              {/* Row 5: Date of Birth & Blood Group */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
-                    Date of Birth <span className="text-[#d02426]">*</span>
-                  </label>
-                  <Controller
-                    name="dob"
-                    control={control}
-                    render={({ field }) => (
-                      <RadixCalendarPicker
-                        value={field.value}
-                        onChange={field.onChange}
-                        error={errors.dob?.message}
-                      />
-                    )}
-                  />
-                  {errors.dob && (
-                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.dob.message}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
-                    Blood Group <span className="text-[#d02426]">*</span>
-                  </label>
-                  <Controller
-                    name="bloodGroup"
-                    control={control}
-                    render={({ field }) => (
-                      <RadixSelect
-                        id="reg-blood-group"
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        options={BLOOD_GROUPS}
-                        placeholder="Select Blood Group"
-                        error={errors.bloodGroup?.message}
-                      />
-                    )}
-                  />
-                  {errors.bloodGroup && (
-                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.bloodGroup.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {/* Row 6: Residential Address & Pin Code + Location Preference */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
-                <div className="flex flex-col h-full">
-                  <label
-                    htmlFor="reg-address"
-                    className="block text-xs sm:text-sm font-bold mb-1.5"
+                <form id="reg-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* =========================================================================
+                 SECTION 1: RUNNER PROFILE
+                 ========================================================================= */}
+              {(viewMode === 'all-in-one' || currentStep === 1) && (
+              <div
+                className="p-4 sm:p-6 rounded-2xl border space-y-4"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                  borderColor: 'var(--border-color)'
+                }}
+              >
+                <div
+                  className="flex items-center gap-2 pb-2.5 border-b"
+                  style={{ borderColor: 'var(--border-color)' }}
+                >
+                  <User className="w-4 h-4 text-[#318cdd]" />
+                  <span
+                    className="text-xs sm:text-sm font-black uppercase tracking-wider"
                     style={{ color: 'var(--text-heading)' }}
                   >
-                    Residential Address <span className="text-[#d02426]">*</span>
-                  </label>
-                  <textarea
-                    id="reg-address"
-                    placeholder="Enter full postal address"
-                    {...register('residentialAddress')}
-                    className={`w-full flex-1 min-h-[115px] px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 resize-none ${
-                      errors.residentialAddress ? 'border-red-500 bg-red-500/5' : ''
-                    }`}
-                    style={{
-                      backgroundColor: 'var(--card-inner)',
-                      borderColor: errors.residentialAddress ? '#ef4444' : 'var(--border-color)',
-                      color: 'var(--text-heading)'
-                    }}
-                  />
-                  {errors.residentialAddress && (
-                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.residentialAddress.message}
-                    </p>
-                  )}
+                    1. Runner Profile
+                  </span>
                 </div>
 
-                <div className="flex flex-col justify-between gap-3 sm:gap-3.5">
+                {/* Row 1: Full Name & Email Address */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label
-                      htmlFor="reg-pincode"
+                      htmlFor="reg-fullName"
                       className="block text-xs sm:text-sm font-bold mb-1.5"
                       style={{ color: 'var(--text-heading)' }}
                     >
-                      Pin / Zip Code <span className="text-[#d02426]">*</span>
+                      Full Name <span className="text-[#d02426]">*</span>
                     </label>
                     <input
-                      id="reg-pincode"
+                      id="reg-fullName"
                       type="text"
-                      inputMode="numeric"
-                      maxLength={6}
-                      placeholder="6-digit PIN code (e.g. 560003)"
-                      {...register('pinZipCode', {
-                        onChange: (e) => {
-                          const clean = e.target.value.replace(/[^0-9]/g, '').slice(0, 6);
-                          setValue('pinZipCode', clean);
-                        }
-                      })}
-                      className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border font-mono text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                        errors.pinZipCode ? 'border-red-500 bg-red-500/5' : ''
+                      placeholder="Enter full name"
+                      {...register('fullName')}
+                      className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
+                        errors.fullName ? 'border-red-500 bg-red-500/5' : ''
                       }`}
                       style={{
                         backgroundColor: 'var(--card-inner)',
-                        borderColor: errors.pinZipCode ? '#ef4444' : 'var(--border-color)',
+                        borderColor: errors.fullName ? '#ef4444' : 'var(--border-color)',
                         color: 'var(--text-heading)'
                       }}
                     />
-                    {errors.pinZipCode && (
+                    {errors.fullName && (
                       <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                        <AlertCircle className="w-3 h-3" /> {errors.pinZipCode.message}
+                        <AlertCircle className="w-3 h-3" /> {errors.fullName.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="reg-email"
+                      className="block text-xs sm:text-sm font-bold mb-1.5"
+                      style={{ color: 'var(--text-heading)' }}
+                    >
+                      Email Address <span className="text-[#d02426]">*</span>
+                    </label>
+                    <input
+                      id="reg-email"
+                      type="email"
+                      placeholder="name@example.com"
+                      {...register('email')}
+                      className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
+                        errors.email ? 'border-red-500 bg-red-500/5' : ''
+                      }`}
+                      style={{
+                        backgroundColor: 'var(--card-inner)',
+                        borderColor: errors.email ? '#ef4444' : 'var(--border-color)',
+                        color: 'var(--text-heading)'
+                      }}
+                    />
+                    {errors.email && (
+                      <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" /> {errors.email.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Row 2: Mobile No & WhatsApp No */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      htmlFor="reg-mobile"
+                      className="block text-xs sm:text-sm font-bold mb-1.5"
+                      style={{ color: 'var(--text-heading)' }}
+                    >
+                      Mobile No <span className="text-[#d02426]">*</span>
+                    </label>
+                    <input
+                      id="reg-mobile"
+                      type="tel"
+                      inputMode="numeric"
+                      maxLength={10}
+                      placeholder="10-digit mobile number"
+                      {...register('mobileNo', {
+                        onChange: (e) => {
+                          const clean = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+                          setValue('mobileNo', clean, { shouldValidate: true });
+                        }
+                      })}
+                      className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border font-mono text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
+                        errors.mobileNo ? 'border-red-500 bg-red-500/5' : ''
+                      }`}
+                      style={{
+                        backgroundColor: 'var(--card-inner)',
+                        borderColor: errors.mobileNo ? '#ef4444' : 'var(--border-color)',
+                        color: 'var(--text-heading)'
+                      }}
+                    />
+                    {errors.mobileNo && (
+                      <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" /> {errors.mobileNo.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label
+                        htmlFor="reg-whatsapp"
+                        className="block text-xs sm:text-sm font-bold"
+                        style={{ color: 'var(--text-heading)' }}
+                      >
+                        WhatsApp No <span className="text-[#d02426]">*</span>
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const next = !watchSameAsMobile;
+                          setValue('sameAsMobile', next, { shouldValidate: true });
+                          if (next && watchMobileNo) {
+                            setValue('whatsappNo', watchMobileNo, { shouldValidate: true });
+                          }
+                        }}
+                        className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold border transition-all flex items-center gap-1 cursor-pointer ${
+                          watchSameAsMobile
+                            ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-600 dark:text-emerald-400'
+                            : 'opacity-60 hover:opacity-100'
+                        }`}
+                        style={{
+                          backgroundColor: watchSameAsMobile ? undefined : 'var(--card-inner)',
+                          borderColor: watchSameAsMobile ? undefined : 'var(--border-color)',
+                          color: watchSameAsMobile ? undefined : 'var(--text-secondary)'
+                        }}
+                      >
+                        <Check className={`w-3 h-3 ${watchSameAsMobile ? 'opacity-100' : 'opacity-30'}`} />
+                        <span>Same as Mobile</span>
+                      </button>
+                    </div>
+                    <input
+                      id="reg-whatsapp"
+                      type="tel"
+                      inputMode="numeric"
+                      maxLength={10}
+                      placeholder="10-digit WhatsApp number"
+                      disabled={watchSameAsMobile}
+                      {...register('whatsappNo', {
+                        onChange: (e) => {
+                          const clean = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+                          setValue('whatsappNo', clean);
+                        }
+                      })}
+                      className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border font-mono text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
+                        watchSameAsMobile ? 'opacity-60 cursor-not-allowed' : ''
+                      } ${errors.whatsappNo ? 'border-red-500 bg-red-500/5' : ''}`}
+                      style={{
+                        backgroundColor: 'var(--card-inner)',
+                        borderColor: errors.whatsappNo ? '#ef4444' : 'var(--border-color)',
+                        color: 'var(--text-heading)'
+                      }}
+                    />
+                    {errors.whatsappNo && (
+                      <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" /> {errors.whatsappNo.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Row 3: Emergency Contact Name & Number */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      htmlFor="reg-emergency-name"
+                      className="block text-xs sm:text-sm font-bold mb-1.5"
+                      style={{ color: 'var(--text-heading)' }}
+                    >
+                      Emergency Contact Name <span className="text-[#d02426]">*</span>
+                    </label>
+                    <input
+                      id="reg-emergency-name"
+                      type="text"
+                      placeholder="Relative, spouse, or friend"
+                      {...register('emergencyName')}
+                      className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
+                        errors.emergencyName ? 'border-red-500 bg-red-500/5' : ''
+                      }`}
+                      style={{
+                        backgroundColor: 'var(--card-inner)',
+                        borderColor: errors.emergencyName ? '#ef4444' : 'var(--border-color)',
+                        color: 'var(--text-heading)'
+                      }}
+                    />
+                    {errors.emergencyName && (
+                      <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" /> {errors.emergencyName.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="reg-emergency-no"
+                      className="block text-xs sm:text-sm font-bold mb-1.5"
+                      style={{ color: 'var(--text-heading)' }}
+                    >
+                      Emergency Contact No <span className="text-[#d02426]">*</span>
+                    </label>
+                    <input
+                      id="reg-emergency-no"
+                      type="tel"
+                      inputMode="numeric"
+                      maxLength={10}
+                      placeholder="10-digit emergency number"
+                      {...register('emergencyNo', {
+                        onChange: (e) => {
+                          const clean = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+                          setValue('emergencyNo', clean);
+                        }
+                      })}
+                      className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border font-mono text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
+                        errors.emergencyNo ? 'border-red-500 bg-red-500/5' : ''
+                      }`}
+                      style={{
+                        backgroundColor: 'var(--card-inner)',
+                        borderColor: errors.emergencyNo ? '#ef4444' : 'var(--border-color)',
+                        color: 'var(--text-heading)'
+                      }}
+                    />
+                    {errors.emergencyNo && (
+                      <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" /> {errors.emergencyNo.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Row 4: Gender & T-Shirt Size (Sports Pill Selectors) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
+                      Gender <span className="text-[#d02426]">*</span>
+                    </label>
+                    <Controller
+                      name="gender"
+                      control={control}
+                      render={({ field }) => (
+                        <div className="grid grid-cols-2 gap-2 pt-0.5">
+                          {['Male', 'Female'].map((g) => {
+                            const isSelected = field.value === g;
+                            return (
+                              <button
+                                type="button"
+                                key={g}
+                                onClick={() => field.onChange(g)}
+                                className={`py-2.5 px-3 rounded-xl border text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                                  isSelected
+                                    ? 'bg-[#318cdd] text-white border-[#318cdd] shadow-md shadow-[#318cdd]/30 scale-[1.02]'
+                                    : 'hover:bg-[var(--card-inner)] opacity-70 hover:opacity-100'
+                                }`}
+                                style={{
+                                  backgroundColor: isSelected ? '#318cdd' : 'var(--card-inner)',
+                                  borderColor: isSelected ? '#318cdd' : errors.gender ? '#ef4444' : 'var(--border-color)',
+                                  color: isSelected ? '#ffffff' : 'var(--text-heading)'
+                                }}
+                              >
+                                <span>{g}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    />
+                    {errors.gender && (
+                      <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" /> {errors.gender.message}
                       </p>
                     )}
                   </div>
 
                   <div>
                     <label className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
-                      Location Preference <span className="text-[#d02426]">*</span>
+                      T-Shirt Size <span className="text-[#d02426]">*</span>
                     </label>
                     <Controller
-                      name="locationPreference"
+                      name="tshirtSize"
                       control={control}
                       render={({ field }) => (
-                        <RadixLocationSelect
-                          value={field.value}
-                          onChange={field.onChange}
-                          error={errors.locationPreference?.message}
-                        />
+                        <div className="grid grid-cols-5 gap-1.5 sm:gap-2 pt-0.5">
+                          {TSHIRT_SIZES.map((size) => {
+                            const isSelected = field.value === size;
+                            return (
+                              <button
+                                type="button"
+                                key={size}
+                                onClick={() => field.onChange(size)}
+                                className={`py-2.5 rounded-xl border text-xs sm:text-sm font-black transition-all cursor-pointer ${
+                                  isSelected
+                                    ? 'bg-[#318cdd] text-white border-[#318cdd] shadow-md shadow-[#318cdd]/30 scale-[1.04]'
+                                    : 'hover:bg-[var(--card-inner)] opacity-70 hover:opacity-100'
+                                }`}
+                                style={{
+                                  backgroundColor: isSelected ? '#318cdd' : 'var(--card-inner)',
+                                  borderColor: isSelected ? '#318cdd' : errors.tshirtSize ? '#ef4444' : 'var(--border-color)',
+                                  color: isSelected ? '#ffffff' : 'var(--text-heading)'
+                                }}
+                              >
+                                {size}
+                              </button>
+                            );
+                          })}
+                        </div>
                       )}
                     />
-                    {errors.locationPreference && (
+                    {errors.tshirtSize && (
                       <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                        <AlertCircle className="w-3 h-3" /> {errors.locationPreference.message}
+                        <AlertCircle className="w-3 h-3" /> {errors.tshirtSize.message}
                       </p>
                     )}
                   </div>
                 </div>
-              </div>
 
-              {/* Maximum Distance Run in last 1 year */}
-              <div className="pt-2">
-                <label className="block text-xs sm:text-sm font-bold mb-2" style={{ color: 'var(--text-heading)' }}>
-                  Maximum Distance Run in last 1 year <span className="text-[#d02426]">*</span>
-                </label>
-                <div className="flex flex-wrap items-center gap-3 sm:gap-5">
-                  {DISTANCE_OPTIONS.map((dist) => (
-                    <label key={dist} className="flex items-center gap-1.5 cursor-pointer text-xs sm:text-sm font-medium">
-                      <input
-                        type="radio"
-                        value={dist}
-                        {...register('maxDistance1Year')}
-                        className="w-4 h-4 accent-[#318cdd] cursor-pointer"
-                      />
-                      <span style={{ color: 'var(--text-heading)' }}>{dist}</span>
-                    </label>
-                  ))}
-                </div>
-                {errors.maxDistance1Year && (
-                  <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" /> {errors.maxDistance1Year.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Personal Best Event & Timing */}
-              <div>
-                <label className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
-                  Personal Best Event &amp; Timing <span className="text-[#d02426]">*</span>
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* Row 5: Date of Birth & Blood Group */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
+                    <label className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
+                      Date of Birth <span className="text-[#d02426]">*</span>
+                    </label>
                     <Controller
-                      name="pbEvent"
+                      name="dob"
+                      control={control}
+                      render={({ field }) => (
+                        <RadixCalendarPicker
+                          value={field.value}
+                          onChange={field.onChange}
+                          error={errors.dob?.message}
+                        />
+                      )}
+                    />
+                    {errors.dob && (
+                      <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" /> {errors.dob.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
+                      Blood Group <span className="text-[#d02426]">*</span>
+                    </label>
+                    <Controller
+                      name="bloodGroup"
                       control={control}
                       render={({ field }) => (
                         <RadixSelect
-                          id="reg-pb-event"
+                          id="reg-blood-group"
                           value={field.value}
-                          onValueChange={(val) => {
-                            field.onChange(val);
-                            if (val === 'None / First-timer') {
-                              setValue('pbTiming', '');
-                            }
-                          }}
-                          options={PB_EVENTS}
-                          placeholder="Select PB Event"
-                          error={errors.pbEvent?.message}
+                          onValueChange={field.onChange}
+                          options={BLOOD_GROUPS}
+                          placeholder="Select Blood Group"
+                          error={errors.bloodGroup?.message}
                         />
                       )}
                     />
+                    {errors.bloodGroup && (
+                      <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" /> {errors.bloodGroup.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Step 1 Next Action (Wizard Desktop) */}
+                {viewMode === 'wizard' && (
+                  <div className="hidden lg:flex items-center justify-end pt-4 border-t" style={{ borderColor: 'var(--border-color)' }}>
+                    <button
+                      type="button"
+                      onClick={handleNextStep}
+                      className="px-8 py-3 rounded-xl text-sm font-bold tracking-wider uppercase transition-all shadow-md bg-[#318cdd] hover:bg-[#256eb0] text-white flex items-center gap-2 cursor-pointer active:scale-95"
+                    >
+                      <span>Continue to Training Details</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
+              </div>
+              )}
+
+              {/* =========================================================================
+                 SECTION 2: TRAINING GROUND & ADDRESS (Step 2)
+                 ========================================================================= */}
+              {(viewMode === 'all-in-one' || currentStep === 2) && (
+              <>
+              <div
+                className="p-4 sm:p-6 rounded-2xl border space-y-4"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                  borderColor: 'var(--border-color)'
+                }}
+              >
+                <div
+                  className="flex items-center gap-2 pb-2.5 border-b"
+                  style={{ borderColor: 'var(--border-color)' }}
+                >
+                  <MapPin className="w-4 h-4 text-[#318cdd]" />
+                  <span
+                    className="text-xs sm:text-sm font-black uppercase tracking-wider"
+                    style={{ color: 'var(--text-heading)' }}
+                  >
+                    2. Training Ground &amp; Address
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
+                  <div className="flex flex-col h-full">
+                    <label
+                      htmlFor="reg-address"
+                      className="block text-xs sm:text-sm font-bold mb-1.5"
+                      style={{ color: 'var(--text-heading)' }}
+                    >
+                      Residential Address <span className="text-[#d02426]">*</span>
+                    </label>
+                    <textarea
+                      id="reg-address"
+                      placeholder="Enter full postal address"
+                      {...register('residentialAddress')}
+                      className={`w-full flex-1 min-h-[115px] px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 resize-none ${
+                        errors.residentialAddress ? 'border-red-500 bg-red-500/5' : ''
+                      }`}
+                      style={{
+                        backgroundColor: 'var(--card-inner)',
+                        borderColor: errors.residentialAddress ? '#ef4444' : 'var(--border-color)',
+                        color: 'var(--text-heading)'
+                      }}
+                    />
+                    {errors.residentialAddress && (
+                      <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" /> {errors.residentialAddress.message}
+                      </p>
+                    )}
                   </div>
 
-                  <div>
-                    <Controller
-                      name="pbTiming"
-                      control={control}
-                      render={({ field }) => (
-                        <PopoverTimePicker
-                          value={field.value}
-                          onChange={field.onChange}
-                          disabled={watchPbEvent === 'None / First-timer'}
-                          error={errors.pbTiming?.message}
-                        />
+                  <div className="flex flex-col justify-between gap-3 sm:gap-3.5">
+                    <div>
+                      <label
+                        htmlFor="reg-pincode"
+                        className="block text-xs sm:text-sm font-bold mb-1.5"
+                        style={{ color: 'var(--text-heading)' }}
+                      >
+                        Pin / Zip Code <span className="text-[#d02426]">*</span>
+                      </label>
+                      <input
+                        id="reg-pincode"
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={6}
+                        placeholder="6-digit PIN code (e.g. 560003)"
+                        {...register('pinZipCode', {
+                          onChange: (e) => {
+                            const clean = e.target.value.replace(/[^0-9]/g, '').slice(0, 6);
+                            setValue('pinZipCode', clean);
+                          }
+                        })}
+                        className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border font-mono text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
+                          errors.pinZipCode ? 'border-red-500 bg-red-500/5' : ''
+                        }`}
+                        style={{
+                          backgroundColor: 'var(--card-inner)',
+                          borderColor: errors.pinZipCode ? '#ef4444' : 'var(--border-color)',
+                          color: 'var(--text-heading)'
+                        }}
+                      />
+                      {errors.pinZipCode && (
+                        <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3" /> {errors.pinZipCode.message}
+                        </p>
                       )}
-                    />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
+                        Training Ground Preference <span className="text-[#d02426]">*</span>
+                      </label>
+                      <Controller
+                        name="locationPreference"
+                        control={control}
+                        render={({ field }) => (
+                          <RadixLocationSelect
+                            value={field.value}
+                            onChange={field.onChange}
+                            error={errors.locationPreference?.message}
+                          />
+                        )}
+                      />
+                      {errors.locationPreference && (
+                        <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3" /> {errors.locationPreference.message}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Health Problem */}
-              <div>
-                <label
-                  htmlFor="reg-health"
-                  className="block text-xs sm:text-sm font-bold mb-1.5"
-                  style={{ color: 'var(--text-heading)' }}
+              {/* =========================================================================
+                 SECTION 3: RUNNING BACKGROUND & PERSONAL BEST
+                 ========================================================================= */}
+              <div
+                className="p-4 sm:p-6 rounded-2xl border space-y-4"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                  borderColor: 'var(--border-color)'
+                }}
+              >
+                <div
+                  className="flex items-center gap-2 pb-2.5 border-b"
+                  style={{ borderColor: 'var(--border-color)' }}
                 >
-                  Specify health problem (if any) that might hamper physical activities
-                </label>
-                <textarea
-                  id="reg-health"
-                  rows={3}
-                  placeholder="e.g. Asthma, prior ACL tear, hypertension, cardiac conditions, or write 'None'..."
-                  {...register('healthProblem')}
-                  className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 resize-none"
-                  style={{
-                    backgroundColor: 'var(--card-inner)',
-                    borderColor: 'var(--border-color)',
-                    color: 'var(--text-heading)'
-                  }}
-                />
-              </div>
+                  <Trophy className="w-4 h-4 text-[#318cdd]" />
+                  <span
+                    className="text-xs sm:text-sm font-black uppercase tracking-wider"
+                    style={{ color: 'var(--text-heading)' }}
+                  >
+                    3. Running Background &amp; Personal Best
+                  </span>
+                </div>
 
-              {/* Promocode Section */}
-              <div className="pt-1">
-                <div className="max-w-md">
+                {/* Maximum Distance Run in last 1 year (Interactive Athletic Chips) */}
+                <div>
+                  <label className="block text-xs sm:text-sm font-bold mb-2" style={{ color: 'var(--text-heading)' }}>
+                    Maximum Distance Run in last 1 year <span className="text-[#d02426]">*</span>
+                  </label>
+                  <Controller
+                    name="maxDistance1Year"
+                    control={control}
+                    render={({ field }) => (
+                      <div className="flex flex-wrap gap-2 pt-0.5">
+                        {DISTANCE_OPTIONS.map((dist) => {
+                          const isSelected = field.value === dist;
+                          const label =
+                            dist === 'HM'
+                              ? 'Half Marathon (21K)'
+                              : dist === 'FM'
+                              ? 'Full Marathon (42K)'
+                              : dist;
+                          return (
+                            <button
+                              type="button"
+                              key={dist}
+                              onClick={() => field.onChange(dist)}
+                              className={`px-3.5 py-2 rounded-xl border text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                                isSelected
+                                  ? 'bg-[#318cdd] text-white border-[#318cdd] shadow-sm shadow-[#318cdd]/30 scale-105'
+                                  : 'hover:bg-[var(--card-inner)] opacity-75 hover:opacity-100'
+                              }`}
+                              style={{
+                                backgroundColor: isSelected ? '#318cdd' : 'var(--card-inner)',
+                                borderColor: isSelected
+                                  ? '#318cdd'
+                                  : errors.maxDistance1Year
+                                  ? '#ef4444'
+                                  : 'var(--border-color)',
+                                color: isSelected ? '#ffffff' : 'var(--text-heading)'
+                              }}
+                            >
+                              {label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  />
+                  {errors.maxDistance1Year && (
+                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" /> {errors.maxDistance1Year.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Personal Best Event & Timing */}
+                <div>
+                  <label className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
+                    Personal Best Event &amp; Timing <span className="text-[#d02426]">*</span>
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <Controller
+                        name="pbEvent"
+                        control={control}
+                        render={({ field }) => (
+                          <RadixSelect
+                            id="reg-pb-event"
+                            value={field.value}
+                            onValueChange={(val) => {
+                              field.onChange(val);
+                              if (val === 'None / First-timer') {
+                                setValue('pbTiming', '');
+                              }
+                            }}
+                            options={PB_EVENTS}
+                            placeholder="Select PB Event"
+                            error={errors.pbEvent?.message}
+                          />
+                        )}
+                      />
+                    </div>
+
+                    <div>
+                      <Controller
+                        name="pbTiming"
+                        control={control}
+                        render={({ field }) => (
+                          <PopoverTimePicker
+                            value={field.value}
+                            onChange={field.onChange}
+                            disabled={watchPbEvent === 'None / First-timer'}
+                            error={errors.pbTiming?.message}
+                          />
+                        )}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Step 2 Navigation Actions (Wizard Desktop) */}
+                {viewMode === 'wizard' && (
+                  <div className="hidden lg:flex items-center justify-between gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={handlePrevStep}
+                      className="px-6 py-3 rounded-xl text-sm font-bold border transition-all flex items-center gap-2 cursor-pointer hover:bg-slate-500/10 active:scale-95"
+                      style={{
+                        backgroundColor: 'var(--card-inner)',
+                        borderColor: 'var(--border-color)',
+                        color: 'var(--text-heading)'
+                      }}
+                    >
+                      <ArrowLeft className="w-4 h-4" />
+                      <span>Back to Profile</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleNextStep}
+                      className="px-8 py-3 rounded-xl text-sm font-bold tracking-wider uppercase transition-all shadow-md bg-[#318cdd] hover:bg-[#256eb0] text-white flex items-center gap-2 cursor-pointer active:scale-95"
+                    >
+                      <span>Continue to Review &amp; Pay</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
+              </div>
+              </>
+              )}
+
+              {/* =========================================================================
+                 SECTION 4: HEALTH, WAIVER & CHECKOUT (Step 3)
+                 ========================================================================= */}
+              {(viewMode === 'all-in-one' || currentStep === 3) && (
+              <div
+                className="p-4 sm:p-6 rounded-2xl border space-y-4"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                  borderColor: 'var(--border-color)'
+                }}
+              >
+                <div
+                  className="flex items-center gap-2 pb-2.5 border-b"
+                  style={{ borderColor: 'var(--border-color)' }}
+                >
+                  <CreditCard className="w-4 h-4 text-[#318cdd]" />
+                  <span
+                    className="text-xs sm:text-sm font-black uppercase tracking-wider"
+                    style={{ color: 'var(--text-heading)' }}
+                  >
+                    4. Medical Waiver &amp; Checkout
+                  </span>
+                </div>
+
+                {/* Health Problem */}
+                <div>
+                  <label
+                    htmlFor="reg-health"
+                    className="block text-xs sm:text-sm font-bold mb-1.5"
+                    style={{ color: 'var(--text-heading)' }}
+                  >
+                    Specify health problem (if any) that might hamper physical activities
+                  </label>
+                  <textarea
+                    id="reg-health"
+                    rows={2}
+                    placeholder="e.g. Asthma, prior ACL tear, hypertension, cardiac conditions, or write 'None'..."
+                    {...register('healthProblem')}
+                    className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 resize-none"
+                    style={{
+                      backgroundColor: 'var(--card-inner)',
+                      borderColor: 'var(--border-color)',
+                      color: 'var(--text-heading)'
+                    }}
+                  />
+                </div>
+
+                {/* Promocode Input */}
+                <div>
                   <label
                     htmlFor="reg-promo-input"
                     className="block text-xs sm:text-sm font-bold mb-1.5"
                     style={{ color: 'var(--text-heading)' }}
                   >
-                    If you have Promocode, Enter your Promocode
+                    Promo / Athlete Code
                   </label>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 max-w-md">
                     <input
                       id="reg-promo-input"
                       type="text"
-                      placeholder="ENTER YOUR PROMOCODE"
+                      placeholder="ENTER PROMOCODE"
                       {...register('promocode')}
                       className="flex-1 px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm uppercase font-mono transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40"
                       style={{
@@ -1830,7 +2383,7 @@ export default function ProgramRegistrationModal({
                     <button
                       type="button"
                       onClick={handleApplyPromo}
-                      className="px-6 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-bold uppercase tracking-wider text-white transition-all cursor-pointer shadow-sm active:scale-95 bg-[#2d3748] hover:bg-[#1a202c]"
+                      className="px-5 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-bold uppercase tracking-wider text-white transition-all cursor-pointer shadow-sm active:scale-95 bg-[#2d3748] hover:bg-[#1a202c]"
                     >
                       Apply
                     </button>
@@ -1846,79 +2399,219 @@ export default function ProgramRegistrationModal({
                       <AlertCircle className="w-4 h-4" /> {promoError}
                     </p>
                   )}
+                </div>
+
+                {/* Live Order Summary Card */}
+                <div
+                  className="p-4 sm:p-5 rounded-2xl border space-y-2.5 shadow-sm"
+                  style={{
+                    backgroundColor: 'var(--card-inner)',
+                    borderColor: 'var(--border-color)'
+                  }}
+                >
+                  <div className="flex items-center justify-between text-xs sm:text-sm">
+                    <span className="font-semibold" style={{ color: 'var(--text-secondary)' }}>
+                      Selected Track:
+                    </span>
+                    <span className="font-bold" style={{ color: 'var(--text-heading)' }}>
+                      {activeProgram?.title || 'Training Program'}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs sm:text-sm">
+                    <span className="font-semibold" style={{ color: 'var(--text-secondary)' }}>
+                      Program Base Fee:
+                    </span>
+                    <span className="font-mono font-bold" style={{ color: 'var(--text-heading)' }}>
+                      ₹{baseFee.toLocaleString('en-IN')}
+                    </span>
+                  </div>
+
+                  {promoDiscount > 0 && (
+                    <div className="flex items-center justify-between text-xs sm:text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                      <span>Promo Discount ({watchPromocode?.toUpperCase()}):</span>
+                      <span className="font-mono">-₹{promoDiscount.toLocaleString('en-IN')}</span>
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between text-xs sm:text-sm">
+                    <span className="font-semibold" style={{ color: 'var(--text-secondary)' }}>
+                      GST (5%):
+                    </span>
+                    <span className="font-mono font-bold" style={{ color: 'var(--text-heading)' }}>
+                      +₹{gstAmount.toLocaleString('en-IN')}
+                    </span>
+                  </div>
+
+                  <div
+                    className="flex items-center justify-between pt-2.5 border-t text-sm sm:text-base font-black"
+                    style={{ borderColor: 'var(--border-color)', color: 'var(--text-heading)' }}
+                  >
+                    <span>Total Amount Payable:</span>
+                    <span className="font-mono text-[#d02426] text-lg sm:text-xl">
+                      ₹{totalAmount.toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Terms and Conditions Waiver */}
+                <div className="pt-1 space-y-2">
+                  <p className="text-[11px] sm:text-xs leading-relaxed opacity-75" style={{ color: 'var(--text-secondary)' }}>
+                    I declare that I am not suffering from any health condition that hampers physical activity undertaken in this program, and I have clearance from a medical practitioner. I agree that JJs Running &amp; its trainers will not be held responsible for any accidents or health complications while training.
+                  </p>
+
+                  <label className="flex items-start gap-2.5 cursor-pointer pt-1">
+                    <input
+                      type="checkbox"
+                      {...register('acceptedTerms')}
+                      className="mt-0.5 w-4 h-4 rounded accent-[#d02426] cursor-pointer flex-shrink-0"
+                    />
+                    <span
+                      className={`text-xs sm:text-sm font-bold ${
+                        errors.acceptedTerms ? 'text-red-500' : ''
+                      }`}
+                      style={{
+                        color: errors.acceptedTerms ? '#ef4444' : 'var(--text-heading)'
+                      }}
+                    >
+                      I accept the terms &amp; conditions waiver <span className="text-[#d02426]">*</span>
+                    </span>
+                  </label>
+                  {errors.acceptedTerms && (
+                    <p className="text-[11px] text-red-500 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" /> {errors.acceptedTerms.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* JJs Running Brand Red Pay Button (Desktop - Option B Rounded-XL) */}
+                <div className="hidden lg:block pt-3">
+                  <div className={`flex items-center gap-3 ${viewMode === 'wizard' ? 'justify-between' : 'justify-center'}`}>
+                    {viewMode === 'wizard' && (
+                      <button
+                        type="button"
+                        onClick={handlePrevStep}
+                        className="px-6 py-3.5 rounded-xl text-sm font-bold border transition-all flex items-center gap-2 cursor-pointer hover:bg-slate-500/10 active:scale-95"
+                        style={{
+                          backgroundColor: 'var(--card-inner)',
+                          borderColor: 'var(--border-color)',
+                          color: 'var(--text-heading)'
+                        }}
+                      >
+                        <ArrowLeft className="w-4 h-4" />
+                        <span>Back</span>
+                      </button>
+                    )}
+
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className={`min-w-[260px] px-8 py-3.5 rounded-xl text-sm sm:text-base font-bold tracking-wider uppercase transition-all duration-200 shadow-lg shadow-red-500/20 hover:shadow-red-500/35 hover:scale-[1.01] active:scale-[0.98] cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed bg-gradient-to-r from-[#e11d48] via-[#d02426] to-[#b51c1e] text-white border border-red-500/30 ${
+                        viewMode === 'wizard' ? 'flex-1 max-w-[360px]' : 'w-full sm:w-auto'
+                      }`}
+                    >
+                      <div className="flex items-center justify-center gap-2.5">
+                        {loading ? (
+                          <>
+                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            <span>Authorizing Slot...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Lock className="w-4 h-4" />
+                            <span>CONFIRM &amp; PAY ₹{totalAmount.toLocaleString('en-IN')}</span>
+                          </>
+                        )}
+                      </div>
+                    </button>
+                  </div>
 
                   <p
-                    className="text-[11px] sm:text-xs mt-2 opacity-70 leading-relaxed"
+                    className="text-[11px] mt-2.5 flex items-center justify-center gap-1.5 opacity-70"
                     style={{ color: 'var(--text-secondary)' }}
                   >
-                    If you don't have promocode, please proceed the Payment.
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                    <span>256–Bit SSL Encrypted • Direct Razorpay Gateway</span>
                   </p>
                 </div>
               </div>
-
-              {/* Terms and Conditions Waiver */}
-              <div className="pt-2 space-y-2">
-                <p className="text-[11px] sm:text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                  I declare that, I am not suffering from any health condition that will hamper physical activity that I'm undertaking as part of this training program, and I have clearance from medical practitioner for participating in the said activity. I agree that JJActive Pvt. Ltd. &amp; it's trainers will not be held responsible for any accidents/injuries or complications related to my health while training with JJActive Pvt. Ltd.
-                </p>
-
-                <label className="flex items-start gap-2.5 cursor-pointer pt-1">
-                  <input
-                    type="checkbox"
-                    {...register('acceptedTerms')}
-                    className="mt-0.5 w-4 h-4 rounded accent-[#d02426] cursor-pointer flex-shrink-0"
-                  />
-                  <span
-                    className={`text-xs sm:text-sm font-bold ${
-                      errors.acceptedTerms ? 'text-red-500' : ''
-                    }`}
-                    style={{
-                      color: errors.acceptedTerms ? '#ef4444' : 'var(--text-heading)'
-                    }}
-                  >
-                    I Accept(Please Select the Checkbox) <span className="text-[#d02426]">*</span>
-                  </span>
-                </label>
-                {errors.acceptedTerms && (
-                  <p className="text-[11px] text-red-500 flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" /> {errors.acceptedTerms.message}
-                  </p>
-                )}
-              </div>
-
-              {/* JJs Running Brand Red Pay Button */}
-              <div className="pt-4 pb-2 text-center">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full sm:w-auto min-w-[240px] px-10 py-4 rounded-full text-base sm:text-lg font-black tracking-wider uppercase transition-all duration-300 shadow-xl shadow-red-500/25 hover:shadow-red-500/40 hover:scale-[1.02] active:scale-[0.98] cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed bg-gradient-to-r from-[#e11d48] via-[#d02426] to-[#b51c1e] text-white border border-red-500/30"
-                >
-                  <div className="flex items-center justify-center gap-3">
-                    {loading ? (
-                      <>
-                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        <span>Processing Roster Slot...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Lock className="w-5 h-5" />
-                        <span>PAY ₹{finalFee.toLocaleString('en-IN')}</span>
-                      </>
-                    )}
-                  </div>
-                </button>
-
-                <p
-                  className="text-[11px] mt-2 flex items-center justify-center gap-1.5 opacity-70"
-                  style={{ color: 'var(--text-secondary)' }}
-                >
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>256–Bit SSL Encrypted • Direct Razorpay Gateway</span>
-                </p>
-              </div>
+              )}
             </form>
           </div>
-        )}
+
+          {/* Mobile Sticky Bottom Action Bar (Option B Rounded-XL) */}
+          <div
+            className="lg:hidden p-3 sm:p-3.5 border-t backdrop-blur-xl shadow-2xl flex items-center justify-between gap-3 flex-shrink-0 z-30"
+            style={{
+              backgroundColor: 'var(--card-bg)',
+              borderColor: 'var(--border-color)'
+            }}
+          >
+            <div>
+              <span className="text-[10px] uppercase font-bold tracking-wider opacity-60 block" style={{ color: 'var(--text-secondary)' }}>
+                {viewMode === 'wizard' ? `Step 0${currentStep} of 03` : 'Total Payable'}
+              </span>
+              <div className="flex items-baseline gap-1">
+                <span className="font-mono font-black text-base sm:text-lg text-[#d02426]">
+                  ₹{totalAmount.toLocaleString('en-IN')}
+                </span>
+                <span className="text-[10px] opacity-70" style={{ color: 'var(--text-secondary)' }}>
+                  (incl. 5% GST)
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {viewMode === 'wizard' && currentStep > 1 && (
+                <button
+                  type="button"
+                  onClick={handlePrevStep}
+                  className="p-2.5 rounded-xl border text-xs font-bold cursor-pointer"
+                  style={{
+                    backgroundColor: 'var(--card-inner)',
+                    borderColor: 'var(--border-color)',
+                    color: 'var(--text-heading)'
+                  }}
+                  aria-label="Previous step"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                </button>
+              )}
+
+              {viewMode === 'wizard' && currentStep < 3 ? (
+                <button
+                  type="button"
+                  onClick={handleNextStep}
+                  className="py-2.5 px-4 sm:px-5 rounded-xl text-xs sm:text-sm font-bold uppercase tracking-wider shadow-md shadow-[#318cdd]/20 flex items-center gap-1.5 cursor-pointer bg-[#318cdd] hover:bg-[#256eb0] text-white active:scale-95"
+                >
+                  <span>Next Step</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  form="reg-form"
+                  disabled={loading}
+                  className="py-2.5 px-5 rounded-xl text-xs sm:text-sm font-bold uppercase tracking-wider shadow-md shadow-red-500/20 flex items-center gap-2 cursor-pointer disabled:opacity-75 bg-gradient-to-r from-[#e11d48] via-[#d02426] to-[#b51c1e] text-white active:scale-95"
+                >
+                  {loading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span>Authorizing...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Lock className="w-4 h-4" />
+                      <span>CONFIRM &amp; PAY</span>
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </>
+    )}
       </div>
     </div>
   );
