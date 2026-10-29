@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import {
   X,
   CheckCircle2,
@@ -8,15 +8,16 @@ import {
   AlertCircle,
   Sparkles,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Check,
   Search,
-  Calendar,
+  Calendar as CalendarIcon,
   Lock,
   MapPin
 } from 'lucide-react';
 import { centersData } from '../data/centersData';
 import { programsData } from '../data/programsData';
-import JJsLogo from './JJsLogo';
 
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
 
@@ -34,31 +35,454 @@ const PB_EVENTS = [
   'None / First-timer'
 ];
 
-const MONTHS = [
-  { value: '01', label: 'Jan' },
-  { value: '02', label: 'Feb' },
-  { value: '03', label: 'Mar' },
-  { value: '04', label: 'Apr' },
-  { value: '05', label: 'May' },
-  { value: '06', label: 'Jun' },
-  { value: '07', label: 'Jul' },
-  { value: '08', label: 'Aug' },
-  { value: '09', label: 'Sep' },
-  { value: '10', label: 'Oct' },
-  { value: '11', label: 'Nov' },
-  { value: '12', label: 'Dec' }
+const MONTH_NAMES = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
-const DAYS = Array.from({ length: 31 }, (_, i) => {
-  const d = i + 1;
-  return d < 10 ? `0${d}` : `${d}`;
-});
+const DAYS_OF_WEEK = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
-const CURRENT_YEAR = new Date().getFullYear();
-const YEARS = Array.from({ length: 75 }, (_, i) => `${CURRENT_YEAR - 12 - i}`);
+const CURRENT_CALENDAR_YEAR = new Date().getFullYear();
 
 // =============================================================================
-// Sleek Custom Dropdown (No Native OS White Box Clashes in Dark Mode)
+// 1. Bespoke Theme-Aware Calendar Control (No split dropdowns, no OS popup)
+// =============================================================================
+function CustomCalendarPicker({ value, onChange, error = '' }) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef(null);
+
+  // Parse current value (YYYY-MM-DD)
+  const parsedDate = useMemo(() => {
+    if (!value) return new Date(1995, 0, 15);
+    const [y, m, d] = value.split('-').map(Number);
+    if (!y || !m || !d) return new Date(1995, 0, 15);
+    return new Date(y, m - 1, d);
+  }, [value]);
+
+  const [viewYear, setViewYear] = useState(parsedDate.getFullYear());
+  const [viewMonth, setViewMonth] = useState(parsedDate.getMonth()); // 0-11
+  const [prevValue, setPrevValue] = useState(value);
+
+  // Synchronize when value changes externally
+  if (value !== prevValue) {
+    setPrevValue(value);
+    if (value) {
+      const [y, m] = value.split('-').map(Number);
+      if (y && m) {
+        setViewYear(y);
+        setViewMonth(m - 1);
+      }
+    }
+  }
+
+  // Click outside to close
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Calendar calculations
+  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+  const firstDayOfWeek = new Date(viewYear, viewMonth, 1).getDay(); // 0 is Sunday
+  const prevMonthDays = new Date(viewYear, viewMonth, 0).getDate();
+
+  const handlePrevMonth = (e) => {
+    e.stopPropagation();
+    if (viewMonth === 0) {
+      setViewMonth(11);
+      setViewYear(viewYear - 1);
+    } else {
+      setViewMonth(viewMonth - 1);
+    }
+  };
+
+  const handleNextMonth = (e) => {
+    e.stopPropagation();
+    if (viewMonth === 11) {
+      setViewMonth(0);
+      setViewYear(viewYear + 1);
+    } else {
+      setViewMonth(viewMonth + 1);
+    }
+  };
+
+  const handleSelectDay = (day) => {
+    const mStr = String(viewMonth + 1).padStart(2, '0');
+    const dStr = String(day).padStart(2, '0');
+    onChange(`${viewYear}-${mStr}-${dStr}`);
+    setOpen(false);
+  };
+
+  // Format display string e.g. "15 Jan 1995"
+  const formattedDisplay = useMemo(() => {
+    if (!value) return '';
+    const [y, m, d] = value.split('-').map(Number);
+    if (!y || !m || !d) return '';
+    const shortMonth = MONTH_NAMES[m - 1]?.slice(0, 3) || '';
+    return `${d} ${shortMonth} ${y}`;
+  }, [value]);
+
+  // Range of years for rapid birthday selection (from 1940 to 10 years ago)
+  const availableYears = useMemo(() => {
+    const years = [];
+    for (let yr = CURRENT_CALENDAR_YEAR - 10; yr >= 1940; yr--) {
+      years.push(yr);
+    }
+    return years;
+  }, []);
+
+  return (
+    <div ref={containerRef} className="relative w-full">
+      <button
+        type="button"
+        id="reg-dob-btn"
+        onClick={() => setOpen(!open)}
+        className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm font-medium flex items-center justify-between gap-2 transition-all cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
+          error ? 'border-red-500 bg-red-500/5' : ''
+        }`}
+        style={{
+          backgroundColor: 'var(--card-inner)',
+          borderColor: error ? '#ef4444' : 'var(--border-color)',
+          color: value ? 'var(--text-heading)' : 'var(--text-secondary)'
+        }}
+        aria-haspopup="dialog"
+        aria-expanded={open}
+      >
+        <div className="flex items-center gap-2 truncate">
+          <CalendarIcon className="w-4 h-4 opacity-70 text-[#318cdd] flex-shrink-0" />
+          <span className="truncate">{formattedDisplay || 'DD / MM / YYYY (Click to pick)'}</span>
+        </div>
+        <ChevronDown
+          className={`w-4 h-4 opacity-60 flex-shrink-0 transition-transform duration-200 ${
+            open ? 'rotate-180' : ''
+          }`}
+        />
+      </button>
+
+      {/* Floating Theme-Matched Calendar Popover */}
+      {open && (
+        <div
+          role="dialog"
+          aria-label="Choose date of birth"
+          className="absolute z-50 left-0 right-0 sm:left-auto sm:right-auto sm:w-80 mt-2 p-3.5 rounded-2xl border shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100"
+          style={{
+            backgroundColor: 'var(--card-bg)',
+            borderColor: 'var(--border-color)',
+            boxShadow: '0 20px 45px -10px rgba(0,0,0,0.5)'
+          }}
+        >
+          {/* Calendar Header with Fast Year / Month Navigation */}
+          <div className="flex items-center justify-between gap-1 mb-3 pb-2.5 border-b" style={{ borderColor: 'var(--border-color)' }}>
+            <button
+              type="button"
+              onClick={handlePrevMonth}
+              aria-label="Previous month"
+              className="p-1.5 rounded-lg border hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
+              style={{ borderColor: 'var(--border-color)', color: 'var(--text-heading)' }}
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            {/* Quick Month & Year Selectors */}
+            <div className="flex items-center gap-1.5">
+              <select
+                value={viewMonth}
+                onChange={(e) => setViewMonth(Number(e.target.value))}
+                className="text-xs font-bold px-2 py-1 rounded-md border bg-transparent cursor-pointer focus:outline-none"
+                style={{ borderColor: 'var(--border-color)', color: 'var(--text-heading)' }}
+              >
+                {MONTH_NAMES.map((m, idx) => (
+                  <option key={m} value={idx} className="bg-slate-900 text-white">
+                    {m}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={viewYear}
+                onChange={(e) => setViewYear(Number(e.target.value))}
+                className="text-xs font-bold px-2 py-1 rounded-md border bg-transparent cursor-pointer focus:outline-none"
+                style={{ borderColor: 'var(--border-color)', color: 'var(--text-heading)' }}
+              >
+                {availableYears.map((yr) => (
+                  <option key={yr} value={yr} className="bg-slate-900 text-white">
+                    {yr}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleNextMonth}
+              aria-label="Next month"
+              className="p-1.5 rounded-lg border hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
+              style={{ borderColor: 'var(--border-color)', color: 'var(--text-heading)' }}
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Days of Week Row */}
+          <div className="grid grid-cols-7 gap-1 text-center mb-1">
+            {DAYS_OF_WEEK.map((d) => (
+              <span
+                key={d}
+                className="text-[11px] font-bold uppercase tracking-wider opacity-60"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                {d}
+              </span>
+            ))}
+          </div>
+
+          {/* Day Grid */}
+          <div className="grid grid-cols-7 gap-1 text-center">
+            {/* Previous month filler days */}
+            {Array.from({ length: firstDayOfWeek }).map((_, i) => {
+              const dayNum = prevMonthDays - firstDayOfWeek + i + 1;
+              return (
+                <div
+                  key={`prev-${i}`}
+                  className="py-1.5 text-xs opacity-25 cursor-default select-none"
+                  style={{ color: 'var(--text-secondary)' }}
+                >
+                  {dayNum}
+                </div>
+              );
+            })}
+
+            {/* Current month days */}
+            {Array.from({ length: daysInMonth }).map((_, i) => {
+              const dayNum = i + 1;
+              const isSelected =
+                parsedDate &&
+                parsedDate.getFullYear() === viewYear &&
+                parsedDate.getMonth() === viewMonth &&
+                parsedDate.getDate() === dayNum;
+
+              return (
+                <button
+                  type="button"
+                  key={dayNum}
+                  onClick={() => handleSelectDay(dayNum)}
+                  className={`py-1.5 text-xs rounded-lg font-medium transition-all cursor-pointer ${
+                    isSelected
+                      ? 'bg-[#d02426] text-white font-bold shadow-md shadow-red-500/30 scale-105'
+                      : 'hover:bg-black/5 dark:hover:bg-white/10'
+                  }`}
+                  style={{
+                    color: isSelected ? '#ffffff' : 'var(--text-heading)'
+                  }}
+                >
+                  {dayNum}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Footer with Clear & Today shortcuts */}
+          <div className="flex items-center justify-between pt-2.5 mt-2 border-t text-[11px]" style={{ borderColor: 'var(--border-color)' }}>
+            <button
+              type="button"
+              onClick={() => {
+                onChange('');
+                setOpen(false);
+              }}
+              className="text-[#d02426] font-semibold hover:underline cursor-pointer"
+            >
+              Clear
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                const now = new Date();
+                const defaultAdultYear = now.getFullYear() - 25; // Sensible default 25-yr-old
+                setViewYear(defaultAdultYear);
+                setViewMonth(0);
+                const dStr = `15`;
+                onChange(`${defaultAdultYear}-01-${dStr}`);
+                setOpen(false);
+              }}
+              className="text-[#318cdd] font-semibold hover:underline cursor-pointer"
+            >
+              Default (25yo)
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// =============================================================================
+// 2. Dedicated Race Timing Control (HH : MM : SS)
+// Blocks alphabetic gibberish like "01:3asdfasdf9:44" entirely!
+// =============================================================================
+function RaceTimingInput({ value, onChange, disabled = false, error = '' }) {
+  // Parse incoming value "HH:MM:SS"
+  const [hours, minutes, seconds] = useMemo(() => {
+    if (!value) return ['01', '39', '44'];
+    const parts = value.split(':');
+    return [
+      parts[0] !== undefined ? parts[0] : '01',
+      parts[1] !== undefined ? parts[1] : '39',
+      parts[2] !== undefined ? parts[2] : '44'
+    ];
+  }, [value]);
+
+  const hRef = useRef(null);
+  const mRef = useRef(null);
+  const sRef = useRef(null);
+
+  const updateTiming = (h, m, s) => {
+    const formatted = `${h.padStart(2, '0')}:${m.padStart(2, '0')}:${s.padStart(2, '0')}`;
+    onChange(formatted);
+  };
+
+  const handleHourChange = (e) => {
+    const clean = e.target.value.replace(/[^0-9]/g, '').slice(-2);
+    const num = Math.min(99, Number(clean) || 0);
+    const val = clean === '' ? '' : String(num).padStart(clean.length, '0');
+    updateTiming(val || '00', minutes, seconds);
+    if (clean.length === 2 && mRef.current) {
+      mRef.current.focus();
+      mRef.current.select();
+    }
+  };
+
+  const handleMinuteChange = (e) => {
+    const clean = e.target.value.replace(/[^0-9]/g, '').slice(-2);
+    const num = Math.min(59, Number(clean) || 0);
+    const val = clean === '' ? '' : String(num).padStart(clean.length, '0');
+    updateTiming(hours, val || '00', seconds);
+    if (clean.length === 2 && sRef.current) {
+      sRef.current.focus();
+      sRef.current.select();
+    }
+  };
+
+  const handleSecondChange = (e) => {
+    const clean = e.target.value.replace(/[^0-9]/g, '').slice(-2);
+    const num = Math.min(59, Number(clean) || 0);
+    const val = clean === '' ? '' : String(num).padStart(clean.length, '0');
+    updateTiming(hours, minutes, val || '00');
+  };
+
+  const handleKeyDown = (e, currentUnit) => {
+    // Navigate backwards on Backspace when empty
+    if (e.key === 'Backspace' && e.target.value === '') {
+      if (currentUnit === 'seconds' && mRef.current) {
+        mRef.current.focus();
+      } else if (currentUnit === 'minutes' && hRef.current) {
+        hRef.current.focus();
+      }
+    }
+  };
+
+  if (disabled) {
+    return (
+      <div
+        className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm font-mono opacity-50 flex items-center justify-between"
+        style={{
+          backgroundColor: 'var(--card-inner)',
+          borderColor: 'var(--border-color)',
+          color: 'var(--text-secondary)'
+        }}
+      >
+        <span>First-Timer / No Prior Timing Required</span>
+        <Clock className="w-4 h-4 opacity-50" />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`w-full px-3 py-1.5 sm:py-2 rounded-xl border flex items-center justify-between transition-all focus-within:ring-2 focus-within:ring-[#318cdd]/40 ${
+        error ? 'border-red-500 bg-red-500/5' : ''
+      }`}
+      style={{
+        backgroundColor: 'var(--card-inner)',
+        borderColor: error ? '#ef4444' : 'var(--border-color)'
+      }}
+    >
+      <div className="flex items-center gap-1.5 font-mono text-xs sm:text-sm">
+        {/* Hours Box */}
+        <div className="flex flex-col items-center">
+          <input
+            ref={hRef}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            maxLength={2}
+            value={hours}
+            onChange={handleHourChange}
+            onKeyDown={(e) => handleKeyDown(e, 'hours')}
+            aria-label="Hours"
+            placeholder="01"
+            className="w-8 text-center bg-transparent font-bold focus:outline-none focus:bg-white/10 rounded"
+            style={{ color: 'var(--text-heading)' }}
+          />
+          <span className="text-[9px] uppercase tracking-wider opacity-60" style={{ color: 'var(--text-secondary)' }}>hrs</span>
+        </div>
+
+        <span className="font-bold opacity-40 -mt-3">:</span>
+
+        {/* Minutes Box */}
+        <div className="flex flex-col items-center">
+          <input
+            ref={mRef}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            maxLength={2}
+            value={minutes}
+            onChange={handleMinuteChange}
+            onKeyDown={(e) => handleKeyDown(e, 'minutes')}
+            aria-label="Minutes"
+            placeholder="39"
+            className="w-8 text-center bg-transparent font-bold focus:outline-none focus:bg-white/10 rounded"
+            style={{ color: 'var(--text-heading)' }}
+          />
+          <span className="text-[9px] uppercase tracking-wider opacity-60" style={{ color: 'var(--text-secondary)' }}>min</span>
+        </div>
+
+        <span className="font-bold opacity-40 -mt-3">:</span>
+
+        {/* Seconds Box */}
+        <div className="flex flex-col items-center">
+          <input
+            ref={sRef}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            maxLength={2}
+            value={seconds}
+            onChange={handleSecondChange}
+            onKeyDown={(e) => handleKeyDown(e, 'seconds')}
+            aria-label="Seconds"
+            placeholder="44"
+            className="w-8 text-center bg-transparent font-bold focus:outline-none focus:bg-white/10 rounded"
+            style={{ color: 'var(--text-heading)' }}
+          />
+          <span className="text-[9px] uppercase tracking-wider opacity-60" style={{ color: 'var(--text-secondary)' }}>sec</span>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-1.5 opacity-60" style={{ color: 'var(--text-secondary)' }}>
+        <Clock className="w-4 h-4" />
+      </div>
+    </div>
+  );
+}
+
+// =============================================================================
+// 3. Custom Dropdown for Blood Group & Events
 // =============================================================================
 function CustomDropdown({
   value,
@@ -66,7 +490,6 @@ function CustomDropdown({
   options = [],
   placeholder = 'Select...',
   error = false,
-  icon: Icon = null,
   id = ''
 }) {
   const [open, setOpen] = useState(false);
@@ -82,15 +505,7 @@ function CustomDropdown({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const selectedOption = options.find((opt) =>
-    typeof opt === 'string' ? opt === value : opt.value === value
-  );
-
-  const displayLabel = selectedOption
-    ? typeof selectedOption === 'string'
-      ? selectedOption
-      : selectedOption.label
-    : placeholder;
+  const displayLabel = value || placeholder;
 
   return (
     <div ref={containerRef} className="relative w-full">
@@ -109,10 +524,7 @@ function CustomDropdown({
         aria-haspopup="listbox"
         aria-expanded={open}
       >
-        <div className="flex items-center gap-2 truncate">
-          {Icon && <Icon className="w-4 h-4 opacity-60 flex-shrink-0" />}
-          <span className="truncate">{displayLabel}</span>
-        </div>
+        <span className="truncate">{displayLabel}</span>
         <ChevronDown
           className={`w-4 h-4 opacity-60 flex-shrink-0 transition-transform duration-200 ${
             open ? 'rotate-180' : ''
@@ -131,41 +543,25 @@ function CustomDropdown({
           }}
         >
           {options.map((opt) => {
-            const val = typeof opt === 'string' ? opt : opt.value;
-            const label = typeof opt === 'string' ? opt : opt.label;
-            const subtitle = typeof opt === 'object' ? opt.subtitle : null;
-            const isSelected = val === value;
-
+            const isSelected = opt === value;
             return (
               <button
                 type="button"
-                key={val}
+                key={opt}
                 role="option"
                 aria-selected={isSelected}
                 onClick={() => {
-                  onChange(val);
+                  onChange(opt);
                   setOpen(false);
                 }}
                 className={`w-full text-left px-3.5 py-2 text-xs sm:text-sm flex items-center justify-between gap-2 transition-colors cursor-pointer ${
-                  isSelected
-                    ? 'bg-[#318cdd]/15 text-[#318cdd] font-bold'
-                    : 'hover:bg-slate-500/10'
+                  isSelected ? 'bg-[#318cdd]/15 text-[#318cdd] font-bold' : 'hover:bg-slate-500/10'
                 }`}
                 style={{
                   color: isSelected ? 'var(--accent)' : 'var(--text-heading)'
                 }}
               >
-                <div className="truncate">
-                  <div>{label}</div>
-                  {subtitle && (
-                    <div
-                      className="text-[11px] font-normal truncate opacity-70"
-                      style={{ color: 'var(--text-secondary)' }}
-                    >
-                      {subtitle}
-                    </div>
-                  )}
-                </div>
+                <span className="truncate">{opt}</span>
                 {isSelected && <Check className="w-4 h-4 flex-shrink-0 text-[#318cdd]" />}
               </button>
             );
@@ -177,7 +573,7 @@ function CustomDropdown({
 }
 
 // =============================================================================
-// Location Dropdown Grouped by City from centersData with Search
+// 4. Location Dropdown Grouped by City from centersData with Search
 // =============================================================================
 function LocationDropdown({ value, onChange, error = false }) {
   const [open, setOpen] = useState(false);
@@ -194,7 +590,6 @@ function LocationDropdown({ value, onChange, error = false }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Filter centers
   const filteredCenters = useMemo(() => {
     if (!search.trim()) return centersData;
     const q = search.toLowerCase();
@@ -206,7 +601,6 @@ function LocationDropdown({ value, onChange, error = false }) {
     );
   }, [search]);
 
-  // Group by City
   const groupedCenters = useMemo(() => {
     const groups = {};
     filteredCenters.forEach((c) => {
@@ -263,7 +657,6 @@ function LocationDropdown({ value, onChange, error = false }) {
             boxShadow: '0 20px 40px -10px rgba(0,0,0,0.5)'
           }}
         >
-          {/* Quick Search inside Location dropdown */}
           <div className="px-3 pb-2 pt-1 border-b" style={{ borderColor: 'var(--border-color)' }}>
             <div className="relative">
               <input
@@ -312,9 +705,7 @@ function LocationDropdown({ value, onChange, error = false }) {
                         setSearch('');
                       }}
                       className={`w-full text-left px-3.5 py-2 text-xs sm:text-sm flex items-start justify-between gap-2 transition-colors cursor-pointer ${
-                        isSelected
-                          ? 'bg-[#318cdd]/15 text-[#318cdd] font-bold'
-                          : 'hover:bg-slate-500/10'
+                        isSelected ? 'bg-[#318cdd]/15 text-[#318cdd] font-bold' : 'hover:bg-slate-500/10'
                       }`}
                       style={{
                         color: isSelected ? 'var(--accent)' : 'var(--text-heading)'
@@ -345,68 +736,7 @@ function LocationDropdown({ value, onChange, error = false }) {
 }
 
 // =============================================================================
-// Elegant Date of Birth Selector (Day / Month / Year Dropdowns)
-// Never triggers the ugly native OS popup
-// =============================================================================
-function DateOfBirthPicker({ value, onChange, error = false }) {
-  // Parse incoming YYYY-MM-DD
-  const parts = (value || '').split('-');
-  const initialYear = parts[0] || '1995';
-  const initialMonth = parts[1] || '01';
-  const initialDay = parts[2] || '15';
-
-  const [day, setDay] = useState(initialDay);
-  const [month, setMonth] = useState(initialMonth);
-  const [year, setYear] = useState(initialYear);
-
-  useEffect(() => {
-    if (day && month && year) {
-      onChange(`${year}-${month}-${day}`);
-    }
-  }, [day, month, year, onChange]);
-
-  return (
-    <div>
-      <div className="grid grid-cols-3 gap-2">
-        {/* Day Select */}
-        <div>
-          <CustomDropdown
-            value={day}
-            onChange={setDay}
-            options={DAYS.map((d) => ({ value: d, label: d }))}
-            placeholder="Day"
-            error={error}
-          />
-        </div>
-
-        {/* Month Select */}
-        <div>
-          <CustomDropdown
-            value={month}
-            onChange={setMonth}
-            options={MONTHS}
-            placeholder="Month"
-            error={error}
-          />
-        </div>
-
-        {/* Year Select */}
-        <div>
-          <CustomDropdown
-            value={year}
-            onChange={setYear}
-            options={YEARS.map((y) => ({ value: y, label: y }))}
-            placeholder="Year"
-            error={error}
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// =============================================================================
-// Main Official Program Registration Modal
+// Main Official Program Registration Modal with Full Control Validations
 // =============================================================================
 export default function ProgramRegistrationModal({
   isOpen,
@@ -438,7 +768,33 @@ export default function ProgramRegistrationModal({
     selectedProgramId: ''
   });
 
-  const [activeProgram, setActiveProgram] = useState(null);
+  const resolveProgram = (prog) => {
+    if (!prog) return programsData[2];
+    if (typeof prog === 'string') {
+      return programsData.find((p) => p.id === prog || p.title === prog) || programsData[2];
+    }
+    if (prog.id) {
+      return programsData.find((p) => p.id === prog.id) || prog;
+    }
+    if (prog.title) {
+      return programsData.find((p) => p.title === prog.title) || prog;
+    }
+    return prog;
+  };
+
+  const [prevSelectedProgram, setPrevSelectedProgram] = useState(selectedProgram);
+  const [activeProgram, setActiveProgram] = useState(() => resolveProgram(selectedProgram));
+
+  if (selectedProgram !== prevSelectedProgram) {
+    setPrevSelectedProgram(selectedProgram);
+    const resolved = resolveProgram(selectedProgram);
+    setActiveProgram(resolved);
+    setFormData((prev) => ({
+      ...prev,
+      selectedProgramId: resolved?.id || resolved?.title || ''
+    }));
+  }
+
   const [promoApplied, setPromoApplied] = useState(false);
   const [promoDiscount, setPromoDiscount] = useState(0);
   const [promoMessage, setPromoMessage] = useState('');
@@ -447,45 +803,19 @@ export default function ProgramRegistrationModal({
   const [submitted, setSubmitted] = useState(false);
   const [registrationId, setRegistrationId] = useState('');
   const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
 
   const dialogRef = useRef(null);
   const firstInputRef = useRef(null);
 
-  // Synchronize incoming selected program
-  useEffect(() => {
-    if (selectedProgram) {
-      let matched = null;
-      if (typeof selectedProgram === 'string') {
-        matched = programsData.find(
-          (p) => p.id === selectedProgram || p.title === selectedProgram
-        );
-      } else if (selectedProgram.id) {
-        matched =
-          programsData.find((p) => p.id === selectedProgram.id) || selectedProgram;
-      } else if (selectedProgram.title) {
-        matched =
-          programsData.find((p) => p.title === selectedProgram.title) || selectedProgram;
-      }
-      setActiveProgram(matched || programsData[2]); // Default to 21K Half Marathon
-      if (matched) {
-        setFormData((prev) => ({
-          ...prev,
-          selectedProgramId: matched.id || matched.title
-        }));
-      }
-    } else {
-      setActiveProgram(programsData[2]); // Default to 21K Half Marathon
-      setFormData((prev) => ({ ...prev, selectedProgramId: programsData[2].id }));
-    }
-  }, [selectedProgram]);
-
-  const handleClose = React.useCallback(() => {
+  const handleClose = useCallback(() => {
     setSubmitted(false);
     setPromoApplied(false);
     setPromoDiscount(0);
     setPromoMessage('');
     setPromoError('');
     setErrors({});
+    setTouched({});
     onClose();
   }, [onClose]);
 
@@ -511,8 +841,6 @@ export default function ProgramRegistrationModal({
     };
   }, [isOpen, handleClose]);
 
-  if (!isOpen) return null;
-
   // Pricing calculations
   const parseBasePrice = (priceStr) => {
     if (!priceStr) return 6000;
@@ -523,9 +851,10 @@ export default function ProgramRegistrationModal({
   const baseFee = activeProgram ? parseBasePrice(activeProgram.price) : 6000;
   const discountAmount = promoApplied ? promoDiscount : 0;
   const taxableAmount = Math.max(0, baseFee - discountAmount);
-  const gstAmount = Math.round(taxableAmount * 0.05); // 5% GST
+  const gstAmount = Math.round(taxableAmount * 0.05);
   const totalAmount = taxableAmount + gstAmount;
 
+  // Promocode Handler
   const handleApplyPromo = (e) => {
     e.preventDefault();
     setPromoError('');
@@ -533,7 +862,7 @@ export default function ProgramRegistrationModal({
     const code = (formData.promocode || '').trim().toUpperCase();
 
     if (!code) {
-      setPromoError('Please enter a valid promocode');
+      setPromoError('Please enter a promocode before applying.');
       return;
     }
 
@@ -558,51 +887,181 @@ export default function ProgramRegistrationModal({
     }
   };
 
-  const validateForm = () => {
-    const errs = {};
-    if (!formData.fullName.trim()) errs.fullName = 'Full Name is required';
-    if (!formData.email.trim() || !formData.email.includes('@'))
-      errs.email = 'Valid Email is required';
-    if (!formData.mobileNo.trim() || formData.mobileNo.replace(/[^0-9]/g, '').length < 10) {
-      errs.mobileNo = 'Valid 10-digit mobile number is required';
-    }
-    const whatsApp = formData.sameAsMobile ? formData.mobileNo : formData.whatsappNo;
-    if (!whatsApp.trim() || whatsApp.replace(/[^0-9]/g, '').length < 10) {
-      errs.whatsappNo = 'Valid WhatsApp number is required';
-    }
-    if (!formData.emergencyName.trim()) errs.emergencyName = 'Emergency contact name is required';
-    if (!formData.emergencyNo.trim() || formData.emergencyNo.replace(/[^0-9]/g, '').length < 10) {
-      errs.emergencyNo = 'Emergency contact number is required';
-    }
-    if (!formData.dob) errs.dob = 'Date of birth is required';
-    if (!formData.bloodGroup || formData.bloodGroup === 'Select Blood Group') {
-      errs.bloodGroup = 'Please select your blood group';
-    }
-    if (!formData.residentialAddress.trim()) errs.residentialAddress = 'Residential address is required';
-    if (!formData.pinZipCode.trim()) errs.pinZipCode = 'PIN / Zip Code is required';
-    if (!formData.locationPreference) errs.locationPreference = 'Please select a preferred training center';
-    if (!formData.acceptedTerms) errs.acceptedTerms = 'You must accept the medical & liability declaration to register';
+  // ===========================================================================
+  // Comprehensive Control Validation Rules
+  // ===========================================================================
+  const validateField = (field, value, allData = formData) => {
+    switch (field) {
+      case 'fullName':
+        if (!value || !value.trim()) return 'Full Name is required';
+        if (value.trim().length < 2) return 'Please enter at least 2 characters';
+        return '';
 
-    setErrors(errs);
-    return Object.keys(errs).length === 0;
+      case 'email':
+        if (!value || !value.trim()) return 'Email Address is required';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) return 'Please enter a valid email address';
+        return '';
+
+      case 'mobileNo': {
+        const clean = (value || '').replace(/[^0-9]/g, '');
+        if (!clean) return 'Mobile Number is required';
+        if (clean.length !== 10) return 'Must be a 10-digit mobile number';
+        return '';
+      }
+
+      case 'whatsappNo': {
+        const target = allData.sameAsMobile ? allData.mobileNo : value;
+        const clean = (target || '').replace(/[^0-9]/g, '');
+        if (!clean) return 'WhatsApp Number is required';
+        if (clean.length !== 10) return 'Must be a 10-digit WhatsApp number';
+        return '';
+      }
+
+      case 'emergencyName':
+        if (!value || !value.trim()) return 'Emergency Contact Name is required';
+        if (value.trim().length < 2) return 'Please enter a valid contact name';
+        return '';
+
+      case 'emergencyNo': {
+        const clean = (value || '').replace(/[^0-9]/g, '');
+        if (!clean) return 'Emergency Contact Number is required';
+        if (clean.length !== 10) return 'Emergency contact number must be 10 digits';
+        const ownMobile = (allData.mobileNo || '').replace(/[^0-9]/g, '');
+        if (clean === ownMobile && ownMobile.length === 10) {
+          return 'Emergency contact must be different from your personal mobile';
+        }
+        return '';
+      }
+
+      case 'dob': {
+        if (!value) return 'Date of Birth is required';
+        const [y, m, d] = value.split('-').map(Number);
+        if (!y || !m || !d) return 'Invalid Date of Birth';
+        const birthDate = new Date(y, m - 1, d);
+        if (birthDate > new Date()) return 'Date of Birth cannot be in the future';
+        const ageYears = (Date.now() - birthDate.getTime()) / (365.25 * 24 * 3600 * 1000);
+        if (ageYears < 10) return 'Runner must be at least 10 years of age';
+        if (ageYears > 100) return 'Please check the birth year';
+        return '';
+      }
+
+      case 'bloodGroup':
+        if (!value || value === 'Select Blood Group') return 'Please select your blood group';
+        return '';
+
+      case 'residentialAddress':
+        if (!value || !value.trim()) return 'Residential Address is required';
+        if (value.trim().length < 5) return 'Please enter a complete residential address (min 5 characters)';
+        return '';
+
+      case 'pinZipCode': {
+        const clean = (value || '').replace(/[^0-9]/g, '');
+        if (!clean) return 'PIN / Zip Code is required';
+        if (clean.length !== 6) return 'PIN Code must be 6 numeric digits';
+        return '';
+      }
+
+      case 'locationPreference':
+        if (!value || !value.trim()) return 'Please select your preferred training ground';
+        return '';
+
+      case 'maxDistance1Year':
+        if (!value) return 'Please select your max distance run in the last year';
+        return '';
+
+      case 'pbTiming': {
+        if (allData.pbEvent === 'None / First-timer') return '';
+        if (!value || value === '00:00:00') return 'Please enter your PB finish time';
+        return '';
+      }
+
+      case 'acceptedTerms':
+        if (!value) return 'You must accept the medical clearance & liability waiver to register';
+        return '';
+
+      default:
+        return '';
+    }
+  };
+
+  const handleFieldChange = (field, value) => {
+    setFormData((prev) => {
+      const next = { ...prev, [field]: value };
+      if (field === 'sameAsMobile' && value === true) {
+        next.whatsappNo = next.mobileNo;
+      }
+      if (field === 'mobileNo' && next.sameAsMobile) {
+        next.whatsappNo = value;
+      }
+      return next;
+    });
+
+    // Clear error dynamically if valid
+    const err = validateField(field, value, { ...formData, [field]: value });
+    setErrors((prev) => ({ ...prev, [field]: err }));
+  };
+
+  const handleBlur = (field) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+    const err = validateField(field, formData[field], formData);
+    setErrors((prev) => ({ ...prev, [field]: err }));
+  };
+
+  const validateAll = () => {
+    const fields = [
+      'fullName',
+      'email',
+      'mobileNo',
+      'whatsappNo',
+      'emergencyName',
+      'emergencyNo',
+      'dob',
+      'bloodGroup',
+      'residentialAddress',
+      'pinZipCode',
+      'locationPreference',
+      'maxDistance1Year',
+      'pbTiming',
+      'acceptedTerms'
+    ];
+
+    const newErrors = {};
+    let firstInvalidField = null;
+
+    fields.forEach((field) => {
+      const err = validateField(field, formData[field], formData);
+      if (err) {
+        newErrors[field] = err;
+        if (!firstInvalidField) firstInvalidField = field;
+      }
+    });
+
+    setErrors(newErrors);
+    setTouched(fields.reduce((acc, f) => ({ ...acc, [f]: true }), {}));
+
+    if (firstInvalidField) {
+      // Find element and scroll smoothly to it
+      const el = document.getElementById(`reg-${firstInvalidField.toLowerCase()}`) ||
+                 document.getElementById('reg-title');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return false;
+    }
+    return true;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!validateForm()) {
-      if (dialogRef.current) {
-        dialogRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-      return;
-    }
+    if (!validateAll()) return;
 
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      setRegistrationId(`JJS-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`);
+      setRegistrationId(`JJs-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`);
       setSubmitted(true);
     }, 1200);
   };
+
+  if (!isOpen) return null;
 
   return (
     <div
@@ -623,10 +1082,10 @@ export default function ProgramRegistrationModal({
           color: 'var(--text-primary)'
         }}
       >
-        {/* Close Button (Accessible 44x44px Touch Target) */}
+        {/* High-Contrast Close Button */}
         <button
           onClick={handleClose}
-          aria-label="Close registration form"
+          aria-label="Close registration dialog"
           title="Close dialog"
           className="absolute top-3.5 right-3.5 sm:top-6 sm:right-6 w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full border shadow-sm transition-all hover:scale-105 z-30 cursor-pointer"
           style={{
@@ -668,11 +1127,11 @@ export default function ProgramRegistrationModal({
                 <span className="font-bold" style={{ color: 'var(--text-heading)' }}>
                   {formData.fullName}
                 </span>
-                ! Your roster slot for{' '}
+                ! Your slot for{' '}
                 <span className="font-bold text-[#d02426]">
                   {activeProgram?.title || 'Training Program'}
                 </span>{' '}
-                is secured.
+                is confirmed.
               </p>
             </div>
 
@@ -741,8 +1200,7 @@ export default function ProgramRegistrationModal({
             </div>
 
             <p className="text-xs max-w-md mx-auto" style={{ color: 'var(--text-secondary)' }}>
-              Your Training Center Head (TCH) will add you to the neighborhood batch WhatsApp group
-              for morning warmup drills, hydration pacing, and track schedule.
+              Your Training Center Head (TCH) will add you to the squad WhatsApp group for morning warmup drills, hydration pacing, and track coordinates.
             </p>
 
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -750,7 +1208,7 @@ export default function ProgramRegistrationModal({
                 onClick={handleClose}
                 className="w-full sm:w-auto py-3.5 px-8 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg transition-transform hover:scale-105 cursor-pointer bg-[#d02426] text-white hover:bg-[#b51c1e]"
               >
-                Back to Dashboard
+                Back to Site
               </button>
             </div>
           </div>
@@ -768,7 +1226,6 @@ export default function ProgramRegistrationModal({
               >
                 Program Registration
               </h2>
-              {/* Short warm accent underline matching brand layout */}
               <div className="w-16 h-1 bg-[#ea580c] mx-auto mt-2 rounded-full" />
 
               {/* Active Program Banner with Option to Switch */}
@@ -781,7 +1238,7 @@ export default function ProgramRegistrationModal({
                   }}
                 >
                   <span className="font-semibold" style={{ color: 'var(--text-secondary)' }}>
-                    Program:
+                    Selected Program:
                   </span>
                   <span className="font-bold text-[#318cdd]">{activeProgram.title}</span>
                   <span className="opacity-40">•</span>
@@ -792,7 +1249,6 @@ export default function ProgramRegistrationModal({
                     <span className="text-[10px] opacity-70">({activeProgram.tax})</span>
                   )}
 
-                  {/* Switch to Free Trial if not ready */}
                   {onSwitchToTrial && (
                     <button
                       type="button"
@@ -809,18 +1265,15 @@ export default function ProgramRegistrationModal({
               )}
             </div>
 
-            {/* Error Banner */}
-            {Object.keys(errors).length > 0 && (
-              <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-xs flex items-center gap-2">
+            {/* Error Banner when attempting to submit with errors */}
+            {Object.keys(errors).some((k) => errors[k]) && Object.keys(touched).length > 0 && (
+              <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-xs flex items-center gap-2 animate-shake">
                 <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                <span>
-                  Please complete all required fields highlighted in red below before proceeding to
-                  payment.
-                </span>
+                <span>Please fix the highlighted required fields below before proceeding to payment.</span>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+            <form onSubmit={handleSubmit} noValidate className="space-y-4 sm:space-y-6">
               {/* Desktop 2-Column Grid / Mobile 1-Column Flow */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 {/* 1. Full Name */}
@@ -836,21 +1289,23 @@ export default function ProgramRegistrationModal({
                     ref={firstInputRef}
                     id="reg-fullname"
                     type="text"
-                    required
                     placeholder="Enter your full name"
                     value={formData.fullName}
-                    onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                    onChange={(e) => handleFieldChange('fullName', e.target.value)}
+                    onBlur={() => handleBlur('fullName')}
                     className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      errors.fullName ? 'border-red-500 bg-red-500/5' : ''
+                      touched.fullName && errors.fullName ? 'border-red-500 bg-red-500/5' : ''
                     }`}
                     style={{
                       backgroundColor: 'var(--card-inner)',
-                      borderColor: errors.fullName ? '#ef4444' : 'var(--border-color)',
+                      borderColor: touched.fullName && errors.fullName ? '#ef4444' : 'var(--border-color)',
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {errors.fullName && (
-                    <p className="text-[11px] text-red-500 mt-1">{errors.fullName}</p>
+                  {touched.fullName && errors.fullName && (
+                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" /> {errors.fullName}
+                    </p>
                   )}
                 </div>
 
@@ -867,57 +1322,60 @@ export default function ProgramRegistrationModal({
                     id="reg-email"
                     type="email"
                     inputMode="email"
-                    required
                     placeholder="name@example.com"
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onChange={(e) => handleFieldChange('email', e.target.value)}
+                    onBlur={() => handleBlur('email')}
                     className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      errors.email ? 'border-red-500 bg-red-500/5' : ''
+                      touched.email && errors.email ? 'border-red-500 bg-red-500/5' : ''
                     }`}
                     style={{
                       backgroundColor: 'var(--card-inner)',
-                      borderColor: errors.email ? '#ef4444' : 'var(--border-color)',
+                      borderColor: touched.email && errors.email ? '#ef4444' : 'var(--border-color)',
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {errors.email && <p className="text-[11px] text-red-500 mt-1">{errors.email}</p>}
+                  {touched.email && errors.email && (
+                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" /> {errors.email}
+                    </p>
+                  )}
                 </div>
 
                 {/* 3. Mobile No */}
                 <div>
                   <label
-                    htmlFor="reg-mobile"
+                    htmlFor="reg-mobileno"
                     className="block text-xs sm:text-sm font-bold mb-1.5"
                     style={{ color: 'var(--text-heading)' }}
                   >
-                    Mobile No <span className="text-[#d02426]">*</span>
+                    Mobile No (10 Digits) <span className="text-[#d02426]">*</span>
                   </label>
                   <input
-                    id="reg-mobile"
+                    id="reg-mobileno"
                     type="tel"
-                    inputMode="tel"
-                    required
-                    placeholder="10-digit mobile number"
+                    inputMode="numeric"
+                    maxLength={10}
+                    placeholder="e.g. 9876543210"
                     value={formData.mobileNo}
                     onChange={(e) => {
-                      const val = e.target.value;
-                      setFormData((prev) => ({
-                        ...prev,
-                        mobileNo: val,
-                        whatsappNo: prev.sameAsMobile ? val : prev.whatsappNo
-                      }));
+                      const clean = e.target.value.replace(/[^0-9]/g, '');
+                      handleFieldChange('mobileNo', clean);
                     }}
+                    onBlur={() => handleBlur('mobileNo')}
                     className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      errors.mobileNo ? 'border-red-500 bg-red-500/5' : ''
+                      touched.mobileNo && errors.mobileNo ? 'border-red-500 bg-red-500/5' : ''
                     }`}
                     style={{
                       backgroundColor: 'var(--card-inner)',
-                      borderColor: errors.mobileNo ? '#ef4444' : 'var(--border-color)',
+                      borderColor: touched.mobileNo && errors.mobileNo ? '#ef4444' : 'var(--border-color)',
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {errors.mobileNo && (
-                    <p className="text-[11px] text-red-500 mt-1">{errors.mobileNo}</p>
+                  {touched.mobileNo && errors.mobileNo && (
+                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" /> {errors.mobileNo}
+                    </p>
                   )}
                 </div>
 
@@ -925,7 +1383,7 @@ export default function ProgramRegistrationModal({
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
                     <label
-                      htmlFor="reg-whatsapp"
+                      htmlFor="reg-whatsappno"
                       className="text-xs sm:text-sm font-bold"
                       style={{ color: 'var(--text-heading)' }}
                     >
@@ -938,104 +1396,111 @@ export default function ProgramRegistrationModal({
                       <input
                         type="checkbox"
                         checked={formData.sameAsMobile}
-                        onChange={(e) => {
-                          const checked = e.target.checked;
-                          setFormData((prev) => ({
-                            ...prev,
-                            sameAsMobile: checked,
-                            whatsappNo: checked ? prev.mobileNo : prev.whatsappNo
-                          }));
-                        }}
+                        onChange={(e) => handleFieldChange('sameAsMobile', e.target.checked)}
                         className="rounded accent-[#d02426]"
                       />
                       <span>Same as Mobile</span>
                     </label>
                   </div>
                   <input
-                    id="reg-whatsapp"
+                    id="reg-whatsappno"
                     type="tel"
-                    inputMode="tel"
-                    required
-                    placeholder="WhatsApp number"
+                    inputMode="numeric"
+                    maxLength={10}
+                    placeholder="e.g. 9876543210"
                     disabled={formData.sameAsMobile}
                     value={formData.sameAsMobile ? formData.mobileNo : formData.whatsappNo}
-                    onChange={(e) => setFormData({ ...formData, whatsappNo: e.target.value })}
+                    onChange={(e) => {
+                      const clean = e.target.value.replace(/[^0-9]/g, '');
+                      handleFieldChange('whatsappNo', clean);
+                    }}
+                    onBlur={() => handleBlur('whatsappNo')}
                     className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      errors.whatsappNo ? 'border-red-500 bg-red-500/5' : ''
+                      touched.whatsappNo && errors.whatsappNo ? 'border-red-500 bg-red-500/5' : ''
                     } ${formData.sameAsMobile ? 'opacity-80' : ''}`}
                     style={{
                       backgroundColor: 'var(--card-inner)',
-                      borderColor: errors.whatsappNo ? '#ef4444' : 'var(--border-color)',
+                      borderColor: touched.whatsappNo && errors.whatsappNo ? '#ef4444' : 'var(--border-color)',
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {errors.whatsappNo && (
-                    <p className="text-[11px] text-red-500 mt-1">{errors.whatsappNo}</p>
+                  {touched.whatsappNo && errors.whatsappNo && (
+                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" /> {errors.whatsappNo}
+                    </p>
                   )}
                 </div>
 
                 {/* 5. Emergency Contact Name */}
                 <div>
                   <label
-                    htmlFor="reg-emergency-name"
+                    htmlFor="reg-emergencyname"
                     className="block text-xs sm:text-sm font-bold mb-1.5"
                     style={{ color: 'var(--text-heading)' }}
                   >
                     Emergency Contact Name <span className="text-[#d02426]">*</span>
                   </label>
                   <input
-                    id="reg-emergency-name"
+                    id="reg-emergencyname"
                     type="text"
-                    required
-                    placeholder="Contact person name"
+                    placeholder="Contact person name (e.g. Spouse / Parent)"
                     value={formData.emergencyName}
-                    onChange={(e) => setFormData({ ...formData, emergencyName: e.target.value })}
+                    onChange={(e) => handleFieldChange('emergencyName', e.target.value)}
+                    onBlur={() => handleBlur('emergencyName')}
                     className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      errors.emergencyName ? 'border-red-500 bg-red-500/5' : ''
+                      touched.emergencyName && errors.emergencyName ? 'border-red-500 bg-red-500/5' : ''
                     }`}
                     style={{
                       backgroundColor: 'var(--card-inner)',
-                      borderColor: errors.emergencyName ? '#ef4444' : 'var(--border-color)',
+                      borderColor: touched.emergencyName && errors.emergencyName ? '#ef4444' : 'var(--border-color)',
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {errors.emergencyName && (
-                    <p className="text-[11px] text-red-500 mt-1">{errors.emergencyName}</p>
+                  {touched.emergencyName && errors.emergencyName && (
+                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" /> {errors.emergencyName}
+                    </p>
                   )}
                 </div>
 
                 {/* 6. Emergency Contact No */}
                 <div>
                   <label
-                    htmlFor="reg-emergency-no"
+                    htmlFor="reg-emergencyno"
                     className="block text-xs sm:text-sm font-bold mb-1.5"
                     style={{ color: 'var(--text-heading)' }}
                   >
                     Emergency Contact No <span className="text-[#d02426]">*</span>
                   </label>
                   <input
-                    id="reg-emergency-no"
+                    id="reg-emergencyno"
                     type="tel"
-                    inputMode="tel"
-                    required
-                    placeholder="Emergency phone number"
+                    inputMode="numeric"
+                    maxLength={10}
+                    placeholder="e.g. 9811122233"
                     value={formData.emergencyNo}
-                    onChange={(e) => setFormData({ ...formData, emergencyNo: e.target.value })}
+                    onChange={(e) => {
+                      const clean = e.target.value.replace(/[^0-9]/g, '');
+                      handleFieldChange('emergencyNo', clean);
+                    }}
+                    onBlur={() => handleBlur('emergencyNo')}
                     className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      errors.emergencyNo ? 'border-red-500 bg-red-500/5' : ''
+                      touched.emergencyNo && errors.emergencyNo ? 'border-red-500 bg-red-500/5' : ''
                     }`}
                     style={{
                       backgroundColor: 'var(--card-inner)',
-                      borderColor: errors.emergencyNo ? '#ef4444' : 'var(--border-color)',
+                      borderColor: touched.emergencyNo && errors.emergencyNo ? '#ef4444' : 'var(--border-color)',
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {errors.emergencyNo && (
-                    <p className="text-[11px] text-red-500 mt-1">{errors.emergencyNo}</p>
+                  {touched.emergencyNo && errors.emergencyNo && (
+                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" /> {errors.emergencyNo}
+                    </p>
                   )}
                 </div>
 
-                {/* 7. Gender (Segmented / Radio Options) */}
+                {/* 7. Gender */}
                 <div>
                   <label
                     className="block text-xs sm:text-sm font-bold mb-2"
@@ -1054,7 +1519,7 @@ export default function ProgramRegistrationModal({
                           name="gender"
                           value={gender}
                           checked={formData.gender === gender}
-                          onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+                          onChange={(e) => handleFieldChange('gender', e.target.value)}
                           className="w-4 h-4 accent-[#318cdd] cursor-pointer"
                         />
                         <span style={{ color: 'var(--text-heading)' }}>{gender}</span>
@@ -1082,7 +1547,7 @@ export default function ProgramRegistrationModal({
                           name="tshirtSize"
                           value={size}
                           checked={formData.tshirtSize === size}
-                          onChange={(e) => setFormData({ ...formData, tshirtSize: e.target.value })}
+                          onChange={(e) => handleFieldChange('tshirtSize', e.target.value)}
                           className="w-4 h-4 accent-[#318cdd] cursor-pointer"
                         />
                         <span style={{ color: 'var(--text-heading)' }}>{size}</span>
@@ -1091,25 +1556,31 @@ export default function ProgramRegistrationModal({
                   </div>
                 </div>
 
-                {/* 9. Date of Birth (Elegant 3-part selector: Day, Month, Year - No Browser Popup!) */}
+                {/* 9. Date of Birth (Theme-Aware Calendar Control) */}
                 <div>
                   <label
+                    htmlFor="reg-dob-btn"
                     className="block text-xs sm:text-sm font-bold mb-1.5"
                     style={{ color: 'var(--text-heading)' }}
                   >
                     Date of Birth <span className="text-[#d02426]">*</span>
                   </label>
-                  <DateOfBirthPicker
+                  <CustomCalendarPicker
                     value={formData.dob}
-                    onChange={(newDob) => setFormData((prev) => ({ ...prev, dob: newDob }))}
-                    error={Boolean(errors.dob)}
+                    onChange={(newDob) => handleFieldChange('dob', newDob)}
+                    error={touched.dob && errors.dob ? errors.dob : ''}
                   />
-                  {errors.dob && <p className="text-[11px] text-red-500 mt-1">{errors.dob}</p>}
+                  {touched.dob && errors.dob && (
+                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" /> {errors.dob}
+                    </p>
+                  )}
                 </div>
 
-                {/* 10. Blood Group (Custom Styled Dropdown) */}
+                {/* 10. Blood Group */}
                 <div>
                   <label
+                    htmlFor="reg-bloodgroup"
                     className="block text-xs sm:text-sm font-bold mb-1.5"
                     style={{ color: 'var(--text-heading)' }}
                   >
@@ -1118,96 +1589,105 @@ export default function ProgramRegistrationModal({
                   <CustomDropdown
                     id="reg-bloodgroup"
                     value={formData.bloodGroup}
-                    onChange={(bg) => setFormData((prev) => ({ ...prev, bloodGroup: bg }))}
+                    onChange={(bg) => handleFieldChange('bloodGroup', bg)}
                     options={BLOOD_GROUPS}
                     placeholder="Select Blood Group"
-                    error={Boolean(errors.bloodGroup)}
+                    error={touched.bloodGroup && Boolean(errors.bloodGroup)}
                   />
-                  {errors.bloodGroup && (
-                    <p className="text-[11px] text-red-500 mt-1">{errors.bloodGroup}</p>
+                  {touched.bloodGroup && errors.bloodGroup && (
+                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" /> {errors.bloodGroup}
+                    </p>
                   )}
                 </div>
 
-                {/* 11. Residential Address (Multiline Textarea) */}
+                {/* 11. Residential Address */}
                 <div className="md:row-span-2">
                   <label
-                    htmlFor="reg-address"
+                    htmlFor="reg-residentialaddress"
                     className="block text-xs sm:text-sm font-bold mb-1.5"
                     style={{ color: 'var(--text-heading)' }}
                   >
                     Residential Address <span className="text-[#d02426]">*</span>
                   </label>
                   <textarea
-                    id="reg-address"
+                    id="reg-residentialaddress"
                     rows={4}
-                    required
                     placeholder="House/Flat No, Street, Locality..."
                     value={formData.residentialAddress}
-                    onChange={(e) =>
-                      setFormData({ ...formData, residentialAddress: e.target.value })
-                    }
+                    onChange={(e) => handleFieldChange('residentialAddress', e.target.value)}
+                    onBlur={() => handleBlur('residentialAddress')}
                     className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 resize-none ${
-                      errors.residentialAddress ? 'border-red-500 bg-red-500/5' : ''
+                      touched.residentialAddress && errors.residentialAddress ? 'border-red-500 bg-red-500/5' : ''
                     }`}
                     style={{
                       backgroundColor: 'var(--card-inner)',
-                      borderColor: errors.residentialAddress ? '#ef4444' : 'var(--border-color)',
+                      borderColor: touched.residentialAddress && errors.residentialAddress ? '#ef4444' : 'var(--border-color)',
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {errors.residentialAddress && (
-                    <p className="text-[11px] text-red-500 mt-1">{errors.residentialAddress}</p>
+                  {touched.residentialAddress && errors.residentialAddress && (
+                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" /> {errors.residentialAddress}
+                    </p>
                   )}
                 </div>
 
                 {/* 12. Pin / Zip Code */}
                 <div>
                   <label
-                    htmlFor="reg-pin"
+                    htmlFor="reg-pinzipcode"
                     className="block text-xs sm:text-sm font-bold mb-1.5"
                     style={{ color: 'var(--text-heading)' }}
                   >
-                    Pin / Zip Code <span className="text-[#d02426]">*</span>
+                    Pin / Zip Code (6 Digits) <span className="text-[#d02426]">*</span>
                   </label>
                   <input
-                    id="reg-pin"
+                    id="reg-pinzipcode"
                     type="text"
                     inputMode="numeric"
-                    required
+                    maxLength={6}
                     placeholder="e.g. 560003"
                     value={formData.pinZipCode}
-                    onChange={(e) => setFormData({ ...formData, pinZipCode: e.target.value })}
+                    onChange={(e) => {
+                      const clean = e.target.value.replace(/[^0-9]/g, '');
+                      handleFieldChange('pinZipCode', clean);
+                    }}
+                    onBlur={() => handleBlur('pinZipCode')}
                     className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      errors.pinZipCode ? 'border-red-500 bg-red-500/5' : ''
+                      touched.pinZipCode && errors.pinZipCode ? 'border-red-500 bg-red-500/5' : ''
                     }`}
                     style={{
                       backgroundColor: 'var(--card-inner)',
-                      borderColor: errors.pinZipCode ? '#ef4444' : 'var(--border-color)',
+                      borderColor: touched.pinZipCode && errors.pinZipCode ? '#ef4444' : 'var(--border-color)',
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {errors.pinZipCode && (
-                    <p className="text-[11px] text-red-500 mt-1">{errors.pinZipCode}</p>
+                  {touched.pinZipCode && errors.pinZipCode && (
+                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" /> {errors.pinZipCode}
+                    </p>
                   )}
                 </div>
 
-                {/* 13. Location Preference (Synchronized from centersData with Ground/City Search) */}
+                {/* 13. Location Preference (from centersData with Ground/City Search) */}
                 <div>
                   <label
-                    htmlFor="reg-location-pref"
+                    htmlFor="reg-locationpreference"
                     className="block text-xs sm:text-sm font-bold mb-1.5"
                     style={{ color: 'var(--text-heading)' }}
                   >
-                    Location Preference (20+ Training Centers){' '}
-                    <span className="text-[#d02426]">*</span>
+                    Location Preference (20+ Training Centers) <span className="text-[#d02426]">*</span>
                   </label>
                   <LocationDropdown
                     value={formData.locationPreference}
-                    onChange={(loc) => setFormData((prev) => ({ ...prev, locationPreference: loc }))}
-                    error={Boolean(errors.locationPreference)}
+                    onChange={(loc) => handleFieldChange('locationPreference', loc)}
+                    error={touched.locationPreference && Boolean(errors.locationPreference)}
                   />
-                  {errors.locationPreference && (
-                    <p className="text-[11px] text-red-500 mt-1">{errors.locationPreference}</p>
+                  {touched.locationPreference && errors.locationPreference && (
+                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" /> {errors.locationPreference}
+                    </p>
                   )}
                 </div>
               </div>
@@ -1231,9 +1711,7 @@ export default function ProgramRegistrationModal({
                         name="maxDistance1Year"
                         value={dist}
                         checked={formData.maxDistance1Year === dist}
-                        onChange={(e) =>
-                          setFormData({ ...formData, maxDistance1Year: e.target.value })
-                        }
+                        onChange={(e) => handleFieldChange('maxDistance1Year', e.target.value)}
                         className="w-4 h-4 accent-[#318cdd] cursor-pointer"
                       />
                       <span style={{ color: 'var(--text-heading)' }}>{dist}</span>
@@ -1242,7 +1720,7 @@ export default function ProgramRegistrationModal({
                 </div>
               </div>
 
-              {/* 15. Personal Best Event & Timing (Event select + Timing Input with icon) */}
+              {/* 15. Personal Best Event & Timing (Masked Numeric Time Control) */}
               <div>
                 <label
                   className="block text-xs sm:text-sm font-bold mb-2"
@@ -1251,32 +1729,29 @@ export default function ProgramRegistrationModal({
                   Personal Best Event &amp; Timing <span className="text-[#d02426]">*</span>
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  <CustomDropdown
-                    value={formData.pbEvent}
-                    onChange={(ev) => setFormData((prev) => ({ ...prev, pbEvent: ev }))}
-                    options={PB_EVENTS}
-                    placeholder="Select PB Event"
-                  />
-
-                  <div className="relative">
-                    <input
-                      type="text"
-                      placeholder="HH:MM:SS (e.g. 01:39:44)"
-                      value={formData.pbTiming}
-                      onChange={(e) => setFormData({ ...formData, pbTiming: e.target.value })}
-                      className="w-full px-3.5 py-2.5 sm:py-3 pr-10 rounded-xl border font-mono text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40"
-                      style={{
-                        backgroundColor: 'var(--card-inner)',
-                        borderColor: 'var(--border-color)',
-                        color: 'var(--text-heading)'
-                      }}
+                  {/* Event Dropdown */}
+                  <div>
+                    <CustomDropdown
+                      value={formData.pbEvent}
+                      onChange={(ev) => handleFieldChange('pbEvent', ev)}
+                      options={PB_EVENTS}
+                      placeholder="Select PB Event"
                     />
-                    <div
-                      className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none opacity-60"
-                      style={{ color: 'var(--text-secondary)' }}
-                    >
-                      <Clock className="w-4 h-4" />
-                    </div>
+                  </div>
+
+                  {/* Masked Numeric Race Time Input (HH : MM : SS) */}
+                  <div>
+                    <RaceTimingInput
+                      value={formData.pbTiming}
+                      onChange={(t) => handleFieldChange('pbTiming', t)}
+                      disabled={formData.pbEvent === 'None / First-timer'}
+                      error={touched.pbTiming && errors.pbTiming ? errors.pbTiming : ''}
+                    />
+                    {touched.pbTiming && errors.pbTiming && (
+                      <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" /> {errors.pbTiming}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -1295,7 +1770,7 @@ export default function ProgramRegistrationModal({
                   rows={3}
                   placeholder="e.g. Asthma, prior ACL tear, hypertension, cardiac conditions, or write 'None'..."
                   value={formData.healthProblem}
-                  onChange={(e) => setFormData({ ...formData, healthProblem: e.target.value })}
+                  onChange={(e) => handleFieldChange('healthProblem', e.target.value)}
                   className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 resize-none"
                   style={{
                     backgroundColor: 'var(--card-inner)',
@@ -1357,7 +1832,6 @@ export default function ProgramRegistrationModal({
                   </p>
                 )}
 
-                {/* Banner from screenshot: "If you don't have promocode, please proceed the Payment." */}
                 <div className="bg-[#24639c] text-white text-[11px] sm:text-xs font-medium px-4 py-2.5 rounded-lg inline-block w-full sm:w-auto shadow-xs">
                   If you don't have promocode, please proceed the Payment.
                 </div>
@@ -1412,25 +1886,24 @@ export default function ProgramRegistrationModal({
                   <input
                     type="checkbox"
                     checked={formData.acceptedTerms}
-                    onChange={(e) => {
-                      setFormData({ ...formData, acceptedTerms: e.target.checked });
-                      if (errors.acceptedTerms) {
-                        setErrors((prev) => ({ ...prev, acceptedTerms: undefined }));
-                      }
-                    }}
+                    onChange={(e) => handleFieldChange('acceptedTerms', e.target.checked)}
                     className="mt-0.5 w-4 h-4 rounded accent-[#d02426] cursor-pointer flex-shrink-0"
                   />
                   <span
                     className={`text-xs sm:text-sm font-bold ${
-                      errors.acceptedTerms ? 'text-red-500' : ''
+                      touched.acceptedTerms && errors.acceptedTerms ? 'text-red-500' : ''
                     }`}
-                    style={{ color: errors.acceptedTerms ? '#ef4444' : 'var(--text-heading)' }}
+                    style={{
+                      color: touched.acceptedTerms && errors.acceptedTerms ? '#ef4444' : 'var(--text-heading)'
+                    }}
                   >
                     I Accept(Please Select the Checkbox) <span className="text-[#d02426]">*</span>
                   </span>
                 </label>
-                {errors.acceptedTerms && (
-                  <p className="text-[11px] text-red-500">{errors.acceptedTerms}</p>
+                {touched.acceptedTerms && errors.acceptedTerms && (
+                  <p className="text-[11px] text-red-500 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" /> {errors.acceptedTerms}
+                  </p>
                 )}
               </div>
 
