@@ -96,10 +96,20 @@ export default function PaceCalculator({ onSelectProgram, defaultExpanded = fals
         color: 'var(--text-primary)'
       }}
     >
-      {/* Sleek, Low-Profile Collapsed Bar */}
+      {/* Sleek, Low-Profile Collapsed Bar with Keyboard Support */}
       <div
+        role="button"
+        tabIndex={0}
+        aria-expanded={isOpen}
+        aria-controls="calculator-panel"
         onClick={() => setIsOpen(!isOpen)}
-        className="py-3 px-4 sm:px-5 cursor-pointer flex items-center justify-between gap-3 select-none hover:opacity-95 transition-all"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setIsOpen(!isOpen);
+          }
+        }}
+        className="py-3 px-4 sm:px-5 cursor-pointer flex items-center justify-between gap-3 select-none hover:opacity-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#318cdd]"
       >
         <div className="flex items-center gap-3 min-w-0">
           <div
@@ -146,11 +156,13 @@ export default function PaceCalculator({ onSelectProgram, defaultExpanded = fals
           }}
         >
           {/* Distance presets strip */}
-          <div className="flex flex-wrap items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-1.5" role="radiogroup" aria-label="Target race distance">
             <span className="text-[11px] opacity-60 mr-1.5 font-medium">Distance:</span>
             {DISTANCES.map((dist) => (
               <button
                 key={dist.label}
+                role="radio"
+                aria-checked={selectedDistance.label === dist.label}
                 onClick={() => setSelectedDistance(dist)}
                 className={`px-3 py-1 text-xs font-bold rounded-lg transition-all ${
                   selectedDistance.label === dist.label
@@ -191,7 +203,7 @@ export default function PaceCalculator({ onSelectProgram, defaultExpanded = fals
                     max="12"
                     value={hours}
                     onChange={(e) => setHours(Math.max(0, parseInt(e.target.value) || 0))}
-                    className="w-full text-center text-lg font-black rounded-lg p-1.5 border focus:outline-none"
+                    className="w-full text-center text-lg font-black rounded-lg p-1.5 border focus:outline-none tabular-num"
                     style={{
                       backgroundColor: 'var(--card-inner)',
                       borderColor: 'var(--border-color)',
@@ -207,7 +219,7 @@ export default function PaceCalculator({ onSelectProgram, defaultExpanded = fals
                     max="59"
                     value={minutes}
                     onChange={(e) => setMinutes(Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))}
-                    className="w-full text-center text-lg font-black rounded-lg p-1.5 border focus:outline-none"
+                    className="w-full text-center text-lg font-black rounded-lg p-1.5 border focus:outline-none tabular-num"
                     style={{
                       backgroundColor: 'var(--card-inner)',
                       borderColor: 'var(--border-color)',
@@ -223,7 +235,7 @@ export default function PaceCalculator({ onSelectProgram, defaultExpanded = fals
                     max="59"
                     value={seconds}
                     onChange={(e) => setSeconds(Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))}
-                    className="w-full text-center text-lg font-black rounded-lg p-1.5 border focus:outline-none"
+                    className="w-full text-center text-lg font-black rounded-lg p-1.5 border focus:outline-none tabular-num"
                     style={{
                       backgroundColor: 'var(--card-inner)',
                       borderColor: 'var(--border-color)',

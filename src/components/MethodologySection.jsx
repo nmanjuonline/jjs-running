@@ -136,7 +136,7 @@ export default function MethodologySection({ currentTheme = 'olympic-clean', onE
                     color: 'var(--text-heading)'
                   }}
                 >
-                  ✓ {pillar.highlight}
+                  {pillar.highlight}
                 </span>
               </div>
             </div>

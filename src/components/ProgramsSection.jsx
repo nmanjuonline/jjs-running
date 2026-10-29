@@ -31,12 +31,14 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
     return (
       <div className="space-y-6">
         {/* Category Filter Pills - Sleek Minimalist Tabs */}
-        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2">
+        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2" role="tablist" aria-label="Filter programs by category">
           {CATEGORIES.map((cat) => {
             const isActive = activeCategory === cat;
             return (
               <button
                 key={cat}
+                role="tab"
+                aria-selected={isActive}
                 onClick={() => setActiveCategory(cat)}
                 className={`px-4 py-2 text-xs font-bold tracking-wide rounded-full transition-all duration-200 flex-shrink-0 ${
                   isActive
@@ -54,7 +56,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
 
         {/* Mobile Swipe Hint */}
         <div className={`md:hidden flex items-center justify-between text-xs font-medium px-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-          <span>👈 Swipe horizontally to view all</span>
+          <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#318cdd] animate-pulse" />Swipe to explore</span>
           <span>{filtered.length} Programs</span>
         </div>
 
@@ -125,8 +127,8 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                   </p>
 
                   {/* Highlights Checklist */}
-                  <div className={`pt-3 border-t space-y-1.5 ${isDark ? 'border-slate-800' : 'border-slate-100'}`}>
-                    {program.highlights.slice(0, 3).map((h, i) => (
+                  <div className={`pt-3 border-t space-y-2 ${isDark ? 'border-slate-800' : 'border-slate-100'}`}>
+                    {program.highlights.map((h, i) => (
                       <div key={i} className={`flex items-center gap-2 text-xs ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
                         <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 ${
                           isDark ? 'bg-blue-950/80 text-blue-400' : 'bg-[#318cdd]/10 text-[#318cdd]'
@@ -141,10 +143,14 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
               </div>
 
               {/* Bottom Price & Register */}
-              <div className={`p-5 sm:p-6 pt-0 border-t flex items-center justify-between gap-3 mt-4 ${isDark ? 'border-slate-800' : 'border-slate-100'}`}>
-                <div>
-                  <span className={`text-2xl font-black block leading-none ${isDark ? 'text-white' : 'text-slate-950'}`}>{program.price}</span>
-                  <span className="text-[10px] text-slate-400 uppercase font-medium">{program.tax}</span>
+              <div className={`p-5 sm:p-6 pt-4 border-t flex items-center justify-between gap-3 ${isDark ? 'border-slate-800' : 'border-slate-100'}`}>
+                <div className="flex flex-col">
+                  <span className={`text-2xl font-black block leading-tight tabular-num ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                    {program.price}
+                  </span>
+                  <span className="text-[10px] text-slate-400 uppercase font-semibold tracking-wider">
+                    {program.tax}
+                  </span>
                 </div>
 
                 <button
@@ -169,12 +175,14 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
     return (
       <div className="space-y-6">
         {/* Warm Sunrise Category Pills */}
-        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2">
+        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2" role="tablist" aria-label="Filter programs by category">
           {CATEGORIES.map((cat) => {
             const isActive = activeCategory === cat;
             return (
               <button
                 key={cat}
+                role="tab"
+                aria-selected={isActive}
                 onClick={() => setActiveCategory(cat)}
                 className={`px-4 py-2 text-xs font-bold tracking-wide rounded-full transition-all duration-200 flex-shrink-0 ${
                   isActive
@@ -266,8 +274,8 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                   </p>
 
                   {/* Highlights with warm checkmarks */}
-                  <div className="pt-3 border-t border-orange-100 space-y-1.5">
-                    {program.highlights.slice(0, 3).map((h, i) => (
+                  <div className="pt-3 border-t border-orange-100 space-y-2">
+                    {program.highlights.map((h, i) => (
                       <div key={i} className="flex items-center gap-2 text-xs text-zinc-700">
                         <div className="w-4 h-4 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
                           <Check className="w-2.5 h-2.5 text-orange-600 stroke-[3]" />
@@ -280,10 +288,10 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
               </div>
 
               {/* Bottom Price & Register */}
-              <div className="p-5 sm:p-6 pt-0 border-t border-orange-100/80 flex items-center justify-between gap-3 mt-4">
-                <div>
-                  <span className="text-2xl font-black text-zinc-950 block leading-none">{program.price}</span>
-                  <span className="text-[10px] text-zinc-500 uppercase font-medium">{program.tax}</span>
+              <div className="p-5 sm:p-6 pt-4 border-t border-orange-100/80 flex items-center justify-between gap-3">
+                <div className="flex flex-col">
+                  <span className="text-2xl font-black text-zinc-950 block leading-tight tabular-num">{program.price}</span>
+                  <span className="text-[10px] text-zinc-500 uppercase font-semibold tracking-wider">{program.tax}</span>
                 </div>
 
                 <button
@@ -307,12 +315,14 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
   if (currentTheme === 'kinetic') {
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2">
+        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2" role="tablist" aria-label="Filter programs by category">
           {CATEGORIES.map((cat) => {
             const isActive = activeCategory === cat;
             return (
               <button
                 key={cat}
+                role="tab"
+                aria-selected={isActive}
                 onClick={() => setActiveCategory(cat)}
                 className={`px-3.5 py-1.5 text-xs font-mono font-bold tracking-wider rounded-xl transition-all flex-shrink-0 ${
                   isActive
@@ -403,7 +413,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
   // =========================================================================
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2">
+      <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2" role="tablist" aria-label="Filter programs by category">
         {CATEGORIES.map((cat) => {
           const isActive = activeCategory === cat;
           return (

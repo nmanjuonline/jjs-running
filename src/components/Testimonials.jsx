@@ -7,7 +7,7 @@ export default function Testimonials() {
     <div className="space-y-4">
       {/* Mobile Swipe Hint */}
       <div className="md:hidden flex items-center justify-between text-[11px] opacity-60 px-1">
-        <span>👈 Swipe runner stories</span>
+        <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#318cdd] animate-pulse" />Swipe to read stories</span>
         <span>{runnerStories.length} Stories</span>
       </div>
 
@@ -65,7 +65,7 @@ export default function Testimonials() {
               <div className="p-2 rounded-xl" style={{ backgroundColor: 'var(--card-inner)' }}>
                 <span className="text-[9px] uppercase tracking-wider opacity-60 block">Pace Progress</span>
                 <span className="font-mono font-bold text-[10px] block truncate" style={{ color: 'var(--text-heading)' }}>
-                  {story.stats.initialPace} ➔ {story.stats.currentPace}
+                  {story.stats.initialPace} to {story.stats.currentPace}
                 </span>
               </div>
               <div className="p-2 rounded-xl" style={{ backgroundColor: 'var(--card-inner)' }}>

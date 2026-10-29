@@ -34,7 +34,7 @@ section[id] {
     --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
   }
 
-  /* 🏔️ SWISS CLEAN - VERSION 1: LOGO MATCH (Light • Cerulean Blue & Sprint Red) */
+  /* SWISS CLEAN - VERSION 1: LOGO MATCH (Light • Cerulean Blue & Sprint Red) */
   body[data-theme='swiss-light'], body[data-theme='olympic-clean'], body[data-theme='street-crew'] {
     --bg-page: #ffffff;
     --text-primary: #0f172a;
@@ -60,7 +60,7 @@ section[id] {
     --card-shadow: 0 14px 30px -8px rgba(49, 140, 221, 0.12);
   }
 
-  /* 🌌 SWISS CLEAN - VERSION 2: LOGO CONTRAST (Dark • Deep Obsidian & Logo Palette) */
+  /* SWISS CLEAN - VERSION 2: LOGO CONTRAST (Dark • Deep Obsidian & Logo Palette) */
   body[data-theme='swiss-dark'] {
     --bg-page: #090d16;
     --text-primary: #f8fafc;
@@ -86,7 +86,7 @@ section[id] {
     --card-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.6);
   }
 
-  /* 🌅 THEME 2 (LIGHT): Sunrise Stride (Nike Run Club / Radiant Dawn) */
+  /* THEME 2 (LIGHT): Sunrise Stride (Nike Run Club / Radiant Dawn) */
   body[data-theme='sunrise-coral'], body[data-theme='heritage-gold'] {
     --bg-page: #faf8f5;
     --text-primary: #18181b;
@@ -109,7 +109,7 @@ section[id] {
     --card-shadow: 0 14px 30px -8px rgba(255, 72, 0, 0.10);
   }
 
-  /* ⚡ THEME 3 (DARK): Kinetic Volt (Asymmetric Bento Cockpit) */
+  /* THEME 3 (DARK): Kinetic Volt (Asymmetric Bento Cockpit) */
   body[data-theme='kinetic'] {
     --bg-page: #090a0f;
     --text-primary: #ffffff;
@@ -132,7 +132,7 @@ section[id] {
     --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
   }
 
-  /* 🔴 THEME 4 (DARK): Crimson Velocity (Breaking2 Speed Runway) */
+  /* THEME 4 (DARK): Crimson Velocity (Breaking2 Speed Runway) */
   body[data-theme='crimson'] {
     --bg-page: #070709;
     --text-primary: #ffffff;
@@ -195,4 +195,53 @@ section[id] {
 ::-webkit-scrollbar-thumb {
   background: rgba(150, 150, 150, 0.3);
   border-radius: 4px;
+}
+
+
+/* =========================================================================
+   ACCESSIBILITY & ERGONOMICS (WCAG 2.1 AA/AAA)
+   ========================================================================= */
+
+/* Skip-to-content link */
+.skip-link {
+  position: absolute;
+  top: -60px;
+  left: 1rem;
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+  padding: 0.625rem 1.25rem;
+  font-weight: 800;
+  font-size: 0.875rem;
+  border-radius: 0.75rem;
+  z-index: 99999;
+  text-decoration: none;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  transition: top 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.skip-link:focus-visible, .skip-link:focus {
+  top: 1rem;
+  outline: 3px solid #ffffff !important;
+  outline-offset: 2px !important;
+}
+
+/* High-Contrast Visible Focus States */
+*:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 2px !important;
+}
+
+/* Tabular Numerals for Clocks, Paces, Splits, and Metrics */
+.tabular-num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Reduced Motion Preference (WCAG 2.1 AA) */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

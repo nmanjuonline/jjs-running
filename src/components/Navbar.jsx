@@ -120,31 +120,33 @@ export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenR
 
           </div>
 
-          {/* Mobile Actions: Contrast Toggle & Trial Button */}
-          <div className="flex items-center gap-1.5 sm:hidden">
+          {/* Mobile Actions: Contrast Toggle & Accessible Menu Button (>=44x44px Touch Targets) */}
+          <div className="flex items-center gap-2 sm:hidden">
             <button
               onClick={() => setTheme && setTheme(isDark ? 'swiss-light' : 'swiss-dark')}
-              className="p-2 rounded-xl border flex-shrink-0"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl border flex-shrink-0 cursor-pointer"
               style={{
                 backgroundColor: 'var(--card-inner)',
                 borderColor: 'var(--border-color)',
                 color: 'var(--text-primary)'
               }}
-              aria-label="Toggle logo contrast theme"
-              title={isDark ? 'Switch to Light Mode (Logo Match)' : 'Switch to Dark Mode (Logo Contrast)'}
+              aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+              title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
-              {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
+              {isDark ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-slate-700" />}
             </button>
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl border flex-shrink-0"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl border flex-shrink-0 cursor-pointer"
               style={{
                 backgroundColor: 'var(--card-inner)',
                 borderColor: 'var(--border-color)',
                 color: 'var(--text-primary)'
               }}
-              aria-label="Toggle menu"
+              aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
