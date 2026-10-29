@@ -193,15 +193,15 @@ export default function App() {
               style={{ backgroundColor: 'var(--badge-bg)', color: 'var(--accent)' }}
             >
               <Sparkles className="w-3.5 h-3.5" />
-              Target Race Calendar
+              Signature JJs Running Events
             </span>
             <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight uppercase"
               style={{ color: 'var(--text-heading)' }}
             >
-              Marathon Campaigns & Squads
+              Flagship Races & Festivals
             </h2>
             <p className="text-xs sm:text-base mt-1.5" style={{ color: 'var(--text-secondary)' }}>
-              Train with our official target race squads with supported weekend SLR simulations, pacing groups, and finish-line hospitality.
+              From high-altitude monsoon hill climbs to iconic women fitness movements, experience running events founded and powered by Jayanagar Jaguars.
             </p>
           </div>
 
