@@ -509,7 +509,7 @@ function PopoverTimePicker({ value, onChange, disabled = false, error = '' }) {
   if (disabled) {
     return (
       <div
-        className="w-full px-3.5 py-2.5 sm:py-3 min-h-[44px] sm:min-h-[48px] rounded-xl border text-xs sm:text-sm font-mono opacity-50 flex items-center justify-between"
+        className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm font-mono opacity-50 flex items-center justify-between"
         style={{
           backgroundColor: 'var(--card-inner)',
           borderColor: 'var(--border-color)',
@@ -530,7 +530,7 @@ function PopoverTimePicker({ value, onChange, disabled = false, error = '' }) {
         <button
           type="button"
           id="reg-pb-timing-btn"
-          className={`w-full px-3.5 py-2.5 sm:py-3 min-h-[44px] sm:min-h-[48px] rounded-xl border flex items-center justify-between font-mono text-xs sm:text-sm transition-all cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
+          className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm font-medium flex items-center justify-between gap-2 transition-all cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
             error ? 'border-red-500 bg-red-500/5' : ''
           }`}
           style={{
@@ -539,16 +539,8 @@ function PopoverTimePicker({ value, onChange, disabled = false, error = '' }) {
             color: 'var(--text-heading)'
           }}
         >
-          <span className="font-bold tracking-wider">{displayTime}</span>
-          <div
-            className="w-7 h-7 -mr-1 flex items-center justify-center rounded-lg border shadow-xs transition-colors hover:bg-slate-500/10"
-            style={{
-              borderColor: 'var(--border-color)',
-              color: 'var(--text-secondary)'
-            }}
-          >
-            <Clock className="w-4 h-4 text-[#318cdd]" />
-          </div>
+          <span className="font-mono font-bold tracking-wider">{displayTime}</span>
+          <Clock className="w-4 h-4 opacity-60 text-[#318cdd] flex-shrink-0" />
         </button>
       </Popover.Trigger>
 
@@ -571,7 +563,7 @@ function PopoverTimePicker({ value, onChange, disabled = false, error = '' }) {
             height={6}
           />
 
-          {/* Time Spinner Header / Columns */}
+          {/* Time Spinner Columns */}
           <div className="flex items-center justify-center gap-2 sm:gap-3 font-mono select-none">
             {/* Hours Column */}
             <div className="flex flex-col items-center gap-1.5">
@@ -734,17 +726,14 @@ function PopoverTimePicker({ value, onChange, disabled = false, error = '' }) {
             </div>
           </div>
 
-          {/* Quick set / done button */}
-          <div className="pt-3 mt-3 border-t flex items-center justify-between" style={{ borderColor: 'var(--border-color)' }}>
-            <span className="text-[11px] opacity-60" style={{ color: 'var(--text-secondary)' }}>
-              Target: {hours}h {minutes}m {seconds}s
-            </span>
+          {/* Action Footer */}
+          <div className="pt-3 mt-3 border-t flex items-center justify-end" style={{ borderColor: 'var(--border-color)' }}>
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="px-3.5 py-1 rounded-lg text-xs font-bold text-white bg-[#318cdd] hover:bg-[#256eb0] transition-colors cursor-pointer"
+              className="px-4 py-1.5 rounded-lg text-xs font-bold text-white bg-[#318cdd] hover:bg-[#256eb0] transition-colors cursor-pointer shadow-xs active:scale-95"
             >
-              Set Time
+              Done
             </button>
           </div>
         </Popover.Content>
