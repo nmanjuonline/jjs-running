@@ -37,7 +37,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                   AEROBIC PERIODIZATION
                 </span>
                 <span className="hidden sm:inline-flex px-3 py-1 rounded-full text-xs font-bold bg-white/95 text-slate-900 backdrop-blur-md shadow-md">
-                  15,000+ Coached Runners
+                  17,000+ Coached Runners
                 </span>
                 <span className="hidden md:inline-flex px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#318cdd]/25 border border-[#318cdd]/50 text-[#4ca6f5] backdrop-blur-md">
                   3 CITIES • TUE, THU, SAT &amp; SUN @ 5:30 AM
@@ -94,7 +94,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
             }`}>
               <div className="flex items-center justify-between">
                 <div>
-                  <span className={`block text-2xl sm:text-3xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>15,000+</span>
+                  <span className={`block text-2xl sm:text-3xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>17,000+</span>
                   <span className={`text-[11px] font-semibold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Runners Coached • 12+ Years</span>
                 </div>
                 <div className="w-9 h-9 rounded-xl bg-[#d02426]/10 flex items-center justify-center text-[#d02426]">
@@ -185,7 +185,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                   THE SUNRISE STRIDE
                 </span>
                 <span className="hidden sm:inline-flex px-3 py-1 rounded-full text-xs font-bold bg-white/95 text-zinc-900 backdrop-blur-md shadow-md">
-                  15,000+ Coached Runners
+                  17,000+ Coached Runners
                 </span>
               </div>
 
@@ -284,7 +284,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                   <span className="text-[#ccff00]">DECODE SPEED.</span>
                 </h1>
                 <p className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed">
-                  Join 15,000+ runners powered by scientific periodization, heart-rate zone calibration, and certified Training Center Heads (TCH) across 30+ grounds.
+                  Join 17,000+ runners powered by scientific periodization, heart-rate zone calibration, and certified Training Center Heads (TCH) across 30+ grounds.
                 </p>
               </div>
 
@@ -317,7 +317,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                 </div>
                 <div>
                   <span className="text-slate-500 text-[10px] uppercase block">ACTIVE CREW</span>
-                  <span className="text-white font-black text-base">15,000+</span>
+                  <span className="text-white font-black text-base">17,000+</span>
                 </div>
               </div>
             </div>
