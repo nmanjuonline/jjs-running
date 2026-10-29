@@ -25,44 +25,44 @@ export default function RegisterModal({ isOpen, onClose, initialData = null, onS
     if (initialData) {
       const timer = setTimeout(() => {
         setFormData(prev => {
-        let locValue = prev.location;
-        let progValue = prev.program;
+          let locValue = prev.location;
+          let progValue = prev.program;
 
-        // Match center
-        if (initialData.city || initialData.venue || initialData.name) {
-          const matchingCenter = centersData.find(c => c.id === initialData.id || c.name === initialData.name);
-          if (matchingCenter) {
-            locValue = `${matchingCenter.city} - ${matchingCenter.name}`;
-          } else if (initialData.name) {
-            locValue = `${initialData.city ? initialData.city + ' - ' : ''}${initialData.name}`;
-          } else if (initialData.id) {
-            locValue = initialData.id;
+          // Match center
+          if (initialData.city || initialData.venue || initialData.name) {
+            const matchingCenter = centersData.find(c => c.id === initialData.id || c.name === initialData.name);
+            if (matchingCenter) {
+              locValue = `${matchingCenter.city} - ${matchingCenter.name}`;
+            } else if (initialData.name) {
+              locValue = `${initialData.city ? initialData.city + ' - ' : ''}${initialData.name}`;
+            } else if (initialData.id) {
+              locValue = initialData.id;
+            }
           }
-        }
 
-        // Match program
-        if (initialData.title || initialData.duration || initialData.level) {
-          const matchingProg = programsData.find(p => p.id === initialData.id || p.title === initialData.title);
-          if (matchingProg) {
-            progValue = matchingProg.title;
-          } else if (initialData.title) {
-            progValue = initialData.title;
+          // Match program
+          if (initialData.title || initialData.duration || initialData.level) {
+            const matchingProg = programsData.find(p => p.id === initialData.id || p.title === initialData.title);
+            if (matchingProg) {
+              progValue = matchingProg.title;
+            } else if (initialData.title) {
+              progValue = initialData.title;
+            }
+          } else if (initialData.program) {
+            const matchingProg = programsData.find(p => p.id === initialData.program || p.title === initialData.program);
+            progValue = matchingProg ? matchingProg.title : initialData.program;
           }
-        } else if (initialData.program) {
-          const matchingProg = programsData.find(p => p.id === initialData.program || p.title === initialData.program);
-          progValue = matchingProg ? matchingProg.title : initialData.program;
-        }
 
-        return {
-          ...prev,
-          location: locValue,
-          program: progValue
-        };
-      });
-    }, 10);
-    return () => clearTimeout(timer);
-  }
-}, [initialData]);
+          return {
+            ...prev,
+            location: locValue,
+            program: progValue
+          };
+        });
+      }, 10);
+      return () => clearTimeout(timer);
+    }
+  }, [initialData]);
 
   const handleReset = React.useCallback(() => {
     setSubmitted(false);
