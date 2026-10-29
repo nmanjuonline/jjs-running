@@ -16,7 +16,7 @@ export const programsData = [
       'Strength, core & flexibility sessions',
       'Nutrition & hydration 101'
     ],
-    image: '/images/jjs/1197244505.jpg',
+    image: '/images/programs/program-ftr-beginner.jpg',
     targetRace: '5K / 10K Finish line'
   },
   {
@@ -36,7 +36,7 @@ export const programsData = [
       'Race-day tactical pacing plan',
       'Dedicated coach feedback'
     ],
-    image: '/images/jjs/1499340928.jpg',
+    image: '/images/programs/program-elevate-10k.jpg',
     targetRace: 'TCS World 10K / 10K PBs'
   },
   {
@@ -56,7 +56,7 @@ export const programsData = [
       'Pace group mentors (Sub-1:45, Sub-2:00, Sub-2:15, Sub-2:30)',
       'Pre-race taper & psychological prep'
     ],
-    image: '/images/jjs/1760985518.png',
+    image: '/images/programs/program-ryf-21k.jpg',
     targetRace: 'Bengaluru / Delhi / Mumbai Half'
   },
   {
@@ -76,7 +76,7 @@ export const programsData = [
       'Heart rate zone & power meter tracking',
       'Targeted marathon pacing squads'
     ],
-    image: '/images/jjs/1591953102.png',
+    image: '/images/programs/program-ryf-42k.jpg',
     targetRace: 'Tata Mumbai Marathon / World Majors'
   },
   {
@@ -96,7 +96,7 @@ export const programsData = [
       'Mandatory gear management & hydration vest drills',
       'Climb and technical descent footwork'
     ],
-    image: '/images/jjs/2051940036.png',
+    image: '/images/programs/program-ultra-trail.jpg',
     targetRace: 'Malnad Ultra / SRT / Border Ultra'
   },
   {
@@ -116,7 +116,7 @@ export const programsData = [
       'Bi-weekly video call form check',
       'Digital community forum & weekend virtual SLRs'
     ],
-    image: '/images/jjs/Slider_3.png',
+    image: '/images/programs/program-remote-global.jpg',
     targetRace: 'Any target race worldwide'
   }
 ];
