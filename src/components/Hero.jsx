@@ -108,7 +108,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
             }`}>
               <div className="flex items-center justify-between">
                 <div>
-                  <span className={`block text-2xl sm:text-3xl font-black ${isDark ? 'text-[#4ca6f5]' : 'text-[#1d72bd]'}`}>30+</span>
+                  <span className={`block text-2xl sm:text-3xl font-black ${isDark ? 'text-[#4ca6f5]' : 'text-[#1d72bd]'}`}>20+</span>
                   <span className={`text-[11px] font-semibold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-[#1d72bd]'}`}>Active Training Grounds</span>
                 </div>
                 <div className="w-9 h-9 rounded-xl bg-[#318cdd]/20 flex items-center justify-center text-[#318cdd]">
@@ -154,7 +154,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
               </span>
               <div>
                 <span className="text-xs font-black uppercase tracking-wider text-orange-900 block">
-                  05:30 AM MORNING RUN CLUB • 30+ NEIGHBORHOOD GROUNDS
+                  05:30 AM MORNING RUN CLUB • 20+ NEIGHBORHOOD GROUNDS
                 </span>
                 <span className="text-[11px] text-zinc-600 font-medium">
                   Led by certified Training Center Heads (TCH) across Bengaluru, Pune, and Kolkata.
@@ -273,7 +273,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                   </span>
                 </div>
                 <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-[#ccff00]/10 text-[#ccff00] border border-[#ccff00]/20 font-bold">
-                  LAT 12.9716° N • 30+ HUBS
+                  LAT 12.9716° N • 20+ HUBS
                 </span>
               </div>
 
@@ -284,7 +284,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                   <span className="text-[#ccff00]">DECODE SPEED.</span>
                 </h1>
                 <p className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed">
-                  Join 17,000+ runners powered by scientific periodization, heart-rate zone calibration, and certified Training Center Heads (TCH) across 30+ grounds.
+                  Join 17,000+ runners powered by scientific periodization, heart-rate zone calibration, and certified Training Center Heads (TCH) across 20+ grounds.
                 </p>
               </div>
 
@@ -302,7 +302,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                   className="py-3 px-5 rounded-2xl bg-white/5 hover:bg-white/10 text-white text-xs sm:text-sm font-bold border border-white/10 transition-all flex items-center gap-2"
                 >
                   <MapPin className="w-4 h-4 text-[#ccff00]" />
-                  <span>RADAR 30+ CENTERS</span>
+                  <span>RADAR 20+ CENTERS</span>
                 </button>
               </div>
 
@@ -344,7 +344,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                 <div className="absolute bottom-3 inset-x-3 p-3 rounded-2xl bg-black/70 border border-white/10 backdrop-blur-md flex items-center justify-between">
                   <div>
                     <span className="text-[10px] font-mono text-[#ccff00] uppercase block">NEXT MORNING MUSTER</span>
-                    <span className="text-xs font-bold text-white">05:30 AM • 30+ Hubs with TCH</span>
+                    <span className="text-xs font-bold text-white">05:30 AM • 20+ Hubs with TCH</span>
                   </div>
                   <span className="font-mono text-xs px-2 py-1 rounded bg-[#ccff00] text-black font-black">
                     FREE TRIAL
@@ -394,7 +394,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
           <div className="hidden sm:flex items-center gap-4 text-zinc-400">
             <span>PACE: <strong className="text-white">4:15 /KM</strong></span>
             <span>SPLIT: <strong className="text-[#ff1e42]">02:59:59</strong></span>
-            <span>30+ CENTERS DEPLOYED</span>
+            <span>20+ CENTERS DEPLOYED</span>
           </div>
         </div>
       </div>
@@ -434,7 +434,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                 className="py-3.5 px-6 rounded-xl bg-zinc-900 text-white text-xs sm:text-sm font-bold border border-zinc-800 hover:border-[#ff1e42] transition-all flex items-center gap-2"
               >
                 <MapPin className="w-4 h-4 text-[#ff1e42]" />
-                <span>30+ Training Camps</span>
+                <span>20+ Training Camps</span>
               </button>
             </div>
 

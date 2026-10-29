@@ -41,7 +41,7 @@ export const eventsData = [
     category: 'Club Championship',
     date: 'Jul 26, 2027',
     location: 'Bangalore University Green Boulevard',
-    participants: '30 Centers competing for the JJs Cup',
+    participants: '20+ Centers competing for the JJs Cup',
     status: 'Team Rosters Forming',
     targetDistance: '4 x 5K Ekiden Relay',
     image: '/images/jjs/1364616691.png',

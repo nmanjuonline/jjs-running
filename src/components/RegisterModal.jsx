@@ -126,7 +126,7 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
                 Join JJs Running / Book Free Trial Run
               </h3>
               <p className="text-xs text-gray-400 mt-1">
-                Experience a coached morning session at any of our 30+ grounds across India or remote.
+                Experience a coached morning session at any of our 20+ grounds across India or remote.
               </p>
             </div>
 

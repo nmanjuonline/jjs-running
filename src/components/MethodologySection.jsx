@@ -164,7 +164,7 @@ export default function MethodologySection({ currentTheme = 'olympic-clean', onE
               The 4-Day Training Protocol
             </h3>
             <p className="text-xs sm:text-sm opacity-70 mt-1 max-w-xl">
-              Led across 30+ neighborhood grounds by designated Training Center Heads (TCH). Sessions kick off at 05:30 AM sharp.
+              Led across 20+ neighborhood grounds by designated Training Center Heads (TCH). Sessions kick off at 05:30 AM sharp.
             </p>
           </div>
 

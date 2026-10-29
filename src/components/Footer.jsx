@@ -40,7 +40,7 @@ export default function Footer({ onScrollTo, onOpenRegister }) {
             </div>
 
             <p className="text-xs text-gray-400 leading-relaxed max-w-sm">
-              At JJs Running, we recognize that goals for fitness or endurance sports are achieved only by scientific planning and dedicated community training. As India’s largest running academy with 30+ centers across Bengaluru, Pune, Kolkata, and beyond, our mission is to empower everyday individuals into lifelong endurance athletes.
+              At JJs Running, we recognize that goals for fitness or endurance sports are achieved only by scientific planning and dedicated community training. As India’s largest running academy with 20+ centers across Bengaluru, Pune, Kolkata, and beyond, our mission is to empower everyday individuals into lifelong endurance athletes.
             </p>
 
             <div className="flex items-center gap-3 pt-2">

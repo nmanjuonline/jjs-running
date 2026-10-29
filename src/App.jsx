@@ -129,7 +129,7 @@ export default function App() {
           onExploreCenters={() => scrollToSection('centers')}
         />
 
-        {/* 30+ Training Centers Explorer */}
+        {/* 20+ Training Centers Explorer */}
         <section id="centers" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-4 sm:mb-6">
             <div>
@@ -148,7 +148,7 @@ export default function App() {
                 className="text-2xl sm:text-4xl font-black tracking-tight uppercase"
                 style={{ color: 'var(--text-heading)' }}
               >
-                30+ Centers &amp; Training Center Heads
+                20+ Centers &amp; Training Center Heads
               </h2>
               <p
                 className="text-xs sm:text-sm mt-1 max-w-xl"
@@ -269,7 +269,7 @@ export default function App() {
                   color: 'var(--text-primary)'
                 }}
               >
-                Explore 30+ Locations
+                Explore 20+ Locations
               </button>
             </div>
           </div>

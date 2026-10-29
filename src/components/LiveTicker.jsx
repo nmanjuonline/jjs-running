@@ -7,7 +7,7 @@ export default function LiveTicker({ onActionClick }) {
       badge: 'LIVE WIRE',
       badgeColor: '#d02426',
       icon: Flame,
-      text: '450+ runners completed morning workout across 30+ centers today',
+      text: '450+ runners completed morning workout across 20+ centers today',
       actionText: 'Find Squad',
       actionTarget: 'centers'
     },
@@ -23,7 +23,7 @@ export default function LiveTicker({ onActionClick }) {
       badge: 'WEEKEND LSD',
       badgeColor: '#318cdd',
       icon: Clock,
-      text: '5:30 AM Long Slow Distance gathering across all 30+ morning centers',
+      text: '5:30 AM Long Slow Distance gathering across all 20+ morning centers',
       actionText: 'Explore Centers',
       actionTarget: 'centers'
     },
