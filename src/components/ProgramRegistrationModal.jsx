@@ -4,8 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import * as Select from '@radix-ui/react-select';
 import * as Popover from '@radix-ui/react-popover';
-import { DayPicker } from 'react-day-picker';
-import { format, parse, isValid } from 'date-fns';
+import { format, isValid } from 'date-fns';
 import {
   X,
   CheckCircle2,
@@ -15,6 +14,8 @@ import {
   Sparkles,
   ChevronDown,
   ChevronUp,
+  ChevronLeft,
+  ChevronRight,
   Check,
   Search,
   Calendar as CalendarIcon,
@@ -41,7 +42,6 @@ const PB_EVENTS = [
 ];
 
 const CURRENT_YEAR = new Date().getFullYear();
-const REFERENCE_DATE = new Date(2000, 0, 1);
 
 // =============================================================================
 // ZOD VALIDATION SCHEMA
@@ -173,17 +173,71 @@ function RadixSelect({ value, onValueChange, options = [], placeholder = 'Select
 }
 
 // =============================================================================
-// 2. Radix Popover + React Day Picker Calendar Control
+// 2. Bespoke Themed Sports Calendar Control (Option 2)
 // =============================================================================
+const MONTH_NAMES = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
+];
+
+const CALENDAR_YEARS = Array.from(
+  { length: CURRENT_YEAR - 10 - 1940 + 1 },
+  (_, i) => CURRENT_YEAR - 10 - i
+);
+
 function RadixCalendarPicker({ value, onChange, error }) {
   const [open, setOpen] = useState(false);
 
   // Parse YYYY-MM-DD
   const selectedDate = useMemo(() => {
     if (!value) return undefined;
-    const parsed = parse(value, 'yyyy-MM-dd', REFERENCE_DATE);
-    return isValid(parsed) ? parsed : undefined;
+    const parts = value.split('-');
+    if (parts.length !== 3) return undefined;
+    const y = parseInt(parts[0], 10);
+    const m = parseInt(parts[1], 10) - 1;
+    const d = parseInt(parts[2], 10);
+    const date = new Date(y, m, d);
+    return isValid(date) ? date : undefined;
   }, [value]);
+
+  const [prevValue, setPrevValue] = useState(value);
+  const [viewYear, setViewYear] = useState(() => (selectedDate ? selectedDate.getFullYear() : 1995));
+  const [viewMonth, setViewMonth] = useState(() => (selectedDate ? selectedDate.getMonth() : 0));
+
+  if (value !== prevValue) {
+    setPrevValue(value);
+    if (selectedDate) {
+      setViewYear(selectedDate.getFullYear());
+      setViewMonth(selectedDate.getMonth());
+    }
+  }
+
+  const prevMonth = () => {
+    if (viewMonth === 0) {
+      setViewMonth(11);
+      setViewYear((y) => Math.max(1940, y - 1));
+    } else {
+      setViewMonth((m) => m - 1);
+    }
+  };
+
+  const nextMonth = () => {
+    const maxYear = CURRENT_YEAR - 10;
+    if (viewMonth === 11) {
+      if (viewYear < maxYear) {
+        setViewMonth(0);
+        setViewYear((y) => y + 1);
+      }
+    } else {
+      if (viewYear === maxYear && viewMonth >= new Date().getMonth()) return;
+      setViewMonth((m) => m + 1);
+    }
+  };
+
+  // Days calculations
+  const totalDaysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+  const firstDayOfWeek = new Date(viewYear, viewMonth, 1).getDay(); // 0 is Sunday
+  const maxAllowedDate = useMemo(() => new Date(CURRENT_YEAR - 10, 11, 31), []);
 
   const displayDate = selectedDate
     ? format(selectedDate, 'dd MMM yyyy')
@@ -216,31 +270,154 @@ function RadixCalendarPicker({ value, onChange, error }) {
         <Popover.Content
           sideOffset={6}
           align="start"
-          className="z-[9999] rounded-2xl border shadow-2xl p-3 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100"
+          className="z-[9999] rounded-2xl border shadow-2xl p-4 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100 w-[290px] sm:w-[310px]"
           style={{
             backgroundColor: 'var(--card-bg)',
             borderColor: 'var(--border-color)',
-            boxShadow: '0 20px 40px -10px rgba(0,0,0,0.5)',
+            boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
             color: 'var(--text-heading)'
           }}
         >
-          <DayPicker
-            mode="single"
-            selected={selectedDate}
-            onSelect={(date) => {
-              if (date) {
-                onChange(format(date, 'yyyy-MM-dd'));
-                setOpen(false);
-              }
-            }}
-            captionLayout="dropdown"
-            startMonth={new Date(1940, 0)}
-            endMonth={new Date(CURRENT_YEAR - 10, 11)}
-            defaultMonth={selectedDate || new Date(1995, 0)}
+          <Popover.Arrow
+            className="fill-current"
+            style={{ color: 'var(--border-color)' }}
+            width={12}
+            height={6}
           />
 
+          {/* Calendar Header: Month, Year, and Navigation */}
           <div
-            className="flex items-center justify-between pt-2.5 mt-2 border-t text-[11px]"
+            className="flex items-center justify-between pb-3 mb-2 border-b"
+            style={{ borderColor: 'var(--border-color)' }}
+          >
+            <div className="flex items-center gap-1.5 font-bold text-xs sm:text-sm">
+              <select
+                aria-label="Select month"
+                value={viewMonth}
+                onChange={(e) => setViewMonth(Number(e.target.value))}
+                className="bg-transparent font-bold text-xs sm:text-sm rounded-lg px-2 py-1 transition-colors hover:bg-[#318cdd]/10 focus:outline-none focus:ring-1 focus:ring-[#318cdd]/40 cursor-pointer"
+                style={{ color: 'var(--text-heading)' }}
+              >
+                {MONTH_NAMES.map((name, idx) => (
+                  <option
+                    key={name}
+                    value={idx}
+                    style={{ backgroundColor: 'var(--card-bg)', color: 'var(--text-heading)' }}
+                  >
+                    {name}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                aria-label="Select year"
+                value={viewYear}
+                onChange={(e) => setViewYear(Number(e.target.value))}
+                className="bg-transparent font-bold text-xs sm:text-sm rounded-lg px-2 py-1 transition-colors hover:bg-[#318cdd]/10 focus:outline-none focus:ring-1 focus:ring-[#318cdd]/40 cursor-pointer"
+                style={{ color: 'var(--text-heading)' }}
+              >
+                {CALENDAR_YEARS.map((year) => (
+                  <option
+                    key={year}
+                    value={year}
+                    style={{ backgroundColor: 'var(--card-bg)', color: 'var(--text-heading)' }}
+                  >
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Navigation Chevrons */}
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={prevMonth}
+                aria-label="Previous month"
+                className="w-7 h-7 flex items-center justify-center rounded-lg border transition-all hover:bg-[#318cdd]/15 hover:border-[#318cdd]/40 cursor-pointer active:scale-95 text-[var(--text-heading)] focus:outline-none focus:ring-1 focus:ring-[#318cdd]/40"
+                style={{
+                  backgroundColor: 'var(--card-inner)',
+                  borderColor: 'var(--border-color)'
+                }}
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={nextMonth}
+                aria-label="Next month"
+                className="w-7 h-7 flex items-center justify-center rounded-lg border transition-all hover:bg-[#318cdd]/15 hover:border-[#318cdd]/40 cursor-pointer active:scale-95 text-[var(--text-heading)] focus:outline-none focus:ring-1 focus:ring-[#318cdd]/40"
+                style={{
+                  backgroundColor: 'var(--card-inner)',
+                  borderColor: 'var(--border-color)'
+                }}
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Weekday Row */}
+          <div className="grid grid-cols-7 gap-1 text-center py-1 mb-1 font-mono">
+            {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
+              <span
+                key={d}
+                className="text-[11px] font-bold uppercase tracking-wider opacity-60"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                {d}
+              </span>
+            ))}
+          </div>
+
+          {/* Days Grid */}
+          <div className="grid grid-cols-7 gap-1 text-center font-mono select-none">
+            {Array.from({ length: firstDayOfWeek }).map((_, i) => (
+              <div key={`empty-${i}`} className="w-8 h-8" />
+            ))}
+
+            {Array.from({ length: totalDaysInMonth }).map((_, i) => {
+              const day = i + 1;
+              const isSelected =
+                selectedDate &&
+                selectedDate.getFullYear() === viewYear &&
+                selectedDate.getMonth() === viewMonth &&
+                selectedDate.getDate() === day;
+
+              const thisDate = new Date(viewYear, viewMonth, day);
+              const isFuture = thisDate > maxAllowedDate;
+
+              return (
+                <button
+                  key={day}
+                  type="button"
+                  disabled={isFuture}
+                  onClick={() => {
+                    const m = String(viewMonth + 1).padStart(2, '0');
+                    const d = String(day).padStart(2, '0');
+                    onChange(`${viewYear}-${m}-${d}`);
+                    setOpen(false);
+                  }}
+                  className={`w-8 h-8 mx-auto flex items-center justify-center rounded-xl text-xs font-bold transition-all duration-150 cursor-pointer ${
+                    isSelected
+                      ? 'bg-[#318cdd] text-white font-black shadow-md shadow-[#318cdd]/40 scale-105'
+                      : isFuture
+                      ? 'opacity-20 cursor-not-allowed'
+                      : 'hover:bg-[#318cdd]/15 hover:text-[#318cdd] active:scale-90'
+                  }`}
+                  style={{
+                    color: isSelected ? '#ffffff' : 'var(--text-heading)'
+                  }}
+                >
+                  {day}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Popover Footer */}
+          <div
+            className="flex items-center justify-between pt-3 mt-3 border-t text-xs font-semibold"
             style={{ borderColor: 'var(--border-color)' }}
           >
             <button
@@ -249,20 +426,16 @@ function RadixCalendarPicker({ value, onChange, error }) {
                 onChange('');
                 setOpen(false);
               }}
-              className="text-[#d02426] font-semibold hover:underline cursor-pointer"
+              className="text-[#d02426] hover:underline cursor-pointer px-1 py-0.5"
             >
               Clear
             </button>
             <button
               type="button"
-              onClick={() => {
-                const defaultAdultYear = CURRENT_YEAR - 25;
-                onChange(`${defaultAdultYear}-01-15`);
-                setOpen(false);
-              }}
-              className="text-[#318cdd] font-semibold hover:underline cursor-pointer"
+              onClick={() => setOpen(false)}
+              className="px-3 py-1 rounded-lg text-xs font-bold text-white bg-[#318cdd] hover:bg-[#256eb0] transition-colors cursor-pointer shadow-xs active:scale-95"
             >
-              Default (25yo)
+              Done
             </button>
           </div>
         </Popover.Content>
