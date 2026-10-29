@@ -1,18 +1,419 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { X, CheckCircle2, ShieldCheck, Tag, Clock, ArrowRight, CreditCard, AlertCircle, Sparkles } from 'lucide-react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import {
+  X,
+  CheckCircle2,
+  ShieldCheck,
+  Clock,
+  ArrowRight,
+  AlertCircle,
+  Sparkles,
+  ChevronDown,
+  Check,
+  Search,
+  Calendar,
+  Lock,
+  MapPin
+} from 'lucide-react';
 import { centersData } from '../data/centersData';
 import { programsData } from '../data/programsData';
-import JJSLogo from './JJSLogo';
+import JJsLogo from './JJsLogo';
 
-const BLOOD_GROUPS = ['Select Blood Group', 'A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
+const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
 
 const DISTANCE_OPTIONS = ['5K', '10K', 'HM', 'FM', '25K', '12K', 'None'];
 
 const TSHIRT_SIZES = ['S', 'M', 'L', 'XL', 'XXL'];
 
-const PB_EVENTS = ['Half Marathon', '10K', 'Full Marathon', '5K', '25K', '12K', 'None / First-timer'];
+const PB_EVENTS = [
+  'Half Marathon (21.1K)',
+  '10K Run',
+  'Full Marathon (42.2K)',
+  '5K Run',
+  '25K Run',
+  '12K Run',
+  'None / First-timer'
+];
 
-export default function ProgramRegistrationModal({ isOpen, onClose, selectedProgram = null, onSwitchToTrial }) {
+const MONTHS = [
+  { value: '01', label: 'Jan' },
+  { value: '02', label: 'Feb' },
+  { value: '03', label: 'Mar' },
+  { value: '04', label: 'Apr' },
+  { value: '05', label: 'May' },
+  { value: '06', label: 'Jun' },
+  { value: '07', label: 'Jul' },
+  { value: '08', label: 'Aug' },
+  { value: '09', label: 'Sep' },
+  { value: '10', label: 'Oct' },
+  { value: '11', label: 'Nov' },
+  { value: '12', label: 'Dec' }
+];
+
+const DAYS = Array.from({ length: 31 }, (_, i) => {
+  const d = i + 1;
+  return d < 10 ? `0${d}` : `${d}`;
+});
+
+const CURRENT_YEAR = new Date().getFullYear();
+const YEARS = Array.from({ length: 75 }, (_, i) => `${CURRENT_YEAR - 12 - i}`);
+
+// =============================================================================
+// Sleek Custom Dropdown (No Native OS White Box Clashes in Dark Mode)
+// =============================================================================
+function CustomDropdown({
+  value,
+  onChange,
+  options = [],
+  placeholder = 'Select...',
+  error = false,
+  icon: Icon = null,
+  id = ''
+}) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const selectedOption = options.find((opt) =>
+    typeof opt === 'string' ? opt === value : opt.value === value
+  );
+
+  const displayLabel = selectedOption
+    ? typeof selectedOption === 'string'
+      ? selectedOption
+      : selectedOption.label
+    : placeholder;
+
+  return (
+    <div ref={containerRef} className="relative w-full">
+      <button
+        type="button"
+        id={id}
+        onClick={() => setOpen(!open)}
+        className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm font-medium flex items-center justify-between gap-2 transition-all cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
+          error ? 'border-red-500 bg-red-500/5' : ''
+        }`}
+        style={{
+          backgroundColor: 'var(--card-inner)',
+          borderColor: error ? '#ef4444' : 'var(--border-color)',
+          color: value ? 'var(--text-heading)' : 'var(--text-secondary)'
+        }}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+      >
+        <div className="flex items-center gap-2 truncate">
+          {Icon && <Icon className="w-4 h-4 opacity-60 flex-shrink-0" />}
+          <span className="truncate">{displayLabel}</span>
+        </div>
+        <ChevronDown
+          className={`w-4 h-4 opacity-60 flex-shrink-0 transition-transform duration-200 ${
+            open ? 'rotate-180' : ''
+          }`}
+        />
+      </button>
+
+      {open && (
+        <div
+          role="listbox"
+          className="absolute z-50 left-0 right-0 mt-1.5 rounded-xl border shadow-2xl py-1.5 max-h-60 overflow-y-auto backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100"
+          style={{
+            backgroundColor: 'var(--card-bg)',
+            borderColor: 'var(--border-color)',
+            boxShadow: '0 20px 40px -10px rgba(0,0,0,0.45)'
+          }}
+        >
+          {options.map((opt) => {
+            const val = typeof opt === 'string' ? opt : opt.value;
+            const label = typeof opt === 'string' ? opt : opt.label;
+            const subtitle = typeof opt === 'object' ? opt.subtitle : null;
+            const isSelected = val === value;
+
+            return (
+              <button
+                type="button"
+                key={val}
+                role="option"
+                aria-selected={isSelected}
+                onClick={() => {
+                  onChange(val);
+                  setOpen(false);
+                }}
+                className={`w-full text-left px-3.5 py-2 text-xs sm:text-sm flex items-center justify-between gap-2 transition-colors cursor-pointer ${
+                  isSelected
+                    ? 'bg-[#318cdd]/15 text-[#318cdd] font-bold'
+                    : 'hover:bg-slate-500/10'
+                }`}
+                style={{
+                  color: isSelected ? 'var(--accent)' : 'var(--text-heading)'
+                }}
+              >
+                <div className="truncate">
+                  <div>{label}</div>
+                  {subtitle && (
+                    <div
+                      className="text-[11px] font-normal truncate opacity-70"
+                      style={{ color: 'var(--text-secondary)' }}
+                    >
+                      {subtitle}
+                    </div>
+                  )}
+                </div>
+                {isSelected && <Check className="w-4 h-4 flex-shrink-0 text-[#318cdd]" />}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// =============================================================================
+// Location Dropdown Grouped by City from centersData with Search
+// =============================================================================
+function LocationDropdown({ value, onChange, error = false }) {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Filter centers
+  const filteredCenters = useMemo(() => {
+    if (!search.trim()) return centersData;
+    const q = search.toLowerCase();
+    return centersData.filter(
+      (c) =>
+        c.name.toLowerCase().includes(q) ||
+        c.city.toLowerCase().includes(q) ||
+        (c.venue && c.venue.toLowerCase().includes(q))
+    );
+  }, [search]);
+
+  // Group by City
+  const groupedCenters = useMemo(() => {
+    const groups = {};
+    filteredCenters.forEach((c) => {
+      const city = c.city || 'Other';
+      if (!groups[city]) groups[city] = [];
+      groups[city].push(c);
+    });
+    return groups;
+  }, [filteredCenters]);
+
+  const selectedCenter = centersData.find(
+    (c) => c.name === value || c.id === value || `${c.city} - ${c.name}` === value
+  );
+
+  const displayTitle = selectedCenter
+    ? `${selectedCenter.name} (${selectedCenter.city})`
+    : value || 'Select preferred training ground...';
+
+  return (
+    <div ref={containerRef} className="relative w-full">
+      <button
+        type="button"
+        id="reg-location-pref"
+        onClick={() => setOpen(!open)}
+        className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm font-medium flex items-center justify-between gap-2 transition-all cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
+          error ? 'border-red-500 bg-red-500/5' : ''
+        }`}
+        style={{
+          backgroundColor: 'var(--card-inner)',
+          borderColor: error ? '#ef4444' : 'var(--border-color)',
+          color: value ? 'var(--text-heading)' : 'var(--text-secondary)'
+        }}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+      >
+        <div className="flex items-center gap-2 truncate">
+          <MapPin className="w-4 h-4 opacity-70 text-[#d02426] flex-shrink-0" />
+          <span className="truncate">{displayTitle}</span>
+        </div>
+        <ChevronDown
+          className={`w-4 h-4 opacity-60 flex-shrink-0 transition-transform duration-200 ${
+            open ? 'rotate-180' : ''
+          }`}
+        />
+      </button>
+
+      {open && (
+        <div
+          role="listbox"
+          className="absolute z-50 left-0 right-0 mt-1.5 rounded-2xl border shadow-2xl py-2 max-h-72 overflow-y-auto backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100"
+          style={{
+            backgroundColor: 'var(--card-bg)',
+            borderColor: 'var(--border-color)',
+            boxShadow: '0 20px 40px -10px rgba(0,0,0,0.5)'
+          }}
+        >
+          {/* Quick Search inside Location dropdown */}
+          <div className="px-3 pb-2 pt-1 border-b" style={{ borderColor: 'var(--border-color)' }}>
+            <div className="relative">
+              <input
+                type="text"
+                autoFocus
+                placeholder="Search center, ground, or city..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border focus:outline-none focus:ring-1 focus:ring-[#318cdd]"
+                style={{
+                  backgroundColor: 'var(--card-inner)',
+                  borderColor: 'var(--border-color)',
+                  color: 'var(--text-heading)'
+                }}
+              />
+              <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 opacity-50" />
+            </div>
+          </div>
+
+          {Object.keys(groupedCenters).length === 0 ? (
+            <div className="px-4 py-3 text-xs text-center opacity-60" style={{ color: 'var(--text-secondary)' }}>
+              No grounds matched "{search}"
+            </div>
+          ) : (
+            Object.entries(groupedCenters).map(([city, centers]) => (
+              <div key={city} className="pt-2">
+                <div
+                  className="px-3.5 py-1 text-[10px] font-mono font-bold uppercase tracking-wider opacity-60"
+                  style={{ color: 'var(--text-secondary)' }}
+                >
+                  {city} ({centers.length} Grounds)
+                </div>
+                {centers.map((center) => {
+                  const isSelected =
+                    value === center.name ||
+                    value === `${center.city} - ${center.name}` ||
+                    value === center.id;
+
+                  return (
+                    <button
+                      type="button"
+                      key={center.id}
+                      onClick={() => {
+                        onChange(center.name);
+                        setOpen(false);
+                        setSearch('');
+                      }}
+                      className={`w-full text-left px-3.5 py-2 text-xs sm:text-sm flex items-start justify-between gap-2 transition-colors cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#318cdd]/15 text-[#318cdd] font-bold'
+                          : 'hover:bg-slate-500/10'
+                      }`}
+                      style={{
+                        color: isSelected ? 'var(--accent)' : 'var(--text-heading)'
+                      }}
+                    >
+                      <div className="truncate">
+                        <div className="font-semibold truncate">{center.name}</div>
+                        {center.venue && (
+                          <div
+                            className="text-[11px] truncate opacity-70 font-normal"
+                            style={{ color: 'var(--text-secondary)' }}
+                          >
+                            {center.venue}
+                          </div>
+                        )}
+                      </div>
+                      {isSelected && <Check className="w-4 h-4 flex-shrink-0 text-[#318cdd] mt-0.5" />}
+                    </button>
+                  );
+                })}
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// =============================================================================
+// Elegant Date of Birth Selector (Day / Month / Year Dropdowns)
+// Never triggers the ugly native OS popup
+// =============================================================================
+function DateOfBirthPicker({ value, onChange, error = false }) {
+  // Parse incoming YYYY-MM-DD
+  const parts = (value || '').split('-');
+  const initialYear = parts[0] || '1995';
+  const initialMonth = parts[1] || '01';
+  const initialDay = parts[2] || '15';
+
+  const [day, setDay] = useState(initialDay);
+  const [month, setMonth] = useState(initialMonth);
+  const [year, setYear] = useState(initialYear);
+
+  useEffect(() => {
+    if (day && month && year) {
+      onChange(`${year}-${month}-${day}`);
+    }
+  }, [day, month, year, onChange]);
+
+  return (
+    <div>
+      <div className="grid grid-cols-3 gap-2">
+        {/* Day Select */}
+        <div>
+          <CustomDropdown
+            value={day}
+            onChange={setDay}
+            options={DAYS.map((d) => ({ value: d, label: d }))}
+            placeholder="Day"
+            error={error}
+          />
+        </div>
+
+        {/* Month Select */}
+        <div>
+          <CustomDropdown
+            value={month}
+            onChange={setMonth}
+            options={MONTHS}
+            placeholder="Month"
+            error={error}
+          />
+        </div>
+
+        {/* Year Select */}
+        <div>
+          <CustomDropdown
+            value={year}
+            onChange={setYear}
+            options={YEARS.map((y) => ({ value: y, label: y }))}
+            placeholder="Year"
+            error={error}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// =============================================================================
+// Main Official Program Registration Modal
+// =============================================================================
+export default function ProgramRegistrationModal({
+  isOpen,
+  onClose,
+  selectedProgram = null,
+  onSwitchToTrial
+}) {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -23,13 +424,13 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
     emergencyNo: '',
     gender: 'Male',
     tshirtSize: 'M',
-    dob: '',
-    bloodGroup: 'Select Blood Group',
+    dob: '1995-01-15',
+    bloodGroup: 'B+',
     residentialAddress: '',
     pinZipCode: '',
     locationPreference: 'Malleshwaram',
     maxDistance1Year: 'HM',
-    pbEvent: 'Half Marathon',
+    pbEvent: 'Half Marathon (21.1K)',
     pbTiming: '01:39:44',
     healthProblem: '',
     promocode: '',
@@ -55,19 +456,26 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
     if (selectedProgram) {
       let matched = null;
       if (typeof selectedProgram === 'string') {
-        matched = programsData.find(p => p.id === selectedProgram || p.title === selectedProgram);
+        matched = programsData.find(
+          (p) => p.id === selectedProgram || p.title === selectedProgram
+        );
       } else if (selectedProgram.id) {
-        matched = programsData.find(p => p.id === selectedProgram.id) || selectedProgram;
+        matched =
+          programsData.find((p) => p.id === selectedProgram.id) || selectedProgram;
       } else if (selectedProgram.title) {
-        matched = programsData.find(p => p.title === selectedProgram.title) || selectedProgram;
+        matched =
+          programsData.find((p) => p.title === selectedProgram.title) || selectedProgram;
       }
       setActiveProgram(matched || programsData[2]); // Default to 21K Half Marathon
       if (matched) {
-        setFormData(prev => ({ ...prev, selectedProgramId: matched.id || matched.title }));
+        setFormData((prev) => ({
+          ...prev,
+          selectedProgramId: matched.id || matched.title
+        }));
       }
     } else {
       setActiveProgram(programsData[2]); // Default to 21K Half Marathon
-      setFormData(prev => ({ ...prev, selectedProgramId: programsData[2].id }));
+      setFormData((prev) => ({ ...prev, selectedProgramId: programsData[2].id }));
     }
   }, [selectedProgram]);
 
@@ -130,7 +538,7 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
     }
 
     if (code === 'JAGUAR10' || code === 'JJS10') {
-      const discount = Math.round(baseFee * 0.10);
+      const discount = Math.round(baseFee * 0.1);
       setPromoDiscount(discount);
       setPromoApplied(true);
       setPromoMessage('10% Jaguar Athlete Discount Applied!');
@@ -153,7 +561,8 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
   const validateForm = () => {
     const errs = {};
     if (!formData.fullName.trim()) errs.fullName = 'Full Name is required';
-    if (!formData.email.trim() || !formData.email.includes('@')) errs.email = 'Valid Email is required';
+    if (!formData.email.trim() || !formData.email.includes('@'))
+      errs.email = 'Valid Email is required';
     if (!formData.mobileNo.trim() || formData.mobileNo.replace(/[^0-9]/g, '').length < 10) {
       errs.mobileNo = 'Valid 10-digit mobile number is required';
     }
@@ -166,7 +575,9 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
       errs.emergencyNo = 'Emergency contact number is required';
     }
     if (!formData.dob) errs.dob = 'Date of birth is required';
-    if (formData.bloodGroup === 'Select Blood Group') errs.bloodGroup = 'Please select your blood group';
+    if (!formData.bloodGroup || formData.bloodGroup === 'Select Blood Group') {
+      errs.bloodGroup = 'Please select your blood group';
+    }
     if (!formData.residentialAddress.trim()) errs.residentialAddress = 'Residential address is required';
     if (!formData.pinZipCode.trim()) errs.pinZipCode = 'PIN / Zip Code is required';
     if (!formData.locationPreference) errs.locationPreference = 'Please select a preferred training center';
@@ -179,7 +590,6 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateForm()) {
-      // Find first error and scroll to top of modal if needed
       if (dialogRef.current) {
         dialogRef.current.scrollTo({ top: 0, behavior: 'smooth' });
       }
@@ -200,8 +610,10 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
       aria-modal="true"
       aria-labelledby="reg-title"
       ref={dialogRef}
-      onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/75 backdrop-blur-md transition-all overflow-y-auto"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) handleClose();
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-md transition-all overflow-y-auto"
     >
       <div
         className="w-full max-w-4xl rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-10 border shadow-2xl relative my-auto max-h-[94vh] overflow-y-auto transition-all"
@@ -242,11 +654,25 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
                 Payment Authorized • Registration Confirmed
               </span>
-              <h3 className="text-2xl sm:text-4xl font-black tracking-tight mt-3 uppercase" style={{ color: 'var(--text-heading)' }}>
+              <h3
+                className="text-2xl sm:text-4xl font-black tracking-tight mt-3 uppercase"
+                style={{ color: 'var(--text-heading)' }}
+              >
                 Welcome to JJs Running!
               </h3>
-              <p className="text-xs sm:text-sm max-w-lg mx-auto mt-2 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                Congratulations, <span className="font-bold" style={{ color: 'var(--text-heading)' }}>{formData.fullName}</span>! Your roster slot for <span className="font-bold text-[#d02426]">{activeProgram?.title || 'Training Program'}</span> is secured.
+              <p
+                className="text-xs sm:text-sm max-w-lg mx-auto mt-2 leading-relaxed"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                Congratulations,{' '}
+                <span className="font-bold" style={{ color: 'var(--text-heading)' }}>
+                  {formData.fullName}
+                </span>
+                ! Your roster slot for{' '}
+                <span className="font-bold text-[#d02426]">
+                  {activeProgram?.title || 'Training Program'}
+                </span>{' '}
+                is secured.
               </p>
             </div>
 
@@ -258,14 +684,25 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
                 borderColor: 'var(--border-color)'
               }}
             >
-              <div className="flex items-center justify-between pb-3 border-b" style={{ borderColor: 'var(--border-color)' }}>
-                <span className="text-xs uppercase tracking-wider font-semibold" style={{ color: 'var(--text-secondary)' }}>Registration ID:</span>
+              <div
+                className="flex items-center justify-between pb-3 border-b"
+                style={{ borderColor: 'var(--border-color)' }}
+              >
+                <span
+                  className="text-xs uppercase tracking-wider font-semibold"
+                  style={{ color: 'var(--text-secondary)' }}
+                >
+                  Registration ID:
+                </span>
                 <span className="font-mono font-black text-sm text-[#318cdd]">{registrationId}</span>
               </div>
 
               <div className="flex items-center justify-between">
                 <span style={{ color: 'var(--text-secondary)' }}>Program Track:</span>
-                <span className="font-bold text-right truncate max-w-[220px]" style={{ color: 'var(--text-heading)' }}>
+                <span
+                  className="font-bold text-right truncate max-w-[220px]"
+                  style={{ color: 'var(--text-heading)' }}
+                >
                   {activeProgram?.title || 'Program Registration'}
                 </span>
               </div>
@@ -291,16 +728,21 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
                 </span>
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t" style={{ borderColor: 'var(--border-color)' }}>
+              <div
+                className="flex items-center justify-between pt-2 border-t"
+                style={{ borderColor: 'var(--border-color)' }}
+              >
                 <span style={{ color: 'var(--text-secondary)' }}>TCH WhatsApp Onboarding:</span>
                 <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4" /> Dispatched to {formData.sameAsMobile ? formData.mobileNo : formData.whatsappNo}
+                  <CheckCircle2 className="w-4 h-4" /> Dispatched to{' '}
+                  {formData.sameAsMobile ? formData.mobileNo : formData.whatsappNo}
                 </span>
               </div>
             </div>
 
             <p className="text-xs max-w-md mx-auto" style={{ color: 'var(--text-secondary)' }}>
-              Your Training Center Head (TCH) will add you to the neighborhood batch WhatsApp group for morning warmup drills, hydration pacing, and track schedule.
+              Your Training Center Head (TCH) will add you to the neighborhood batch WhatsApp group
+              for morning warmup drills, hydration pacing, and track schedule.
             </p>
 
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -314,10 +756,10 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
           </div>
         ) : (
           /* =========================================================================
-             OFFICIAL PROGRAM REGISTRATION FORM (Exact Match to Screenshot)
+             OFFICIAL PROGRAM REGISTRATION FORM
              ========================================================================= */
           <div>
-            {/* Header: Exact Title + Underline Bar */}
+            {/* Header: Title + Warm Underline */}
             <div className="text-center mb-6 sm:mb-8 pr-8 sm:pr-0">
               <h2
                 id="reg-title"
@@ -326,7 +768,7 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
               >
                 Program Registration
               </h2>
-              {/* Short warm accent underline matching screenshot */}
+              {/* Short warm accent underline matching brand layout */}
               <div className="w-16 h-1 bg-[#ea580c] mx-auto mt-2 rounded-full" />
 
               {/* Active Program Banner with Option to Switch */}
@@ -338,17 +780,26 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
                     borderColor: 'var(--border-color)'
                   }}
                 >
-                  <span className="font-semibold" style={{ color: 'var(--text-secondary)' }}>Program:</span>
+                  <span className="font-semibold" style={{ color: 'var(--text-secondary)' }}>
+                    Program:
+                  </span>
                   <span className="font-bold text-[#318cdd]">{activeProgram.title}</span>
                   <span className="opacity-40">•</span>
-                  <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">{activeProgram.price}</span>
-                  {activeProgram.tax && <span className="text-[10px] opacity-70">({activeProgram.tax})</span>}
+                  <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                    {activeProgram.price}
+                  </span>
+                  {activeProgram.tax && (
+                    <span className="text-[10px] opacity-70">({activeProgram.tax})</span>
+                  )}
 
                   {/* Switch to Free Trial if not ready */}
                   {onSwitchToTrial && (
                     <button
                       type="button"
-                      onClick={() => { handleClose(); onSwitchToTrial(); }}
+                      onClick={() => {
+                        handleClose();
+                        onSwitchToTrial();
+                      }}
                       className="ml-2 text-[11px] font-bold text-[#d02426] hover:underline cursor-pointer flex items-center gap-1"
                     >
                       <Sparkles className="w-3 h-3" /> Looking for Free Trial instead?
@@ -362,7 +813,10 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
             {Object.keys(errors).length > 0 && (
               <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-xs flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                <span>Please complete all required fields highlighted in red below before proceeding to payment.</span>
+                <span>
+                  Please complete all required fields highlighted in red below before proceeding to
+                  payment.
+                </span>
               </div>
             )}
 
@@ -371,7 +825,11 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 {/* 1. Full Name */}
                 <div>
-                  <label htmlFor="reg-fullname" className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
+                  <label
+                    htmlFor="reg-fullname"
+                    className="block text-xs sm:text-sm font-bold mb-1.5"
+                    style={{ color: 'var(--text-heading)' }}
+                  >
                     Full Name <span className="text-[#d02426]">*</span>
                   </label>
                   <input
@@ -391,12 +849,18 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {errors.fullName && <p className="text-[11px] text-red-500 mt-1">{errors.fullName}</p>}
+                  {errors.fullName && (
+                    <p className="text-[11px] text-red-500 mt-1">{errors.fullName}</p>
+                  )}
                 </div>
 
                 {/* 2. Email Address */}
                 <div>
-                  <label htmlFor="reg-email" className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
+                  <label
+                    htmlFor="reg-email"
+                    className="block text-xs sm:text-sm font-bold mb-1.5"
+                    style={{ color: 'var(--text-heading)' }}
+                  >
                     Email Address <span className="text-[#d02426]">*</span>
                   </label>
                   <input
@@ -421,7 +885,11 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
 
                 {/* 3. Mobile No */}
                 <div>
-                  <label htmlFor="reg-mobile" className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
+                  <label
+                    htmlFor="reg-mobile"
+                    className="block text-xs sm:text-sm font-bold mb-1.5"
+                    style={{ color: 'var(--text-heading)' }}
+                  >
                     Mobile No <span className="text-[#d02426]">*</span>
                   </label>
                   <input
@@ -433,7 +901,7 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
                     value={formData.mobileNo}
                     onChange={(e) => {
                       const val = e.target.value;
-                      setFormData(prev => ({
+                      setFormData((prev) => ({
                         ...prev,
                         mobileNo: val,
                         whatsappNo: prev.sameAsMobile ? val : prev.whatsappNo
@@ -448,22 +916,31 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {errors.mobileNo && <p className="text-[11px] text-red-500 mt-1">{errors.mobileNo}</p>}
+                  {errors.mobileNo && (
+                    <p className="text-[11px] text-red-500 mt-1">{errors.mobileNo}</p>
+                  )}
                 </div>
 
                 {/* 4. Whatsapp No */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label htmlFor="reg-whatsapp" className="text-xs sm:text-sm font-bold" style={{ color: 'var(--text-heading)' }}>
+                    <label
+                      htmlFor="reg-whatsapp"
+                      className="text-xs sm:text-sm font-bold"
+                      style={{ color: 'var(--text-heading)' }}
+                    >
                       Whatsapp No <span className="text-[#d02426]">*</span>
                     </label>
-                    <label className="flex items-center gap-1.5 text-[11px] cursor-pointer select-none" style={{ color: 'var(--text-secondary)' }}>
+                    <label
+                      className="flex items-center gap-1.5 text-[11px] cursor-pointer select-none"
+                      style={{ color: 'var(--text-secondary)' }}
+                    >
                       <input
                         type="checkbox"
                         checked={formData.sameAsMobile}
                         onChange={(e) => {
                           const checked = e.target.checked;
-                          setFormData(prev => ({
+                          setFormData((prev) => ({
                             ...prev,
                             sameAsMobile: checked,
                             whatsappNo: checked ? prev.mobileNo : prev.whatsappNo
@@ -492,12 +969,18 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {errors.whatsappNo && <p className="text-[11px] text-red-500 mt-1">{errors.whatsappNo}</p>}
+                  {errors.whatsappNo && (
+                    <p className="text-[11px] text-red-500 mt-1">{errors.whatsappNo}</p>
+                  )}
                 </div>
 
                 {/* 5. Emergency Contact Name */}
                 <div>
-                  <label htmlFor="reg-emergency-name" className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
+                  <label
+                    htmlFor="reg-emergency-name"
+                    className="block text-xs sm:text-sm font-bold mb-1.5"
+                    style={{ color: 'var(--text-heading)' }}
+                  >
                     Emergency Contact Name <span className="text-[#d02426]">*</span>
                   </label>
                   <input
@@ -516,12 +999,18 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {errors.emergencyName && <p className="text-[11px] text-red-500 mt-1">{errors.emergencyName}</p>}
+                  {errors.emergencyName && (
+                    <p className="text-[11px] text-red-500 mt-1">{errors.emergencyName}</p>
+                  )}
                 </div>
 
                 {/* 6. Emergency Contact No */}
                 <div>
-                  <label htmlFor="reg-emergency-no" className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
+                  <label
+                    htmlFor="reg-emergency-no"
+                    className="block text-xs sm:text-sm font-bold mb-1.5"
+                    style={{ color: 'var(--text-heading)' }}
+                  >
                     Emergency Contact No <span className="text-[#d02426]">*</span>
                   </label>
                   <input
@@ -541,12 +1030,17 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {errors.emergencyNo && <p className="text-[11px] text-red-500 mt-1">{errors.emergencyNo}</p>}
+                  {errors.emergencyNo && (
+                    <p className="text-[11px] text-red-500 mt-1">{errors.emergencyNo}</p>
+                  )}
                 </div>
 
                 {/* 7. Gender (Segmented / Radio Options) */}
                 <div>
-                  <label className="block text-xs sm:text-sm font-bold mb-2" style={{ color: 'var(--text-heading)' }}>
+                  <label
+                    className="block text-xs sm:text-sm font-bold mb-2"
+                    style={{ color: 'var(--text-heading)' }}
+                  >
                     Gender <span className="text-[#d02426]">*</span>
                   </label>
                   <div className="flex items-center gap-4 sm:gap-6 pt-1">
@@ -571,7 +1065,10 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
 
                 {/* 8. T-Shirt Size */}
                 <div>
-                  <label className="block text-xs sm:text-sm font-bold mb-2" style={{ color: 'var(--text-heading)' }}>
+                  <label
+                    className="block text-xs sm:text-sm font-bold mb-2"
+                    style={{ color: 'var(--text-heading)' }}
+                  >
                     T-Shirt Size <span className="text-[#d02426]">*</span>
                   </label>
                   <div className="flex items-center flex-wrap gap-2 sm:gap-4 pt-1">
@@ -594,59 +1091,50 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
                   </div>
                 </div>
 
-                {/* 9. Date of Birth */}
+                {/* 9. Date of Birth (Elegant 3-part selector: Day, Month, Year - No Browser Popup!) */}
                 <div>
-                  <label htmlFor="reg-dob" className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
+                  <label
+                    className="block text-xs sm:text-sm font-bold mb-1.5"
+                    style={{ color: 'var(--text-heading)' }}
+                  >
                     Date of Birth <span className="text-[#d02426]">*</span>
                   </label>
-                  <input
-                    id="reg-dob"
-                    type="date"
-                    required
+                  <DateOfBirthPicker
                     value={formData.dob}
-                    onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
-                    className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      errors.dob ? 'border-red-500 bg-red-500/5' : ''
-                    }`}
-                    style={{
-                      backgroundColor: 'var(--card-inner)',
-                      borderColor: errors.dob ? '#ef4444' : 'var(--border-color)',
-                      color: 'var(--text-heading)'
-                    }}
+                    onChange={(newDob) => setFormData((prev) => ({ ...prev, dob: newDob }))}
+                    error={Boolean(errors.dob)}
                   />
                   {errors.dob && <p className="text-[11px] text-red-500 mt-1">{errors.dob}</p>}
                 </div>
 
-                {/* 10. Blood Group */}
+                {/* 10. Blood Group (Custom Styled Dropdown) */}
                 <div>
-                  <label htmlFor="reg-bloodgroup" className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
+                  <label
+                    className="block text-xs sm:text-sm font-bold mb-1.5"
+                    style={{ color: 'var(--text-heading)' }}
+                  >
                     Blood Group <span className="text-[#d02426]">*</span>
                   </label>
-                  <select
+                  <CustomDropdown
                     id="reg-bloodgroup"
                     value={formData.bloodGroup}
-                    onChange={(e) => setFormData({ ...formData, bloodGroup: e.target.value })}
-                    className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 cursor-pointer ${
-                      errors.bloodGroup ? 'border-red-500 bg-red-500/5' : ''
-                    }`}
-                    style={{
-                      backgroundColor: 'var(--card-inner)',
-                      borderColor: errors.bloodGroup ? '#ef4444' : 'var(--border-color)',
-                      color: 'var(--text-heading)'
-                    }}
-                  >
-                    {BLOOD_GROUPS.map((bg) => (
-                      <option key={bg} value={bg}>
-                        {bg}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.bloodGroup && <p className="text-[11px] text-red-500 mt-1">{errors.bloodGroup}</p>}
+                    onChange={(bg) => setFormData((prev) => ({ ...prev, bloodGroup: bg }))}
+                    options={BLOOD_GROUPS}
+                    placeholder="Select Blood Group"
+                    error={Boolean(errors.bloodGroup)}
+                  />
+                  {errors.bloodGroup && (
+                    <p className="text-[11px] text-red-500 mt-1">{errors.bloodGroup}</p>
+                  )}
                 </div>
 
                 {/* 11. Residential Address (Multiline Textarea) */}
                 <div className="md:row-span-2">
-                  <label htmlFor="reg-address" className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
+                  <label
+                    htmlFor="reg-address"
+                    className="block text-xs sm:text-sm font-bold mb-1.5"
+                    style={{ color: 'var(--text-heading)' }}
+                  >
                     Residential Address <span className="text-[#d02426]">*</span>
                   </label>
                   <textarea
@@ -655,7 +1143,9 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
                     required
                     placeholder="House/Flat No, Street, Locality..."
                     value={formData.residentialAddress}
-                    onChange={(e) => setFormData({ ...formData, residentialAddress: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, residentialAddress: e.target.value })
+                    }
                     className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 resize-none ${
                       errors.residentialAddress ? 'border-red-500 bg-red-500/5' : ''
                     }`}
@@ -665,12 +1155,18 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {errors.residentialAddress && <p className="text-[11px] text-red-500 mt-1">{errors.residentialAddress}</p>}
+                  {errors.residentialAddress && (
+                    <p className="text-[11px] text-red-500 mt-1">{errors.residentialAddress}</p>
+                  )}
                 </div>
 
                 {/* 12. Pin / Zip Code */}
                 <div>
-                  <label htmlFor="reg-pin" className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
+                  <label
+                    htmlFor="reg-pin"
+                    className="block text-xs sm:text-sm font-bold mb-1.5"
+                    style={{ color: 'var(--text-heading)' }}
+                  >
                     Pin / Zip Code <span className="text-[#d02426]">*</span>
                   </label>
                   <input
@@ -690,48 +1186,38 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {errors.pinZipCode && <p className="text-[11px] text-red-500 mt-1">{errors.pinZipCode}</p>}
+                  {errors.pinZipCode && (
+                    <p className="text-[11px] text-red-500 mt-1">{errors.pinZipCode}</p>
+                  )}
                 </div>
 
-                {/* 13. Location Preference (Dropdown) */}
+                {/* 13. Location Preference (Synchronized from centersData with Ground/City Search) */}
                 <div>
-                  <label htmlFor="reg-location-pref" className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
-                    Location Preference <span className="text-[#d02426]">*</span>
-                  </label>
-                  <select
-                    id="reg-location-pref"
-                    value={formData.locationPreference}
-                    onChange={(e) => setFormData({ ...formData, locationPreference: e.target.value })}
-                    className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 cursor-pointer"
-                    style={{
-                      backgroundColor: 'var(--card-inner)',
-                      borderColor: errors.locationPreference ? '#ef4444' : 'var(--border-color)',
-                      color: 'var(--text-heading)'
-                    }}
+                  <label
+                    htmlFor="reg-location-pref"
+                    className="block text-xs sm:text-sm font-bold mb-1.5"
+                    style={{ color: 'var(--text-heading)' }}
                   >
-                    <option value="Malleshwaram">Malleshwaram</option>
-                    <option value="Jayanagar (HQ)">Jayanagar (HQ)</option>
-                    <option value="Indiranagar">Indiranagar</option>
-                    <option value="Koramangala">Koramangala</option>
-                    <option value="Bellandur">Bellandur</option>
-                    <option value="Whitefield">Whitefield</option>
-                    <option value="Bannerghatta Road">Bannerghatta Road</option>
-                    <option value="Bengaluru University (Jnana Bharati)">Bengaluru University (Jnana Bharati)</option>
-                    <option value="Hebbal">Hebbal</option>
-                    <option value="Kanakapura Road">Kanakapura Road</option>
-                    <option value="HSR Layout">HSR Layout</option>
-                    <option value="Sarjapur Road">Sarjapur Road</option>
-                    <option value="Electronic City">Electronic City</option>
-                    <option value="Mysuru">Mysuru</option>
-                    <option value="Hyderabad">Hyderabad</option>
-                    <option value="Remote / Virtual Squad">Remote / Virtual Squad</option>
-                  </select>
+                    Location Preference (20+ Training Centers){' '}
+                    <span className="text-[#d02426]">*</span>
+                  </label>
+                  <LocationDropdown
+                    value={formData.locationPreference}
+                    onChange={(loc) => setFormData((prev) => ({ ...prev, locationPreference: loc }))}
+                    error={Boolean(errors.locationPreference)}
+                  />
+                  {errors.locationPreference && (
+                    <p className="text-[11px] text-red-500 mt-1">{errors.locationPreference}</p>
+                  )}
                 </div>
               </div>
 
               {/* 14. Maximum Distance Run in last 1year (Full Width) */}
               <div className="pt-2">
-                <label className="block text-xs sm:text-sm font-bold mb-2.5" style={{ color: 'var(--text-heading)' }}>
+                <label
+                  className="block text-xs sm:text-sm font-bold mb-2.5"
+                  style={{ color: 'var(--text-heading)' }}
+                >
                   Maximum Distance Run in last 1year <span className="text-[#d02426]">*</span>
                 </label>
                 <div className="flex items-center flex-wrap gap-3 sm:gap-6">
@@ -745,7 +1231,9 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
                         name="maxDistance1Year"
                         value={dist}
                         checked={formData.maxDistance1Year === dist}
-                        onChange={(e) => setFormData({ ...formData, maxDistance1Year: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, maxDistance1Year: e.target.value })
+                        }
                         className="w-4 h-4 accent-[#318cdd] cursor-pointer"
                       />
                       <span style={{ color: 'var(--text-heading)' }}>{dist}</span>
@@ -756,26 +1244,19 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
 
               {/* 15. Personal Best Event & Timing (Event select + Timing Input with icon) */}
               <div>
-                <label className="block text-xs sm:text-sm font-bold mb-2" style={{ color: 'var(--text-heading)' }}>
+                <label
+                  className="block text-xs sm:text-sm font-bold mb-2"
+                  style={{ color: 'var(--text-heading)' }}
+                >
                   Personal Best Event &amp; Timing <span className="text-[#d02426]">*</span>
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  <select
+                  <CustomDropdown
                     value={formData.pbEvent}
-                    onChange={(e) => setFormData({ ...formData, pbEvent: e.target.value })}
-                    className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 cursor-pointer"
-                    style={{
-                      backgroundColor: 'var(--card-inner)',
-                      borderColor: 'var(--border-color)',
-                      color: 'var(--text-heading)'
-                    }}
-                  >
-                    {PB_EVENTS.map((ev) => (
-                      <option key={ev} value={ev}>
-                        {ev}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(ev) => setFormData((prev) => ({ ...prev, pbEvent: ev }))}
+                    options={PB_EVENTS}
+                    placeholder="Select PB Event"
+                  />
 
                   <div className="relative">
                     <input
@@ -802,7 +1283,11 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
 
               {/* 16. Specify health problem */}
               <div>
-                <label htmlFor="reg-health" className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
+                <label
+                  htmlFor="reg-health"
+                  className="block text-xs sm:text-sm font-bold mb-1.5"
+                  style={{ color: 'var(--text-heading)' }}
+                >
                   Specify health problem (if any) that might hamper physical activities
                 </label>
                 <textarea
@@ -828,7 +1313,11 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
                   borderColor: 'var(--border-color)'
                 }}
               >
-                <label htmlFor="reg-promocode" className="block text-xs sm:text-sm font-bold" style={{ color: 'var(--text-heading)' }}>
+                <label
+                  htmlFor="reg-promocode"
+                  className="block text-xs sm:text-sm font-bold"
+                  style={{ color: 'var(--text-heading)' }}
+                >
                   If you have Promocode, Enter your Promocode
                 </label>
                 <div className="flex flex-col sm:flex-row gap-2.5">
@@ -874,7 +1363,10 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
                 </div>
 
                 {/* Live Cost Breakdown */}
-                <div className="pt-2 border-t text-xs space-y-1.5 font-mono" style={{ borderColor: 'var(--border-color)' }}>
+                <div
+                  className="pt-2 border-t text-xs space-y-1.5 font-mono"
+                  style={{ borderColor: 'var(--border-color)' }}
+                >
                   <div className="flex justify-between" style={{ color: 'var(--text-secondary)' }}>
                     <span>Program Base Fee:</span>
                     <span>₹{baseFee.toLocaleString('en-IN')}</span>
@@ -889,7 +1381,13 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
                     <span>GST (5%):</span>
                     <span>₹{gstAmount.toLocaleString('en-IN')}</span>
                   </div>
-                  <div className="flex justify-between font-black text-sm pt-1 border-t" style={{ borderColor: 'var(--border-color)', color: 'var(--text-heading)' }}>
+                  <div
+                    className="flex justify-between font-black text-sm pt-1 border-t"
+                    style={{
+                      borderColor: 'var(--border-color)',
+                      color: 'var(--text-heading)'
+                    }}
+                  >
                     <span>Total Payable:</span>
                     <span className="text-[#d02426]">₹{totalAmount.toLocaleString('en-IN')}</span>
                   </div>
@@ -898,8 +1396,16 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
 
               {/* 18. Medical & Legal Declaration (Exact Text) */}
               <div className="space-y-3 pt-2">
-                <p className="text-xs sm:text-[13px] leading-relaxed text-justify opacity-90" style={{ color: 'var(--text-secondary)' }}>
-                  I declare that, I am not suffering from any health condition that will hamper physical activity that I'm undertaking as part of this training program, and I have clearance from medical practitioner for participating in the said activity. I agree that JJActive Pvt. Ltd. &amp; it's trainers will not be held responsible for any accidents/injuries or complications related to my health while training with JJActive Pvt. Ltd.
+                <p
+                  className="text-xs sm:text-[13px] leading-relaxed text-justify opacity-90"
+                  style={{ color: 'var(--text-secondary)' }}
+                >
+                  I declare that, I am not suffering from any health condition that will hamper
+                  physical activity that I'm undertaking as part of this training program, and I have
+                  clearance from medical practitioner for participating in the said activity. I agree
+                  that JJActive Pvt. Ltd. &amp; it's trainers will not be held responsible for any
+                  accidents/injuries or complications related to my health while training with
+                  JJActive Pvt. Ltd.
                 </p>
 
                 <label className="flex items-start gap-3 cursor-pointer select-none">
@@ -909,33 +1415,44 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
                     onChange={(e) => {
                       setFormData({ ...formData, acceptedTerms: e.target.checked });
                       if (errors.acceptedTerms) {
-                        setErrors(prev => ({ ...prev, acceptedTerms: undefined }));
+                        setErrors((prev) => ({ ...prev, acceptedTerms: undefined }));
                       }
                     }}
                     className="mt-0.5 w-4 h-4 rounded accent-[#d02426] cursor-pointer flex-shrink-0"
                   />
-                  <span className={`text-xs sm:text-sm font-bold ${errors.acceptedTerms ? 'text-red-500' : ''}`} style={{ color: errors.acceptedTerms ? '#ef4444' : 'var(--text-heading)' }}>
+                  <span
+                    className={`text-xs sm:text-sm font-bold ${
+                      errors.acceptedTerms ? 'text-red-500' : ''
+                    }`}
+                    style={{ color: errors.acceptedTerms ? '#ef4444' : 'var(--text-heading)' }}
+                  >
                     I Accept(Please Select the Checkbox) <span className="text-[#d02426]">*</span>
                   </span>
                 </label>
-                {errors.acceptedTerms && <p className="text-[11px] text-red-500">{errors.acceptedTerms}</p>}
+                {errors.acceptedTerms && (
+                  <p className="text-[11px] text-red-500">{errors.acceptedTerms}</p>
+                )}
               </div>
 
-              {/* 19. PAY Button (Centered, exactly as screenshot, mobile thumb-friendly) */}
-              <div className="text-center pt-4 sm:pt-6">
+              {/* 19. PAY Button - Vibrant Official JJs Running Brand Red */}
+              <div className="text-center pt-5 sm:pt-7 space-y-2.5">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full sm:w-64 py-3.5 px-8 rounded-full text-sm font-black uppercase tracking-widest text-white shadow-xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer disabled:opacity-75"
-                  style={{
-                    backgroundColor: '#1f1618',
-                    border: '1px solid rgba(255,255,255,0.1)'
-                  }}
+                  className="w-full sm:w-80 py-4 px-8 rounded-full text-sm sm:text-base font-black uppercase tracking-wider text-white shadow-xl transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] cursor-pointer disabled:opacity-75 flex items-center justify-center gap-2.5 mx-auto bg-gradient-to-r from-[#e11d48] via-[#d02426] to-[#b51c1e] hover:from-[#d02426] hover:to-[#991b1b] shadow-red-600/35 hover:shadow-red-600/55 border border-white/20"
                 >
-                  {loading ? 'Processing Payment...' : `PAY ₹${totalAmount.toLocaleString('en-IN')}`}
+                  <Lock className="w-4 h-4 stroke-[2.5]" />
+                  <span>
+                    {loading ? 'Processing Payment...' : `PAY ₹${totalAmount.toLocaleString('en-IN')}`}
+                  </span>
+                  <ArrowRight className="w-4 h-4 stroke-[2.5]" />
                 </button>
-                <p className="text-[11px] mt-2 opacity-60 flex items-center justify-center gap-1.5" style={{ color: 'var(--text-secondary)' }}>
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+
+                <p
+                  className="text-[11px] opacity-75 flex items-center justify-center gap-1.5"
+                  style={{ color: 'var(--text-secondary)' }}
+                >
+                  <ShieldCheck className="w-4 h-4 text-emerald-500 flex-shrink-0" />
                   <span>256-Bit SSL Encrypted • Direct Razorpay Gateway</span>
                 </p>
               </div>
@@ -946,4 +1463,3 @@ export default function ProgramRegistrationModal({ isOpen, onClose, selectedProg
     </div>
   );
 }
-
