@@ -27,8 +27,23 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
       if (initialData.duration || initialData.level) {
         setFormData(prev => ({ ...prev, program: initialData.id }));
       }
+      if (initialData.program) {
+        setFormData(prev => ({ ...prev, program: initialData.program }));
+      }
     }
   }, [initialData]);
+
+  // Keyboard Escape listener for WCAG 2.1 dialog compliance
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        handleReset();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -62,9 +77,9 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
         {/* Prominent High-Contrast Close Button */}
         <button
           onClick={handleReset}
-          aria-label="Close dialog"
+          aria-label="Close registration dialog"
           title="Close dialog"
-          className="absolute top-4 right-4 sm:top-5 sm:right-5 w-9 h-9 flex items-center justify-center rounded-full bg-slate-800 text-white hover:bg-[#d02426] border border-slate-700/90 shadow-lg transition-all duration-200 hover:scale-105 z-30 cursor-pointer"
+          className="absolute top-4 right-4 sm:top-5 sm:right-5 w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-slate-800 text-white hover:bg-[#d02426] border border-slate-700/90 shadow-lg transition-all duration-200 hover:scale-105 z-30 cursor-pointer"
         >
           <X className="w-5 h-5 stroke-[2.5]" />
         </button>
@@ -122,7 +137,7 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
                   </span>
                 </div>
               </div>
-              <h3 className="text-2xl font-black tracking-tight">
+              <h3 id="modal-title" className="text-2xl font-black tracking-tight">
                 Join JJs Running / Book Free Trial Run
               </h3>
               <p className="text-xs text-gray-400 mt-1">
@@ -132,8 +147,9 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-300 mb-1">Full Name</label>
+                <label htmlFor="reg-name" className="block text-xs font-semibold text-gray-300 mb-1">Full Name</label>
                 <input
+                  id="reg-name"
                   type="text"
                   required
                   placeholder="e.g. Rahul Sharma"
@@ -146,8 +162,9 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-300 mb-1">Email Address</label>
+                  <label htmlFor="reg-email" className="block text-xs font-semibold text-gray-300 mb-1">Email Address</label>
                   <input
+                    id="reg-email"
                     type="email"
                     required
                     placeholder="name@example.com"
@@ -158,8 +175,9 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-300 mb-1">Mobile / WhatsApp No</label>
+                  <label htmlFor="reg-mobile" className="block text-xs font-semibold text-gray-300 mb-1">Mobile / WhatsApp No</label>
                   <input
+                    id="reg-mobile"
                     type="tel"
                     required
                     placeholder="+91 98765 43210"
@@ -173,8 +191,9 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-300 mb-1">Training Location</label>
+                  <label htmlFor="reg-location" className="block text-xs font-semibold text-gray-300 mb-1">Training Location</label>
                   <select
+                    id="reg-location"
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl bg-gray-900 border border-white/10 text-sm focus:outline-none focus:ring-1 text-white"
@@ -190,8 +209,9 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-300 mb-1">Program Track</label>
+                  <label htmlFor="reg-program" className="block text-xs font-semibold text-gray-300 mb-1">Program Track</label>
                   <select
+                    id="reg-program"
                     value={formData.program}
                     onChange={(e) => setFormData({ ...formData, program: e.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl bg-gray-900 border border-white/10 text-sm focus:outline-none focus:ring-1 text-white"
@@ -209,8 +229,9 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-300 mb-1">Current Running Level</label>
+                  <label htmlFor="reg-experience" className="block text-xs font-semibold text-gray-300 mb-1">Current Running Level</label>
                   <select
+                    id="reg-experience"
                     value={formData.experience}
                     onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl bg-gray-900 border border-white/10 text-sm focus:outline-none focus:ring-1 text-white"
@@ -223,8 +244,9 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-300 mb-1">Promocode (Optional)</label>
+                  <label htmlFor="reg-promocode" className="block text-xs font-semibold text-gray-300 mb-1">Promocode (Optional)</label>
                   <input
+                    id="reg-promocode"
                     type="text"
                     placeholder="e.g. JAGUARFIRST"
                     value={formData.promocode}

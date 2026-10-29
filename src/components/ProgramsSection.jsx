@@ -31,12 +31,14 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
     return (
       <div className="space-y-6">
         {/* Category Filter Pills - Sleek Minimalist Tabs */}
-        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2">
+        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2" role="tablist" aria-label="Filter programs by category">
           {CATEGORIES.map((cat) => {
             const isActive = activeCategory === cat;
             return (
               <button
                 key={cat}
+                role="tab"
+                aria-selected={isActive}
                 onClick={() => setActiveCategory(cat)}
                 className={`px-4 py-2 text-xs font-bold tracking-wide rounded-full transition-all duration-200 flex-shrink-0 ${
                   isActive
@@ -169,12 +171,14 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
     return (
       <div className="space-y-6">
         {/* Warm Sunrise Category Pills */}
-        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2">
+        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2" role="tablist" aria-label="Filter programs by category">
           {CATEGORIES.map((cat) => {
             const isActive = activeCategory === cat;
             return (
               <button
                 key={cat}
+                role="tab"
+                aria-selected={isActive}
                 onClick={() => setActiveCategory(cat)}
                 className={`px-4 py-2 text-xs font-bold tracking-wide rounded-full transition-all duration-200 flex-shrink-0 ${
                   isActive
@@ -307,12 +311,14 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
   if (currentTheme === 'kinetic') {
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2">
+        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2" role="tablist" aria-label="Filter programs by category">
           {CATEGORIES.map((cat) => {
             const isActive = activeCategory === cat;
             return (
               <button
                 key={cat}
+                role="tab"
+                aria-selected={isActive}
                 onClick={() => setActiveCategory(cat)}
                 className={`px-3.5 py-1.5 text-xs font-mono font-bold tracking-wider rounded-xl transition-all flex-shrink-0 ${
                   isActive
@@ -403,7 +409,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
   // =========================================================================
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2">
+      <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2" role="tablist" aria-label="Filter programs by category">
         {CATEGORIES.map((cat) => {
           const isActive = activeCategory === cat;
           return (

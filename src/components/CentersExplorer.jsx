@@ -46,7 +46,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
         <div className={`px-4 py-3 sm:px-5 sm:py-3.5 border-b flex flex-col md:flex-row items-center justify-between gap-3 ${
           isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/70'
         }`}>
-          <div className="flex flex-wrap items-center gap-1.5 w-full md:w-auto">
+          <div className="flex flex-wrap items-center gap-1.5 w-full md:w-auto" role="tablist" aria-label="Filter training grounds by city">
             {CITIES.map((city) => {
               const count = city === 'All Cities'
                 ? centersData.length
@@ -55,12 +55,15 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
               return (
                 <button
                   key={city}
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-controls="centers-list"
                   onClick={() => {
                     setSelectedCity(city);
                     const firstInCity = centersData.find(c => city === 'All Cities' || c.city === city);
                     if (firstInCity) setSelectedCenterId(firstInCity.id);
                   }}
-                  className={`px-3 py-1 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 ${
+                  className={`px-3 py-1 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer ${
                     isActive
                       ? 'bg-[#318cdd] text-white shadow-md shadow-[#318cdd]/25'
                       : isDark
@@ -69,7 +72,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                   }`}
                 >
                   <span>{city}</span>
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono tabular-num ${
                     isActive ? 'bg-white/20 text-white' : isDark ? 'text-slate-400 bg-slate-800' : 'text-slate-400 bg-slate-100'
                   }`}>
                     {count}
@@ -84,6 +87,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
             <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
+              aria-label="Search training centers by neighborhood or TCH coach"
               placeholder="Search neighborhood or TCH..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -116,16 +120,30 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
               </span>
             </div>
 
-            <div className={`max-h-56 sm:max-h-64 lg:max-h-[460px] overflow-y-auto divide-y ${
-              isDark ? 'divide-slate-800/70' : 'divide-slate-200/80'
-            }`}>
+            <div
+              id="centers-list"
+              role="listbox"
+              aria-label="Training grounds directory"
+              className={`max-h-56 sm:max-h-64 lg:max-h-[460px] overflow-y-auto divide-y ${
+                isDark ? 'divide-slate-800/70' : 'divide-slate-200/80'
+              }`}
+            >
               {filteredCenters.map((center) => {
                 const isSelected = currentCenter && currentCenter.id === center.id;
                 return (
                   <div
                     key={center.id}
+                    role="option"
+                    aria-selected={isSelected}
+                    tabIndex={0}
                     onClick={() => setSelectedCenterId(center.id)}
-                    className={`p-3.5 sm:px-4 sm:py-3 cursor-pointer transition-all flex items-center justify-between gap-3 text-left ${
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setSelectedCenterId(center.id);
+                      }
+                    }}
+                    className={`p-3.5 sm:px-4 sm:py-3 cursor-pointer transition-all flex items-center justify-between gap-3 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#318cdd] ${
                       isSelected
                         ? isDark
                           ? 'bg-gradient-to-r from-[#318cdd]/20 via-[#318cdd]/10 to-transparent border-l-4 border-[#318cdd]'
@@ -165,7 +183,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                     </div>
 
                     <div className="flex items-center gap-1.5 flex-shrink-0">
-                      <span className={`text-[10px] font-mono font-bold ${isSelected ? 'text-[#318cdd]' : 'text-slate-400'}`}>
+                      <span className={`text-[10px] font-mono font-bold tabular-num ${isSelected ? 'text-[#318cdd]' : 'text-slate-400'}`}>
                         5:30 AM
                       </span>
                       <ChevronRight className={`w-3.5 h-3.5 transition-transform ${isSelected ? 'text-[#318cdd] translate-x-0.5' : 'text-slate-400/60'}`} />
@@ -221,7 +239,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                     isDark ? 'bg-slate-950/80 border-slate-800 text-emerald-400' : 'bg-emerald-50 border-emerald-200 text-emerald-700'
                   }`}>
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-xs font-mono font-bold">{currentCenter.runnersCount}</span>
+                    <span className="text-xs font-mono font-bold tabular-num">{currentCenter.runnersCount}</span>
                   </div>
                 </div>
 

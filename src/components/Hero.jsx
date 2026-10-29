@@ -77,35 +77,44 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
               <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/40 to-transparent pointer-events-none z-[1]" />
 
               {/* Carousel Indicators & Controls */}
-              <div className="absolute z-20 bottom-3 right-4 sm:bottom-4 sm:right-6 flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-2.5 py-1.5 rounded-full border border-white/10">
+              <div className="absolute z-20 bottom-3 right-4 sm:bottom-4 sm:right-6 flex items-center gap-1 bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10"
+                role="tablist"
+                aria-label="Carousel slide controls"
+              >
                 {HERO_IMAGES.map((_, idx) => (
                   <button
                     key={idx}
                     onClick={() => setActiveSlide(idx)}
-                    aria-label={`Slide ${idx + 1}`}
-                    className={`transition-all duration-300 rounded-full cursor-pointer ${
-                      activeSlide === idx
-                        ? 'w-5 h-1.5 bg-[#d02426]'
-                        : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/70'
-                    }`}
-                  />
+                    role="tab"
+                    aria-selected={activeSlide === idx}
+                    aria-label={`Go to slide ${idx + 1} of ${HERO_IMAGES.length}`}
+                    className="p-1 cursor-pointer focus:outline-none"
+                  >
+                    <span
+                      className={`block transition-all duration-300 rounded-full ${
+                        activeSlide === idx
+                          ? 'w-6 h-2 bg-[#d02426]'
+                          : 'w-2 h-2 bg-white/40 hover:bg-white/70'
+                      }`}
+                    />
+                  </button>
                 ))}
               </div>
 
-              {/* Navigation Arrows (Visible on Desktop Hover) */}
+              {/* Navigation Arrows (Visible on Desktop Hover, >= 44x44px Touch Targets) */}
               <button
                 onClick={() => setActiveSlide((prev) => (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length)}
                 aria-label="Previous slide"
-                className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/40 hover:bg-black/70 text-white/80 hover:text-white items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 border border-white/10 cursor-pointer"
+                className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-black/50 hover:bg-black/80 text-white items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 border border-white/20 cursor-pointer shadow-lg"
               >
-                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
               </button>
               <button
                 onClick={() => setActiveSlide((prev) => (prev + 1) % HERO_IMAGES.length)}
                 aria-label="Next slide"
-                className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/40 hover:bg-black/70 text-white/80 hover:text-white items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 border border-white/10 cursor-pointer"
+                className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-black/50 hover:bg-black/80 text-white items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 border border-white/20 cursor-pointer shadow-lg"
               >
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-5 h-5 stroke-[2.5]" />
               </button>
 
               {/* Floating Top Pills (Diversified Information) */}

@@ -26,6 +26,10 @@ export default function App() {
   useEffect(() => {
     document.body.setAttribute('data-theme', theme);
     localStorage.setItem('jjs_theme_variant', theme);
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) {
+      meta.setAttribute('content', theme === 'swiss-dark' ? '#090d16' : '#ffffff');
+    }
   }, [theme]);
 
   const handleOpenRegister = (data = null) => {
@@ -59,6 +63,11 @@ export default function App() {
         color: 'var(--text-primary)'
       }}
     >
+      {/* Skip to Main Content Link for Keyboard and Screen Readers (WCAG 2.1 AA) */}
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+
       {/* Sleek Top Announcement Bar (Above Navbar) */}
       <LiveTicker
         onActionClick={(target) => {
@@ -87,8 +96,8 @@ export default function App() {
         onOpenCalc={() => scrollToSection('calculator')}
       />
 
-      {/* Main Content Sections - Compact spacing for effortless mobile scrolling */}
-      <main className="flex-1 space-y-12 sm:space-y-20 py-4 sm:py-8 w-full max-w-full overflow-hidden">
+      {/* Main Content Sections - Accessible Anchor with Keyboard Focus */}
+      <main id="main-content" tabIndex={-1} className="flex-1 space-y-12 sm:space-y-20 py-4 sm:py-8 w-full max-w-full overflow-hidden focus:outline-none">
         {/* Programs Section */}
         <section id="programs" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-10">

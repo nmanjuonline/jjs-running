@@ -14,8 +14,17 @@ export default function RaceCalendar({ onJoinCamp }) {
           return (
             <div
               key={event.id}
+              role="button"
+              tabIndex={0}
+              aria-pressed={isSelected}
               onClick={() => setSelectedEvent(event)}
-              className={`cursor-pointer rounded-3xl p-5 sm:p-6 border transition-all duration-300 flex flex-col justify-between group ${
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setSelectedEvent(event);
+                }
+              }}
+              className={`cursor-pointer rounded-3xl p-5 sm:p-6 border transition-all duration-300 flex flex-col justify-between group focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
                 isSelected
                   ? 'ring-2 ring-offset-2 scale-[1.01] shadow-2xl'
                   : 'hover:-translate-y-1.5 hover:shadow-xl opacity-90 hover:opacity-100'
@@ -82,13 +91,13 @@ export default function RaceCalendar({ onJoinCamp }) {
 
                 {/* Distance and Elevation Badges */}
                 <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg"
+                  <span className="text-[11px] font-mono font-bold tabular-num px-2.5 py-1 rounded-lg"
                     style={{ backgroundColor: 'var(--card-inner)' }}
                   >
                     🎯 {event.targetDistance}
                   </span>
                   {event.elevation && (
-                    <span className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg flex items-center gap-1"
+                    <span className="text-[11px] font-mono font-bold tabular-num px-2.5 py-1 rounded-lg flex items-center gap-1"
                       style={{ backgroundColor: 'var(--card-inner)' }}
                     >
                       <Mountain className="w-3 h-3 text-amber-500" />
