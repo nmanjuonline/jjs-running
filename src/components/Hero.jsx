@@ -20,7 +20,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
           <div className={`rounded-3xl border overflow-hidden relative group shadow-[0_20px_50px_-15px_rgba(0,50,150,0.18)] ${
             isDark ? 'border-slate-800 bg-slate-950 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.7)]' : 'border-slate-200/90 bg-white'
           }`}>
-            <div className="relative h-80 sm:h-[420px] md:h-[480px] w-full overflow-hidden bg-slate-950">
+            <div className="relative min-h-[540px] sm:min-h-[460px] md:h-[500px] w-full overflow-hidden bg-slate-950 p-5 sm:p-8 md:p-10 flex flex-col justify-between">
               <img
                 src="/images/jjs/login_bg1.jpg"
                 alt="JJs Running squad stride in morning light"
@@ -31,7 +31,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
               <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-950/30 to-transparent pointer-events-none" />
 
               {/* Floating Top Pills (Diversified Information) */}
-              <div className="absolute top-4 left-4 flex flex-wrap items-center gap-2">
+              <div className="relative z-10 flex flex-wrap items-center gap-2 mb-6 sm:mb-8">
                 <span className="px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#d02426] text-white shadow-lg flex items-center gap-1.5">
                   <Zap className="w-3.5 h-3.5 fill-white" />
                   AEROBIC PERIODIZATION
@@ -45,8 +45,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
               </div>
 
               {/* Integrated Bottom Hero Content Overlay */}
-              <div className="absolute bottom-0 inset-x-0 p-5 sm:p-8 md:p-10 text-white">
-                <div className="max-w-3xl space-y-3">
+              <div className="relative z-10 text-white max-w-3xl space-y-3 sm:space-y-4 mt-auto">
                   <h1 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[0.96]">
                     RUN WITH SCIENCE.
                     <br />
@@ -59,10 +58,10 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                     Structured heart-rate zone training, cadence calibration, and injury-free marathon milestones led by certified Training Center Heads (TCH).
                   </p>
 
-                  <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3 pt-2">
                     <button
                       onClick={onBookTrial}
-                      className="py-3 px-6 sm:px-7 rounded-2xl bg-[#d02426] hover:bg-[#b51c1e] text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(208,36,38,0.5)] hover:-translate-y-0.5 flex items-center gap-2"
+                      className="py-3 px-6 sm:px-7 rounded-2xl bg-[#d02426] hover:bg-[#b51c1e] text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(208,36,38,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-2"
                     >
                       <span>Book Free Trial Run</span>
                       <ArrowRight className="w-4 h-4 stroke-[2.5]" />
@@ -70,7 +69,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
 
                     <button
                       onClick={onExploreCenters}
-                      className="py-3 px-5 sm:px-6 rounded-2xl bg-white/95 hover:bg-white text-slate-900 text-xs sm:text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 flex items-center gap-2"
+                      className="py-3 px-5 sm:px-6 rounded-2xl bg-white/95 hover:bg-white text-slate-900 text-xs sm:text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2"
                     >
                       <MapPin className="w-4 h-4 text-[#318cdd] stroke-[2.5]" />
                       <span>Explore Nearby Grounds</span>
@@ -78,13 +77,12 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
 
                     <button
                       onClick={onOpenCalc}
-                      className="py-3 px-4 rounded-2xl bg-black/40 hover:bg-black/60 text-white border border-white/20 backdrop-blur-md text-xs sm:text-sm font-mono font-bold uppercase transition-all hover:-translate-y-0.5 flex items-center gap-1.5"
+                      className="py-3 px-4 rounded-2xl bg-black/40 hover:bg-black/60 text-white border border-white/20 backdrop-blur-md text-xs sm:text-sm font-mono font-bold uppercase transition-all hover:-translate-y-0.5 flex items-center justify-center gap-1.5"
                     >
                       <Activity className="w-4 h-4 text-[#4ca6f5]" />
                       <span>Pace Calculator</span>
                     </button>
                   </div>
-                </div>
               </div>
             </div>
           </div>
@@ -172,7 +170,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
 
           {/* Grand Panoramic Dawn Card with Authentic JJs Pack Photo */}
           <div className="rounded-3xl border border-orange-200/90 bg-white shadow-[0_20px_50px_-15px_rgba(255,72,0,0.15)] overflow-hidden relative group">
-            <div className="relative h-72 sm:h-96 md:h-[440px] w-full overflow-hidden bg-zinc-950">
+            <div className="relative min-h-[520px] sm:min-h-[440px] md:h-[480px] w-full overflow-hidden bg-zinc-950 p-5 sm:p-8 md:p-10 flex flex-col justify-between">
               <img
                 src="/images/jjs/login_bg1.jpg"
                 alt="JJs Running massive squad on morning run"
@@ -181,7 +179,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
               <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/95 via-zinc-950/40 to-zinc-950/15" />
 
               {/* Floating Top Pill */}
-              <div className="absolute top-4 left-4 flex flex-wrap items-center gap-2">
+              <div className="relative z-10 flex flex-wrap items-center gap-2 mb-6 sm:mb-8">
                 <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-gradient-to-r from-orange-600 to-amber-500 text-white shadow-lg flex items-center gap-1.5">
                   <Sun className="w-3.5 h-3.5" />
                   THE SUNRISE STRIDE
@@ -192,8 +190,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
               </div>
 
               {/* Integrated Bottom Hero Content Overlay */}
-              <div className="absolute bottom-0 inset-x-0 p-5 sm:p-8 md:p-10 text-white">
-                <div className="max-w-3xl space-y-3">
+              <div className="relative z-10 text-white max-w-3xl space-y-3 sm:space-y-4 mt-auto">
                   <h1 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[0.96]">
                     WAKE UP WITH PURPOSE.
                     <br />
@@ -205,10 +202,10 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                     India’s warmest distance running community. Structured 5:30 AM sessions with designated pace mentors, heart-rate zone conditioning, and injury-free marathon milestones.
                   </p>
 
-                  <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3 pt-2">
                     <button
                       onClick={onBookTrial}
-                      className="py-3 px-6 sm:px-7 rounded-2xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(255,72,0,0.5)] hover:-translate-y-0.5 flex items-center gap-2"
+                      className="py-3 px-6 sm:px-7 rounded-2xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(255,72,0,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-2"
                     >
                       <span>Book Free Sunrise Trial</span>
                       <ArrowRight className="w-4 h-4 stroke-[2.5]" />
@@ -216,13 +213,12 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
 
                     <button
                       onClick={onExploreCenters}
-                      className="py-3 px-5 sm:px-6 rounded-2xl bg-white/95 hover:bg-white text-zinc-900 text-xs sm:text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 flex items-center gap-2"
+                      className="py-3 px-5 sm:px-6 rounded-2xl bg-white/95 hover:bg-white text-zinc-900 text-xs sm:text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2"
                     >
                       <MapPin className="w-4 h-4 text-orange-600 stroke-[2.5]" />
                       <span>Find Your Morning Ground</span>
                     </button>
                   </div>
-                </div>
               </div>
             </div>
           </div>
