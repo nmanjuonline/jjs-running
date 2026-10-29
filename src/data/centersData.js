@@ -291,7 +291,7 @@ export const centersData = [
         name: 'Yelahanka',
         venue: 'Janatha Colony, Yelahanka',
         timings: '5:30 AM – 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Arun',
+        tch: 'Arun TD',
         vicinity: 'Yelahanka, Janatha Colony, Kogilu, Allalasandra, Vignana Kendra (GKVK), Jakkur',
         mapUrl: 'https://maps.app.goo.gl/SoUTAx4TocbPd3mo6?g_st=aw',
         runnersCount: '175+ Active Runners',
