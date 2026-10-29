@@ -97,9 +97,9 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
         </div>
 
         {/* Master Detail Split */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 lg:h-[530px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[440px]">
           {/* Left Column: Center List with Distinct Directory Styling */}
-          <div className={`lg:col-span-5 border-b-2 lg:border-b-0 lg:border-r flex flex-col h-full ${
+          <div className={`lg:col-span-5 border-b-2 lg:border-b-0 lg:border-r flex flex-col ${
             isDark ? 'border-slate-800 bg-slate-950/40' : 'border-slate-200 bg-slate-50/50'
           }`}>
             {/* Scrollable Directory Header */}
@@ -116,7 +116,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
               </span>
             </div>
 
-            <div className={`max-h-56 sm:max-h-64 lg:max-h-none flex-1 min-h-0 overflow-y-auto divide-y ${
+            <div className={`max-h-56 sm:max-h-64 lg:max-h-[460px] overflow-y-auto divide-y ${
               isDark ? 'divide-slate-800/70' : 'divide-slate-200/80'
             }`}>
               {filteredCenters.map((center) => {
@@ -177,7 +177,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
           </div>
 
           {/* Right Column: Distinct Ground Details Spotlight */}
-          <div className={`lg:col-span-7 p-4 sm:p-5 lg:p-6 flex flex-col justify-between h-full relative overflow-y-auto ${
+          <div className={`lg:col-span-7 p-4 sm:p-5 lg:p-6 flex flex-col justify-between ${
             isDark ? 'bg-slate-900' : 'bg-white'
           }`}>
             {/* Mobile Distinct Section Banner */}
@@ -192,9 +192,9 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
             </div>
 
             {currentCenter && (
-              <div className="flex flex-col justify-between h-full space-y-3.5">
+              <div className="space-y-4 flex flex-col justify-between h-full">
                 {/* Header */}
-                <div className="pb-3 border-b flex flex-wrap items-center justify-between gap-3 flex-shrink-0"
+                <div className="pb-3 border-b flex flex-wrap items-center justify-between gap-3"
                   style={{ borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)' }}
                 >
                   <div className="min-w-0">
@@ -225,9 +225,9 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                   </div>
                 </div>
 
-                {/* Info Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 py-1">
-                  <div className={`p-3 lg:p-3.5 rounded-2xl border transition-all ${
+                {/* 4 Cards Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+                  <div className={`p-3 lg:p-3.5 rounded-2xl border ${
                     isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200/80 bg-slate-50/70'
                   }`}>
                     <div className="flex items-center gap-1.5 text-slate-400 mb-1">
@@ -239,7 +239,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                     </p>
                   </div>
 
-                  <div className={`p-3 lg:p-3.5 rounded-2xl border transition-all ${
+                  <div className={`p-3 lg:p-3.5 rounded-2xl border ${
                     isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200/80 bg-slate-50/70'
                   }`}>
                     <div className="flex items-center gap-1.5 text-slate-400 mb-1">
@@ -254,7 +254,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                     </span>
                   </div>
 
-                  <div className={`p-3 lg:p-3.5 rounded-2xl border transition-all ${
+                  <div className={`p-3 lg:p-3.5 rounded-2xl border ${
                     isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200/80 bg-slate-50/70'
                   }`}>
                     <div className="flex items-center gap-1.5 text-slate-400 mb-1">
@@ -269,7 +269,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                     </span>
                   </div>
 
-                  <div className={`p-3 lg:p-3.5 rounded-2xl border transition-all ${
+                  <div className={`p-3 lg:p-3.5 rounded-2xl border ${
                     isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200/80 bg-slate-50/70'
                   }`}>
                     <div className="flex items-center gap-1.5 text-slate-400 mb-1">
@@ -308,7 +308,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                 </div>
 
                 {/* Action Bar */}
-                <div className={`pt-3 border-t flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mt-auto flex-shrink-0 ${
+                <div className={`pt-3 border-t flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 ${
                   isDark ? 'border-slate-800' : 'border-slate-100'
                 }`}>
                   {mapUrl ? (
