@@ -83,7 +83,7 @@ export const runnerStories = [
     role: 'Mother of Two & 10K Champion',
     center: 'HSR Layout',
     journey: 'Joined Fitness Thru Running at 43 years old, now podium regular',
-    quote: 'Waking up at 5:00 AM with JJs Running changed my mental health forever. The community is so warm—no runner is left behind, whether you run at 4:30 pace or 9:00 pace.',
+    quote: 'Waking up at 5:00 AM with JJs Running changed my mental health forever. The community is so warm, no runner is left behind, whether you run at 4:30 pace or 9:00 pace.',
     avatar: '/images/jjs/1078542079.jpg',
     stats: {
       initialPace: '10:00 min/km (Walk-Run)',

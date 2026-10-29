@@ -98,7 +98,7 @@ export default function RaceCalendar({ onJoinCamp }) {
               </span>
             </div>
             <h3 className="text-xl sm:text-2xl font-black tracking-tight" style={{ color: 'var(--text-heading)' }}>
-              {selectedEvent.title} — Official Squad Camp
+              {selectedEvent.title} - Official Squad Camp
             </h3>
             <p className="text-xs sm:text-sm opacity-80 leading-relaxed">
               {selectedEvent.description}

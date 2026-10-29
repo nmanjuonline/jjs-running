@@ -265,7 +265,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                       Tue, Thu, Sat &amp; Sun @ 5:30 AM
                     </p>
                     <span className="text-[10px] text-slate-500 font-medium block mt-0.5">
-                      75–90 min drills &amp; endurance mileage
+                      75-90 min drills &amp; endurance mileage
                     </span>
                   </div>
 
@@ -823,7 +823,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
 
                 <div className="p-3.5 rounded-xl bg-zinc-950 border border-zinc-800">
                   <span className="text-[10px] text-zinc-500 uppercase block">LAUNCH WINDOW</span>
-                  <p className="text-xs font-bold text-white mt-1">{currentCenter.timings || '05:30 AM – 07:00 AM (4 Days/Wk)'}</p>
+                  <p className="text-xs font-bold text-white mt-1">{currentCenter.timings || '05:30 AM - 07:00 AM (4 Days/Wk)'}</p>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-zinc-950 border border-zinc-800">

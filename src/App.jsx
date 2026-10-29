@@ -113,7 +113,7 @@ export default function App() {
               className="text-xs sm:text-base mt-2 max-w-2xl mx-auto leading-relaxed"
               style={{ color: 'var(--text-secondary)' }}
             >
-              Progressive weekly mileage, structured tempo splits, and weekend long-run pacing—tailored for first-time 5K runners to seasoned marathoners.
+              Progressive weekly mileage, structured tempo splits, and weekend long-run pacing - tailored for first-time 5K runners to seasoned marathoners.
             </p>
           </div>
 
@@ -166,7 +166,7 @@ export default function App() {
               }}
             >
               <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              <span>5:30 AM – 7:00 AM • Tue, Thu, Sat, Sun</span>
+              <span>5:30 AM - 7:00 AM • Tue, Thu, Sat, Sun</span>
             </div>
           </div>
 

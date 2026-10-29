@@ -183,7 +183,7 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
                     <option value="">Select your preferred ground...</option>
                     {centersData.map((c) => (
                       <option key={c.id} value={`${c.city} - ${c.name}`}>
-                        {c.city} — {c.name}
+                        {c.city} - {c.name}
                       </option>
                     ))}
                   </select>

@@ -13,7 +13,7 @@ export default function MethodologySection({ currentTheme = 'olympic-clean', onE
     {
       icon: Activity,
       title: 'Cadence & Biomechanics',
-      subtitle: '175–185 SPM Stride',
+      subtitle: '175-185 SPM Stride',
       description: 'Form correction, posture alignment, forward lean from ankles, and midfoot landing under your center of mass to eliminate heel-strike jarring.',
       highlight: 'Target: 180 SPM rhythm'
     },
@@ -171,7 +171,7 @@ export default function MethodologySection({ currentTheme = 'olympic-clean', onE
           <div className="flex items-center gap-2 self-start md:self-auto">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
             <span className="font-mono text-xs font-bold" style={{ color: 'var(--text-heading)' }}>
-              05:30 AM – 07:00 AM Call-Up
+              05:30 AM - 07:00 AM Call-Up
             </span>
           </div>
         </div>
@@ -229,7 +229,7 @@ export default function MethodologySection({ currentTheme = 'olympic-clean', onE
             </h3>
 
             <p className="text-xs sm:text-sm opacity-75 leading-relaxed max-w-2xl">
-              From college students to runners in their 70s and 80s—software engineers, doctors, teachers, entrepreneurs, and homemakers. Whether your pace is 4:15/km or 9:30/km, JJs Running welcomes you with dedicated pace mentors.
+              From college students to runners in their 70s and 80s, software engineers, doctors, teachers, entrepreneurs, and homemakers. Whether your pace is 4:15/km or 9:30/km, JJs Running welcomes you with dedicated pace mentors.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
