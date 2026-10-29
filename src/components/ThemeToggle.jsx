@@ -18,7 +18,7 @@ export default function ThemeToggle({ currentTheme, setTheme, compact = false })
             <button
               key={theme.id}
               onClick={() => setTheme(theme.id)}
-              title={`${theme.name} (${theme.isLight ? 'Light Mode' : 'Dark Mode'}) — ${theme.subtitle}`}
+              title={`${theme.name} (${theme.isLight ? 'Light Mode' : 'Dark Mode'}) - ${theme.subtitle}`}
               className={`flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-full transition-all duration-200 ${
                 isActive
                   ? 'shadow-md scale-105 ring-1'

@@ -1,3 +1,12 @@
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+section[id] {
+  scroll-margin-top: 5.5rem;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -25,19 +34,22 @@
     --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
   }
 
-  /* 🏔️ THEME 1 (LIGHT): Swiss Clean (On Running / Minimalist Performance) */
-  body[data-theme='olympic-clean'], body[data-theme='street-crew'] {
+  /* SWISS CLEAN - VERSION 1: LOGO MATCH (Light • Cerulean Blue & Sprint Red) */
+  body[data-theme='swiss-light'], body[data-theme='olympic-clean'], body[data-theme='street-crew'] {
     --bg-page: #ffffff;
     --text-primary: #0f172a;
     --text-secondary: #475569;
     --text-heading: #020617;
-    --accent: #0055ff;
+    --accent: #318cdd;
+    --accent-red: #d02426;
+    --accent-orange: #ef7f1a;
     --accent-contrast: #ffffff;
     --border-color: #e2e8f0;
     --card-bg: #ffffff;
     --card-hover: #f8fafc;
     --card-inner: #f1f5f9;
-    --badge-bg: rgba(0, 85, 255, 0.08);
+    --badge-bg: rgba(49, 140, 221, 0.09);
+    --badge-red-bg: rgba(208, 36, 38, 0.09);
     --hero-overlay-from: #ffffff;
     --hero-overlay-via: rgba(255, 255, 255, 0.88);
     --hero-img-filter: contrast(1.06) brightness(1.02);
@@ -45,10 +57,36 @@
     --input-bg: #ffffff;
     --input-border: #cbd5e1;
     --logo-filter: none;
-    --card-shadow: 0 14px 30px -8px rgba(0, 50, 150, 0.08);
+    --card-shadow: 0 14px 30px -8px rgba(49, 140, 221, 0.12);
   }
 
-  /* 🌅 THEME 2 (LIGHT): Sunrise Stride (Nike Run Club / Radiant Dawn) */
+  /* SWISS CLEAN - VERSION 2: LOGO CONTRAST (Dark • Deep Obsidian & Logo Palette) */
+  body[data-theme='swiss-dark'] {
+    --bg-page: #090d16;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-heading: #ffffff;
+    --accent: #318cdd;
+    --accent-red: #d02426;
+    --accent-orange: #ef7f1a;
+    --accent-contrast: #ffffff;
+    --border-color: #1e293b;
+    --card-bg: #0f172a;
+    --card-hover: #172033;
+    --card-inner: rgba(255, 255, 255, 0.04);
+    --badge-bg: rgba(49, 140, 221, 0.16);
+    --badge-red-bg: rgba(208, 36, 38, 0.16);
+    --hero-overlay-from: #090d16;
+    --hero-overlay-via: rgba(9, 13, 22, 0.85);
+    --hero-img-filter: brightness(0.9) contrast(1.1);
+    --nav-bg: rgba(9, 13, 22, 0.94);
+    --input-bg: rgba(255, 255, 255, 0.06);
+    --input-border: rgba(255, 255, 255, 0.14);
+    --logo-filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.25)) contrast(1.05);
+    --card-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.6);
+  }
+
+  /* THEME 2 (LIGHT): Sunrise Stride (Nike Run Club / Radiant Dawn) */
   body[data-theme='sunrise-coral'], body[data-theme='heritage-gold'] {
     --bg-page: #faf8f5;
     --text-primary: #18181b;
@@ -71,7 +109,7 @@
     --card-shadow: 0 14px 30px -8px rgba(255, 72, 0, 0.10);
   }
 
-  /* ⚡ THEME 3 (DARK): Kinetic Volt (Asymmetric Bento Cockpit) */
+  /* THEME 3 (DARK): Kinetic Volt (Asymmetric Bento Cockpit) */
   body[data-theme='kinetic'] {
     --bg-page: #090a0f;
     --text-primary: #ffffff;
@@ -94,7 +132,7 @@
     --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
   }
 
-  /* 🔴 THEME 4 (DARK): Crimson Velocity (Breaking2 Speed Runway) */
+  /* THEME 4 (DARK): Crimson Velocity (Breaking2 Speed Runway) */
   body[data-theme='crimson'] {
     --bg-page: #070709;
     --text-primary: #ffffff;
@@ -157,4 +195,105 @@
 ::-webkit-scrollbar-thumb {
   background: rgba(150, 150, 150, 0.3);
   border-radius: 4px;
+}
+
+
+/* =========================================================================
+   ACCESSIBILITY & ERGONOMICS (WCAG 2.1 AA/AAA)
+   ========================================================================= */
+
+/* Skip-to-content link */
+.skip-link {
+  position: absolute;
+  top: -60px;
+  left: 1rem;
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+  padding: 0.625rem 1.25rem;
+  font-weight: 800;
+  font-size: 0.875rem;
+  border-radius: 0.75rem;
+  z-index: 99999;
+  text-decoration: none;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  transition: top 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.skip-link:focus-visible, .skip-link:focus {
+  top: 1rem;
+  outline: 3px solid #ffffff !important;
+  outline-offset: 2px !important;
+}
+
+/* High-Contrast Visible Focus States */
+*:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 2px !important;
+}
+
+/* Tabular Numerals for Clocks, Paces, Splits, and Metrics */
+.tabular-num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Reduced Motion Preference (WCAG 2.1 AA) */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* =========================================================================
+   SOCIAL MEDIA ICONS (High contrast & brand hover states in light/dark mode)
+   ========================================================================= */
+.social-icon-btn {
+  background-color: var(--card-inner);
+  border-color: var(--border-color);
+  color: var(--text-heading);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.social-icon-btn:hover {
+  transform: translateY(-2px) scale(1.08);
+}
+
+.social-icon-btn.social-instagram:hover {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 8px 18px -4px rgba(220, 39, 67, 0.45);
+}
+
+.social-icon-btn.social-facebook:hover {
+  background-color: #1877F2 !important;
+  color: #ffffff !important;
+  border-color: #1877F2 !important;
+  box-shadow: 0 8px 18px -4px rgba(24, 119, 242, 0.45);
+}
+
+.social-icon-btn.social-x:hover {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+  border-color: #0f172a !important;
+  box-shadow: 0 8px 18px -4px rgba(15, 23, 42, 0.4);
+}
+
+body[data-theme='swiss-dark'] .social-icon-btn.social-x:hover,
+body[data-theme='kinetic'] .social-icon-btn.social-x:hover,
+body[data-theme='crimson'] .social-icon-btn.social-x:hover {
+  background-color: #ffffff !important;
+  color: #090d16 !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 8px 18px -4px rgba(255, 255, 255, 0.35);
+}
+
+.social-icon-btn.social-youtube:hover {
+  background-color: #FF0000 !important;
+  color: #ffffff !important;
+  border-color: #FF0000 !important;
+  box-shadow: 0 8px 18px -4px rgba(255, 0, 0, 0.45);
 }

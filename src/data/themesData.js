@@ -1,4 +1,4 @@
-import { Zap, Flame, Compass, Sun, Shield, Award } from 'lucide-react';
+import { Zap, Flame, Compass, Sun } from 'lucide-react';
 
 export const THEMES = [
   {

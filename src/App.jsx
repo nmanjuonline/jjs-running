@@ -12,17 +12,12 @@ import Testimonials from './components/Testimonials';
 import RegisterModal from './components/RegisterModal';
 import ProgramRegistrationModal from './components/ProgramRegistrationModal';
 import Footer from './components/Footer';
-import ThemeToggle from './components/ThemeToggle';
-import JJSLogo from './components/JJSLogo';
-import { THEMES } from './data/themesData';
-import { Sparkles, ArrowRight, ShieldCheck, Zap, Activity, Flame, Sun } from 'lucide-react';
+import JJsLogo from './components/JJsLogo';
+import { Sparkles, ArrowRight, ShieldCheck, Activity, Award } from 'lucide-react';
 
 export default function App() {
   const [theme, setTheme] = useState(() => {
-    const saved = localStorage.getItem('jjs_theme');
-    const validThemes = ['olympic-clean', 'sunrise-coral', 'kinetic', 'crimson'];
-    if (!saved || !validThemes.includes(saved)) return 'olympic-clean';
-    return saved;
+    return localStorage.getItem('jjs_theme_variant') || 'swiss-light';
   });
 
   // Free Trial Modal State
@@ -37,7 +32,11 @@ export default function App() {
 
   useEffect(() => {
     document.body.setAttribute('data-theme', theme);
-    localStorage.setItem('jjs_theme', theme);
+    localStorage.setItem('jjs_theme_variant', theme);
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) {
+      meta.setAttribute('content', theme === 'swiss-dark' ? '#090d16' : '#ffffff');
+    }
   }, [theme]);
 
   // Open Free Trial flow
@@ -58,7 +57,15 @@ export default function App() {
     }
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+      const nav = document.querySelector('header');
+      const navHeight = nav ? nav.offsetHeight : 72;
+      const elementPosition = el.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - navHeight - 16;
+
+      window.scrollTo({
+        top: Math.max(0, offsetPosition),
+        behavior: 'smooth'
+      });
     }
   };
 
@@ -74,11 +81,6 @@ export default function App() {
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
-
-      {/* Floating Theme Control (Visible on Desktop / Tablets to avoid mobile overflow) */}
-      <div className="hidden sm:flex fixed bottom-6 right-6 z-50 shadow-2xl flex-col items-end gap-2">
-        <ThemeToggle currentTheme={theme} setTheme={setTheme} />
-      </div>
 
       {/* Sleek Top Announcement Bar (Above Navbar) */}
       <LiveTicker
@@ -113,65 +115,29 @@ export default function App() {
         {/* Programs Section */}
         <section id="programs" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-10">
-            {(theme === 'olympic-clean' || theme === 'street-crew') && (
-              <>
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-bold uppercase tracking-wider mb-2">
-                  <Zap className="w-3.5 h-3.5" />
-                  Scientific Periodization
-                </span>
-                <h2 className="text-3xl sm:text-5xl font-black tracking-tight uppercase text-slate-950">
-                  Flagship Training Programs
-                </h2>
-                <p className="text-xs sm:text-base mt-2 text-slate-600">
-                  From couch-to-5K beginners to sub-3-hour Boston Qualifiers. Backed by 12 years of empirical sports science and certified Training Center Heads (TCH).
-                </p>
-              </>
-            )}
-
-            {(theme === 'sunrise-coral' || theme === 'heritage-gold') && (
-              <>
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200/80 text-orange-700 text-xs font-bold uppercase tracking-wider mb-2">
-                  <Sun className="w-3.5 h-3.5 text-amber-500" />
-                  Morning Stride Programs
-                </span>
-                <h2 className="text-3xl sm:text-5xl font-black tracking-tight uppercase text-zinc-950">
-                  Community Training Squads
-                </h2>
-                <p className="text-xs sm:text-base mt-2 text-zinc-600">
-                  Experience morning gatherings across 30+ neighborhood parks with warm coaching and injury-free progression.
-                </p>
-              </>
-            )}
-
-            {theme === 'kinetic' && (
-              <>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold tracking-widest mb-2 bg-[#ccff00]/15 text-[#ccff00] border border-[#ccff00]/30">
-                  <Zap className="w-3.5 h-3.5 fill-[#ccff00]" />
-                  // PROTOCOL: SCIENTIFIC_PERIODIZATION
-                </span>
-                <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight uppercase text-white">
-                  FLAGSHIP TRAINING PROTOCOLS
-                </h2>
-                <p className="text-xs sm:text-base mt-1.5 text-slate-400">
-                  From couch-to-5K beginners to sub-3-hour Boston Qualifiers. Backed by 12 years of empirical sports science and certified coaches.
-                </p>
-              </>
-            )}
-
-            {theme === 'crimson' && (
-              <>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-black tracking-widest mb-2 bg-[#ff1e42]/20 text-[#ff1e42] border border-[#ff1e42]/40">
-                  <Flame className="w-3.5 h-3.5 fill-[#ff1e42]" />
-                  VELOCITY BLOCK // MILESTONE SQUADS
-                </span>
-                <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight uppercase text-white">
-                  HIGH-SPEED MARATHON CAMPS
-                </h2>
-                <p className="text-xs sm:text-base mt-1.5 text-zinc-400">
-                  Target-pace execution, VO2 threshold blocks, and negative-split race tactics engineered for personal records.
-                </p>
-              </>
-            )}
+            <span
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-2 border shadow-sm"
+              style={{
+                backgroundColor: 'var(--badge-bg)',
+                borderColor: 'var(--border-color)',
+                color: 'var(--accent)'
+              }}
+            >
+              <Award className="w-3.5 h-3.5" />
+              Goal-Driven Training
+            </span>
+            <h2
+              className="text-3xl sm:text-5xl font-black tracking-tight uppercase"
+              style={{ color: 'var(--text-heading)' }}
+            >
+              Flagship Training Programs
+            </h2>
+            <p
+              className="text-xs sm:text-base mt-2 max-w-2xl mx-auto leading-relaxed"
+              style={{ color: 'var(--text-secondary)' }}
+            >
+              Progressive weekly mileage, structured tempo splits, and weekend long-run pacing - tailored for first-time 5K runners to seasoned marathoners.
+            </p>
           </div>
 
           <ProgramsSection
@@ -186,55 +152,31 @@ export default function App() {
           onExploreCenters={() => scrollToSection('centers')}
         />
 
-        {/* 30+ Training Centers Explorer */}
+        {/* 20+ Training Centers Explorer */}
         <section id="centers" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-4 sm:mb-6">
             <div>
-              {(theme === 'olympic-clean' || theme === 'street-crew') && (
-                <>
-                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-bold uppercase tracking-wider mb-1.5">
-                    <Activity className="w-3.5 h-3.5" />
-                    Neighborhood Grounds
-                  </span>
-                  <h2 className="text-2xl sm:text-4xl font-black tracking-tight uppercase text-slate-950">
-                    30+ Centers &amp; Training Center Heads
-                  </h2>
-                </>
-              )}
-              {(theme === 'sunrise-coral' || theme === 'heritage-gold') && (
-                <>
-                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200/80 text-orange-700 text-xs font-bold uppercase tracking-wider mb-1.5">
-                    <Sun className="w-3.5 h-3.5 text-amber-500" />
-                    5:30 AM Sunrise Grounds
-                  </span>
-                  <h2 className="text-2xl sm:text-4xl font-black tracking-tight uppercase text-zinc-950">
-                    30+ Morning Centers &amp; TCHs
-                  </h2>
-                </>
-              )}
-              {theme === 'kinetic' && (
-                <>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold tracking-widest mb-1.5 bg-[#ccff00]/15 text-[#ccff00] border border-[#ccff00]/30">
-                    <Activity className="w-3.5 h-3.5" />
-                    RADAR TELEMETRY // 30+ HUBS
-                  </span>
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight uppercase text-white">
-                    GROUND NODES &amp; TCH DIRECTORS
-                  </h2>
-                </>
-              )}
-              {theme === 'crimson' && (
-                <>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold tracking-widest mb-1.5 bg-[#ff1e42]/20 text-[#ff1e42] border border-[#ff1e42]/40">
-                    <Activity className="w-3.5 h-3.5" />
-                    DEPLOYMENT // 30+ BASES
-                  </span>
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight uppercase text-white">
-                    SPEED CAMPS &amp; SQUAD HEADS
-                  </h2>
-                </>
-              )}
-              <p className="text-xs sm:text-sm mt-1 max-w-xl" style={{ color: 'var(--text-secondary)' }}>
+              <span
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-1.5 border shadow-sm"
+                style={{
+                  backgroundColor: 'var(--badge-bg)',
+                  borderColor: 'var(--border-color)',
+                  color: 'var(--accent)'
+                }}
+              >
+                <Activity className="w-3.5 h-3.5" />
+                Neighborhood Grounds
+              </span>
+              <h2
+                className="text-2xl sm:text-4xl font-black tracking-tight uppercase"
+                style={{ color: 'var(--text-heading)' }}
+              >
+                20+ Centers &amp; Training Center Heads
+              </h2>
+              <p
+                className="text-xs sm:text-sm mt-1 max-w-xl"
+                style={{ color: 'var(--text-secondary)' }}
+              >
                 Select your city and neighborhood center below to view morning timings, designated grounds, and connect with your Training Center Head (TCH).
               </p>
             </div>
@@ -247,11 +189,11 @@ export default function App() {
               }}
             >
               <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              <span>5:30 AM – 7:00 AM • Tue, Thu, Sat, Sun</span>
+              <span>5:30 AM - 7:00 AM • Tue, Thu, Sat, Sun</span>
             </div>
           </div>
 
-          <CentersExplorer currentTheme={theme} onBookTrial={(center) => handleOpenRegister(center)} />
+          <CentersExplorer currentTheme={theme} onBookTrial={(center) => handleOpenTrial(center)} />
         </section>
 
         {/* Discreet Pace & Split Calculator Utility */}
@@ -274,15 +216,15 @@ export default function App() {
               style={{ backgroundColor: 'var(--badge-bg)', color: 'var(--accent)' }}
             >
               <Sparkles className="w-3.5 h-3.5" />
-              Target Race Calendar
+              Signature JJs Running Events
             </span>
             <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight uppercase"
               style={{ color: 'var(--text-heading)' }}
             >
-              Marathon Campaigns & Squads
+              Flagship Races & Festivals
             </h2>
             <p className="text-xs sm:text-base mt-1.5" style={{ color: 'var(--text-secondary)' }}>
-              Train with our official target race squads with supported weekend LSD simulations, pacing groups, and finish-line hospitality.
+              From high-altitude monsoon hill climbs to iconic women fitness movements, experience running events founded and powered by Jayanagar Jaguars.
             </p>
           </div>
 
@@ -321,7 +263,7 @@ export default function App() {
             }}
           >
             <div className="mx-auto flex items-center justify-center mb-4">
-              <JJSLogo className="h-12 sm:h-14 w-auto" />
+              <JJsLogo className="h-12 sm:h-14 w-auto" />
             </div>
             <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight mb-2 uppercase"
               style={{ color: 'var(--text-heading)' }}
@@ -350,7 +292,7 @@ export default function App() {
                   color: 'var(--text-primary)'
                 }}
               >
-                Explore 30+ Locations
+                Explore 20+ Locations
               </button>
             </div>
           </div>

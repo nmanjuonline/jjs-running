@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     watch: {
-      ignored: ['**/.vs/**', '**/.wrangler/**']
+      ignored: ['**/.vs/**', '**/.git/**', '**/dist/**', '**/.wrangler/**']
     }
   }
 })

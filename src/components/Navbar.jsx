@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Menu, X, ArrowRight } from 'lucide-react';
-import ThemeToggle from './ThemeToggle';
-import JJSLogo from './JJSLogo';
+import { Menu, X, Sun, Moon, ArrowRight } from 'lucide-react';
+import JJsLogo from './JJsLogo';
 
-export default function Navbar({ currentTheme = 'olympic-clean', setTheme, onOpenRegister, onOpenProgramRegister, onScrollTo }) {
+export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenRegister, onOpenProgramRegister, onScrollTo }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const isDark = currentTheme === 'swiss-dark';
 
   const navItems = [
     { label: 'Programs', id: 'programs' },
@@ -78,7 +79,45 @@ export default function Navbar({ currentTheme = 'olympic-clean', setTheme, onOpe
 
           {/* Right Action: Theme Switcher & Register CTA */}
           <div className="hidden sm:flex items-center gap-3">
-            <ThemeToggle currentTheme={currentTheme} setTheme={setTheme} compact={true} />
+            {/* Sleek Light / Dark Segmented Switcher */}
+            <div
+              className="flex items-center p-1 rounded-full border shadow-xs transition-colors flex-shrink-0"
+              style={{
+                backgroundColor: 'var(--card-inner)',
+                borderColor: 'var(--border-color)'
+              }}
+              role="radiogroup"
+              aria-label="Theme mode"
+            >
+              <button
+                onClick={() => setTheme && setTheme('swiss-light')}
+                className={`px-3 py-1.5 rounded-full transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap text-xs font-bold select-none cursor-pointer ${
+                  !isDark
+                    ? 'bg-[#318cdd] text-white shadow-sm'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+                title="Light Mode"
+                aria-checked={!isDark}
+                role="radio"
+              >
+                <Sun className={`w-3.5 h-3.5 flex-shrink-0 transition-transform ${!isDark ? 'text-white' : 'text-slate-400'}`} />
+                <span>Light</span>
+              </button>
+              <button
+                onClick={() => setTheme && setTheme('swiss-dark')}
+                className={`px-3 py-1.5 rounded-full transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap text-xs font-bold select-none cursor-pointer ${
+                  isDark
+                    ? 'bg-[#318cdd] text-white shadow-sm'
+                    : 'text-slate-500 hover:text-slate-900'
+                }`}
+                title="Dark Mode"
+                aria-checked={isDark}
+                role="radio"
+              >
+                <Moon className={`w-3.5 h-3.5 flex-shrink-0 transition-transform ${isDark ? 'text-white' : 'text-slate-500'}`} />
+                <span>Dark</span>
+              </button>
+            </div>
 
             {/* Desktop CTA Button */}
             <button
@@ -90,9 +129,21 @@ export default function Navbar({ currentTheme = 'olympic-clean', setTheme, onOpe
             </button>
           </div>
 
-          {/* Mobile Actions: Accessible Menu Button (>=44x44px Touch Targets) */}
+          {/* Mobile Actions: Contrast Toggle & Accessible Menu Button (>=44x44px Touch Targets) */}
           <div className="flex items-center gap-2 sm:hidden">
-            <ThemeToggle currentTheme={currentTheme} setTheme={setTheme} compact={true} />
+            <button
+              onClick={() => setTheme && setTheme(isDark ? 'swiss-light' : 'swiss-dark')}
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl border flex-shrink-0 cursor-pointer"
+              style={{
+                backgroundColor: 'var(--card-inner)',
+                borderColor: 'var(--border-color)',
+                color: 'var(--text-primary)'
+              }}
+              aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+              title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {isDark ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-slate-700" />}
+            </button>
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
