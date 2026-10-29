@@ -13,7 +13,7 @@ export default function MethodologySection({ currentTheme = 'olympic-clean', onE
     {
       icon: Activity,
       title: 'Cadence & Biomechanics',
-      subtitle: '175–185 SPM Stride',
+      subtitle: '175-185 SPM Stride',
       description: 'Form correction, posture alignment, forward lean from ankles, and midfoot landing under your center of mass to eliminate heel-strike jarring.',
       highlight: 'Target: 180 SPM rhythm'
     },
@@ -26,8 +26,8 @@ export default function MethodologySection({ currentTheme = 'olympic-clean', onE
     },
     {
       icon: Compass,
-      title: 'Supported Weekend LSDs',
-      subtitle: 'Long Slow Distance',
+      title: 'Supported Weekend SLRs',
+      subtitle: 'Slow Long Runs',
       description: 'Progressive weekend distance simulations with dedicated on-route hydration, electrolyte fluids, nutrition stations, and pace mentors.',
       highlight: 'Fully supported routes'
     }
@@ -49,14 +49,14 @@ export default function MethodologySection({ currentTheme = 'olympic-clean', onE
     {
       day: 'Saturday',
       time: '05:30 AM',
-      focus: 'Hills & Maintenance',
-      description: 'Incline elevation training, technical footwork drills, and aerobic base maintenance.'
+      focus: 'The Signature SLR',
+      description: 'Progressive Slow Long Run (SLR) with dedicated on-route hydration, electrolyte fueling, and pace mentors.'
     },
     {
       day: 'Sunday',
       time: '05:30 AM',
-      focus: 'The Signature LSD',
-      description: 'Progressive Long Slow Distance run with full hydration support, followed by post-run chai and debrief.'
+      focus: 'Recovery Run & Mobility',
+      description: 'Easy aerobic recovery run, joint mobility, cool-down stretching circle, and post-run debrief with filter coffee.'
     }
   ];
 
@@ -80,7 +80,7 @@ export default function MethodologySection({ currentTheme = 'olympic-clean', onE
         </h2>
 
         <p className="text-xs sm:text-base opacity-75 leading-relaxed">
-          How JJs Running achieves a 98%+ injury-free rate across 15,000+ runners, transforming zero-running beginners into marathoners and Boston Qualifiers.
+          How JJs Running achieves a 98%+ injury-free rate across 17,000+ runners, transforming zero-running beginners into confident marathon finishers and endurance runners.
         </p>
       </div>
 
@@ -144,7 +144,7 @@ export default function MethodologySection({ currentTheme = 'olympic-clean', onE
         })}
       </div>
 
-      {/* Weekly Training Blueprint & LSD Protocol */}
+      {/* Weekly Training Blueprint & SLR Protocol */}
       <div
         className="rounded-3xl p-6 sm:p-8 md:p-10 border shadow-xl relative overflow-hidden"
         style={{
@@ -164,14 +164,14 @@ export default function MethodologySection({ currentTheme = 'olympic-clean', onE
               The 4-Day Training Protocol
             </h3>
             <p className="text-xs sm:text-sm opacity-70 mt-1 max-w-xl">
-              Led across 30+ neighborhood grounds by designated Training Center Heads (TCH). Sessions kick off at 05:30 AM sharp.
+              Led across 20+ neighborhood grounds by designated Training Center Heads (TCH). Sessions kick off at 05:30 AM sharp.
             </p>
           </div>
 
           <div className="flex items-center gap-2 self-start md:self-auto">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
             <span className="font-mono text-xs font-bold" style={{ color: 'var(--text-heading)' }}>
-              05:30 AM – 07:00 AM Call-Up
+              05:30 AM - 07:00 AM Call-Up
             </span>
           </div>
         </div>
@@ -229,14 +229,14 @@ export default function MethodologySection({ currentTheme = 'olympic-clean', onE
             </h3>
 
             <p className="text-xs sm:text-sm opacity-75 leading-relaxed max-w-2xl">
-              From college students to runners in their 70s and 80s—software engineers, doctors, teachers, entrepreneurs, and homemakers. Whether your pace is 4:15/km or 9:30/km, JJs Running welcomes you with dedicated pace mentors.
+              From college students to runners in their 70s and 80s, software engineers, doctors, teachers, entrepreneurs, and homemakers. Whether your pace is 4:15/km or 9:30/km, JJs Running welcomes you with dedicated pace mentors.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
               <div className="p-3 rounded-xl border space-y-1" style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}>
                 <Coffee className="w-4 h-4 text-amber-500" />
                 <h5 className="text-xs font-bold" style={{ color: 'var(--text-heading)' }}>Post-Run Chai & Debrief</h5>
-                <p className="text-[10px] opacity-65">The signature Sunday morning cool-down, stretching circle, and filter coffee.</p>
+                <p className="text-[10px] opacity-65">The signature Sunday morning recovery run, stretching circle, and filter coffee.</p>
               </div>
 
               <div className="p-3 rounded-xl border space-y-1" style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}>

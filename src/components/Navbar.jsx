@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Menu, X, ChevronRight, MapPin, Activity, ShieldCheck } from 'lucide-react';
-import ThemeToggle from './ThemeToggle';
+import { Menu, X, Sun, Moon } from 'lucide-react';
 import JJSLogo from './JJSLogo';
 
-export default function Navbar({ currentTheme, setTheme, onOpenRegister, onScrollTo }) {
+export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenRegister, onScrollTo }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const isDark = currentTheme === 'swiss-dark';
 
   const navItems = [
     { label: 'Programs', id: 'programs' },
@@ -16,8 +17,11 @@ export default function Navbar({ currentTheme, setTheme, onOpenRegister, onScrol
   ];
 
   const handleNavClick = (id) => {
-    onScrollTo(id);
     setMobileMenuOpen(false);
+    // Allow drawer collapse to settle before calculating scroll position
+    setTimeout(() => {
+      onScrollTo(id);
+    }, 120);
   };
 
   return (
@@ -47,10 +51,8 @@ export default function Navbar({ currentTheme, setTheme, onOpenRegister, onScrol
                 >
                   JJs Running
                 </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded font-black tracking-wider uppercase hidden sm:inline-block"
-                  style={{ backgroundColor: 'var(--badge-bg)', color: 'var(--accent)' }}
-                >
-                  JJS
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded font-black tracking-wider hidden sm:inline-block bg-[#d02426]/10 text-[#d02426] border border-[#d02426]/30">
+                  JJs
                 </span>
               </div>
               <span className="text-[9px] sm:text-[10px] tracking-wider uppercase font-semibold hidden sm:block mt-0.5 opacity-70">
@@ -73,26 +75,67 @@ export default function Navbar({ currentTheme, setTheme, onOpenRegister, onScrol
             ))}
           </nav>
 
-          {/* Right Actions: Theme Selector & Register CTA */}
+          {/* Right Action: Theme Switcher & Register CTA */}
           <div className="hidden sm:flex items-center gap-2.5">
-            <ThemeToggle currentTheme={currentTheme} setTheme={setTheme} compact={true} />
-
-            <button
-              onClick={() => onOpenRegister()}
-              className="px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-md hover:scale-105 flex items-center gap-1 whitespace-nowrap"
+            {/* Sleek Light / Dark Segmented Switcher */}
+            <div
+              className="flex items-center p-1 rounded-full border shadow-sm transition-colors flex-shrink-0"
               style={{
-                backgroundColor: 'var(--accent)',
-                color: 'var(--accent-contrast)'
+                backgroundColor: 'var(--card-inner)',
+                borderColor: 'var(--border-color)'
               }}
+              role="radiogroup"
+              aria-label="Theme mode"
             >
-              <span>Join Academy</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </button>
+              <button
+                onClick={() => setTheme && setTheme('swiss-light')}
+                className={`px-3 py-1.5 rounded-full transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap text-xs font-bold select-none ${
+                  !isDark
+                    ? 'bg-[#318cdd] text-white shadow-sm'
+                    : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white'
+                }`}
+                title="Light Mode (Official Logo Match)"
+                aria-checked={!isDark}
+                role="radio"
+              >
+                <Sun className={`w-3.5 h-3.5 flex-shrink-0 transition-transform ${!isDark ? 'text-white' : 'text-slate-500 dark:text-slate-400'}`} />
+                <span>Light</span>
+              </button>
+              <button
+                onClick={() => setTheme && setTheme('swiss-dark')}
+                className={`px-3 py-1.5 rounded-full transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap text-xs font-bold select-none ${
+                  isDark
+                    ? 'bg-[#318cdd] text-white shadow-sm'
+                    : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white'
+                }`}
+                title="Dark Mode (Logo Contrast)"
+                aria-checked={isDark}
+                role="radio"
+              >
+                <Moon className={`w-3.5 h-3.5 flex-shrink-0 transition-transform ${isDark ? 'text-white' : 'text-slate-500 dark:text-slate-400'}`} />
+                <span>Dark</span>
+              </button>
+            </div>
+
+
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="flex items-center gap-2 sm:hidden">
-            <ThemeToggle currentTheme={currentTheme} setTheme={setTheme} compact={true} />
+          {/* Mobile Actions: Contrast Toggle & Trial Button */}
+          <div className="flex items-center gap-1.5 sm:hidden">
+            <button
+              onClick={() => setTheme && setTheme(isDark ? 'swiss-light' : 'swiss-dark')}
+              className="p-2 rounded-xl border flex-shrink-0"
+              style={{
+                backgroundColor: 'var(--card-inner)',
+                borderColor: 'var(--border-color)',
+                color: 'var(--text-primary)'
+              }}
+              aria-label="Toggle logo contrast theme"
+              title={isDark ? 'Switch to Light Mode (Logo Match)' : 'Switch to Dark Mode (Logo Contrast)'}
+            >
+              {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
+            </button>
+
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-xl border flex-shrink-0"

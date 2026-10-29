@@ -16,7 +16,7 @@ export const programsData = [
       'Strength, core & flexibility sessions',
       'Nutrition & hydration 101'
     ],
-    image: '/images/jjs/1197244505.jpg',
+    image: '/images/programs/program-ftr-beginner.jpg',
     targetRace: '5K / 10K Finish line'
   },
   {
@@ -36,7 +36,7 @@ export const programsData = [
       'Race-day tactical pacing plan',
       'Dedicated coach feedback'
     ],
-    image: '/images/jjs/1499340928.jpg',
+    image: '/images/programs/program-elevate-10k.jpg',
     targetRace: 'TCS World 10K / 10K PBs'
   },
   {
@@ -49,14 +49,14 @@ export const programsData = [
     frequency: '4 Days / Week',
     price: '₹6,000',
     tax: '+ 5% GST',
-    description: 'Our celebrated "Reach Your Full Potential" half marathon curriculum. Systematic weekend Long Slow Distance (LSD) progression.',
+    description: 'Our celebrated "Reach Your Full Potential" half marathon curriculum. Systematic weekend Slow Long Run (SLR) progression.',
     highlights: [
       'Progressive mileage buildup up to 18-20 km',
       'Fueling, gel ingestion & hydration pacing',
       'Pace group mentors (Sub-1:45, Sub-2:00, Sub-2:15, Sub-2:30)',
       'Pre-race taper & psychological prep'
     ],
-    image: '/images/jjs/1760985518.png',
+    image: '/images/programs/program-ryf-21k.jpg',
     targetRace: 'Bengaluru / Delhi / Mumbai Half'
   },
   {
@@ -65,18 +65,18 @@ export const programsData = [
     category: 'Marathon',
     badge: 'Elite Track',
     duration: '20-24 Weeks',
-    level: 'Full Marathoners & Boston Qualifiers',
+    level: 'Full Marathoners & Competitive Runners',
     frequency: '5 Days / Week',
     price: '₹6,000',
     tax: '+ 5% GST',
-    description: 'Comprehensive periodization for 42.195 km. Aerobic peak blocks, 30+ km LSD simulations, gut training, and negative split tactics.',
+    description: 'Comprehensive periodization for 42.195 km. Aerobic peak blocks, 30+ km SLR simulations, gut training, and negative split tactics.',
     highlights: [
       '30-34km supported simulation runs with hydration stations',
       'Glycogen depletion and re-fueling drills',
       'Heart rate zone & power meter tracking',
-      'BQ (Boston Qualifier) pacing squads'
+      'Targeted marathon pacing squads'
     ],
-    image: '/images/jjs/1591953102.png',
+    image: '/images/programs/program-ryf-42k.jpg',
     targetRace: 'Tata Mumbai Marathon / World Majors'
   },
   {
@@ -96,12 +96,12 @@ export const programsData = [
       'Mandatory gear management & hydration vest drills',
       'Climb and technical descent footwork'
     ],
-    image: '/images/jjs/2051940036.png',
+    image: '/images/programs/program-ultra-trail.jpg',
     targetRace: 'Malnad Ultra / SRT / Border Ultra'
   },
   {
     id: 'remote-global',
-    title: 'JJS Virtual & Global Remote Academy',
+    title: 'JJs Virtual & Global Remote Academy',
     category: 'Virtual',
     badge: 'Anywhere',
     duration: 'Custom Subscription',
@@ -114,9 +114,9 @@ export const programsData = [
       'Full Onca Run App premium access',
       'Sync with Garmin, Apple Watch, Coros & Suunto',
       'Bi-weekly video call form check',
-      'Digital community forum & weekend virtual LSDs'
+      'Digital community forum & weekend virtual SLRs'
     ],
-    image: '/images/jjs/Slider_3.png',
+    image: '/images/programs/program-remote-global.jpg',
     targetRace: 'Any target race worldwide'
   }
 ];
