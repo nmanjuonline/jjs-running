@@ -1,8 +1,41 @@
-import React from 'react';
-import { ArrowRight, Flame, Shield, MapPin, Play, Activity, Sparkles, ChevronRight, Award, Clock, Compass, Zap, CheckCircle2, Sun } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ArrowRight, Flame, Shield, MapPin, Play, Activity, Sparkles, ChevronRight, ChevronLeft, Award, Clock, Compass, Zap, CheckCircle2, Sun } from 'lucide-react';
+
+const HERO_IMAGES = [
+  {
+    src: '/images/jjs/login_bg1.jpg',
+    alt: 'JJs Running squad start line in morning dawn light'
+  },
+  {
+    src: '/images/jjs/JJS-Slider.png',
+    alt: 'JJs Running community stride across Bangalore'
+  },
+  {
+    src: '/images/jjs/SLIDER-JJS_2.png',
+    alt: 'Coached marathon training pack on road'
+  },
+  {
+    src: '/images/jjs/Slider_3.png',
+    alt: 'JJs marathon finish-line celebrations and team energy'
+  },
+  {
+    src: '/images/jjs/home_2.jpg',
+    alt: 'Morning aerobic base conditioning workout'
+  }
+];
 import JJSLogo from './JJSLogo';
 
 export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOpenCalc }) {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (isPaused) return;
+    const interval = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % HERO_IMAGES.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [isPaused]);
   // =========================================================================
   // THEME 1: SWISS CLEAN / OLYMPIC MINIMAL (Wide Panoramic Banner • JJs Red & Blue)
   // =========================================================================
@@ -20,15 +53,60 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
           <div className={`rounded-3xl border overflow-hidden relative group shadow-[0_20px_50px_-15px_rgba(0,50,150,0.18)] ${
             isDark ? 'border-slate-800 bg-slate-950 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.7)]' : 'border-slate-200/90 bg-white'
           }`}>
-            <div className="relative min-h-[540px] sm:min-h-0 sm:h-[420px] md:h-[480px] w-full overflow-hidden bg-slate-950 p-5 sm:p-0 flex flex-col justify-between sm:block">
-              <img
-                src="/images/jjs/login_bg1.jpg"
-                alt="JJs Running squad stride in morning light"
-                className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-              />
+            <div
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+              className="relative min-h-[540px] sm:min-h-0 sm:h-[420px] md:h-[480px] w-full overflow-hidden bg-slate-950 p-5 sm:p-0 flex flex-col justify-between sm:block"
+            >
+              {/* Automatic Cross-Fade Carousel Slides */}
+              {HERO_IMAGES.map((img, idx) => (
+                <img
+                  key={img.src}
+                  src={img.src}
+                  alt={img.alt}
+                  className={`absolute inset-0 w-full h-full object-cover object-center transition-all duration-1000 ease-in-out ${
+                    activeSlide === idx
+                      ? 'opacity-100 scale-100'
+                      : 'opacity-0 scale-105 pointer-events-none'
+                  }`}
+                />
+              ))}
+
               {/* Cinematic multi-stop gradient overlay for crisp contrast */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-slate-950/20" />
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-950/30 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/25 pointer-events-none z-[1]" />
+              <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/40 to-transparent pointer-events-none z-[1]" />
+
+              {/* Carousel Indicators & Controls */}
+              <div className="absolute z-20 bottom-3 right-4 sm:bottom-4 sm:right-6 flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-2.5 py-1.5 rounded-full border border-white/10">
+                {HERO_IMAGES.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveSlide(idx)}
+                    aria-label={`Slide ${idx + 1}`}
+                    className={`transition-all duration-300 rounded-full cursor-pointer ${
+                      activeSlide === idx
+                        ? 'w-5 h-1.5 bg-[#d02426]'
+                        : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/70'
+                    }`}
+                  />
+                ))}
+              </div>
+
+              {/* Navigation Arrows (Visible on Desktop Hover) */}
+              <button
+                onClick={() => setActiveSlide((prev) => (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length)}
+                aria-label="Previous slide"
+                className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/40 hover:bg-black/70 text-white/80 hover:text-white items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 border border-white/10 cursor-pointer"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setActiveSlide((prev) => (prev + 1) % HERO_IMAGES.length)}
+                aria-label="Next slide"
+                className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/40 hover:bg-black/70 text-white/80 hover:text-white items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 border border-white/10 cursor-pointer"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
 
               {/* Floating Top Pills (Diversified Information) */}
               <div className="relative z-10 flex flex-wrap items-center gap-2 mb-6 sm:mb-0 sm:absolute sm:top-5 sm:left-6 md:top-6 md:left-8">
