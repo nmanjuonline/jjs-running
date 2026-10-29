@@ -61,27 +61,62 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
             <div
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
-              className="relative min-h-[540px] sm:min-h-0 sm:h-[420px] md:h-[480px] w-full overflow-hidden bg-slate-950 p-5 sm:p-0 flex flex-col justify-between sm:block"
+              className={`relative ${
+                activeSlide === 5
+                  ? 'min-h-[660px] sm:min-h-0 sm:h-[420px] md:h-[480px]'
+                  : 'min-h-[540px] sm:min-h-0 sm:h-[420px] md:h-[480px]'
+              } w-full overflow-hidden bg-slate-950 p-4 sm:p-0 flex flex-col justify-between sm:block transition-all duration-300`}
             >
               {/* Automatic Cross-Fade Carousel Slides */}
               {HERO_IMAGES.map((img, idx) => (
-                <img
+                <div
                   key={img.src}
-                  src={img.src}
-                  alt={img.alt}
-                  className={`absolute inset-0 w-full h-full object-cover ${
-                    img.isCoach ? 'object-[78%_center]' : 'object-center'
-                  } transition-all duration-1000 ease-in-out ${
+                  className={`absolute inset-0 w-full h-full transition-all duration-1000 ease-in-out ${
                     activeSlide === idx
-                      ? 'opacity-100 scale-100'
-                      : 'opacity-0 scale-105 pointer-events-none'
+                      ? 'opacity-100 scale-100 z-[1]'
+                      : 'opacity-0 scale-105 pointer-events-none z-0'
                   }`}
-                />
+                >
+                  {img.isCoach ? (
+                    <div className="relative w-full h-full">
+                      {/* Mobile portrait: Coach Pramod occupies top ~270px in clear sunlight with zero text on face */}
+                      <img
+                        src="/images/jjs/coach-pramod-hd.jpg"
+                        alt={img.alt}
+                        className="sm:hidden w-full h-[270px] object-cover object-[center_12%]"
+                      />
+                      {/* Mobile bottom fade into slate-950 canvas where text begins */}
+                      <div className="sm:hidden absolute top-[180px] inset-x-0 h-[90px] bg-gradient-to-b from-transparent to-slate-950 pointer-events-none" />
+
+                      {/* Desktop panoramic banner with Coach anchored on right */}
+                      <img
+                        src={img.src}
+                        alt={img.alt}
+                        className="hidden sm:block w-full h-full object-cover object-[78%_center]"
+                      />
+                    </div>
+                  ) : (
+                    <img
+                      src={img.src}
+                      alt={img.alt}
+                      className="w-full h-full object-cover object-center"
+                    />
+                  )}
+                </div>
               ))}
 
-              {/* Cinematic multi-stop gradient overlay for crisp contrast */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/25 pointer-events-none z-[1]" />
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/40 to-transparent pointer-events-none z-[1]" />
+              {/* Cinematic multi-stop gradient overlay for crisp contrast (Scoped to avoid dimming Coach on mobile) */}
+              {activeSlide !== 5 ? (
+                <>
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/25 pointer-events-none z-[1]" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/40 to-transparent pointer-events-none z-[1]" />
+                </>
+              ) : (
+                <>
+                  <div className="hidden sm:block absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/40 to-transparent pointer-events-none z-[1]" />
+                  <div className="hidden sm:block absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none z-[1]" />
+                </>
+              )}
 
               {/* Carousel Indicators & Controls */}
               <div className="absolute z-20 bottom-3 right-4 sm:bottom-4 sm:right-6 flex items-center gap-1 bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10"
@@ -155,7 +190,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
 
               {/* Integrated Bottom Hero Content Overlay */}
               {activeSlide === 5 ? (
-                <div className="relative z-10 text-white max-w-xl md:max-w-2xl space-y-3 sm:space-y-4 mt-auto sm:mt-0 sm:absolute sm:bottom-0 sm:left-0 sm:p-8 md:p-10 bg-slate-950/80 sm:bg-transparent backdrop-blur-sm sm:backdrop-blur-none rounded-2xl sm:rounded-none p-4">
+                <div className="relative z-10 text-white max-w-xl md:max-w-2xl space-y-3 sm:space-y-4 mt-[200px] sm:mt-0 sm:absolute sm:bottom-0 sm:left-0 sm:p-8 md:p-10 px-2 pb-6">
                   <h1 className="text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight leading-[0.98]">
                     EVERY RUNNER HAS AN
                     <br />
