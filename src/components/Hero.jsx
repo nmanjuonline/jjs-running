@@ -7,11 +7,11 @@ const HERO_IMAGES = [
     alt: 'JJs Running squad start line in morning dawn light'
   },
   {
-    src: '/images/jjs/JJS-Slider.png',
+    src: '/images/jjs/jjs-slider.png',
     alt: 'JJs Running community stride across Bangalore'
   },
   {
-    src: '/images/jjs/SLIDER-JJS_2.png',
+    src: '/images/jjs/slider-jjs_2.png',
     alt: 'Coached marathon training pack on road'
   },
   {

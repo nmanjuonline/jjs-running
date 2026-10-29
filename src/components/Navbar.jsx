@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, X, Sun, Moon, ArrowRight } from 'lucide-react';
-import JJSLogo from './JJSLogo';
+import JJsLogo from './JJsLogo';
 
 export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenRegister, onScrollTo }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -42,13 +42,13 @@ export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenR
           >
             {/* Transparent Logo */}
             <div className="flex items-center transition-transform group-hover:scale-105 flex-shrink-0">
-              <JJSLogo className="h-10 sm:h-12 w-auto" />
+              <JJsLogo className="h-10 sm:h-12 w-auto" />
             </div>
 
             <div>
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <span
-                  className="font-black tracking-tight text-sm sm:text-lg lg:text-xl leading-none uppercase"
+                  className="font-black tracking-tight text-sm sm:text-lg lg:text-xl leading-none"
                   style={{ color: 'var(--text-heading)' }}
                 >
                   JJs Running

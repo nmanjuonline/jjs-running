@@ -367,7 +367,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
 
                 <div className={`p-5 flex flex-col justify-between ${isFeatured ? 'md:w-1/2' : ''}`}>
                   <div>
-                    <h3 className="text-xl font-black uppercase text-white tracking-tight">
+                    <h3 className="text-xl font-black text-white tracking-tight">
                       {program.title}
                     </h3>
                     <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
@@ -457,7 +457,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
               </div>
 
               <div className="p-5">
-                <h3 className="text-xl font-black uppercase text-white tracking-tight">
+                <h3 className="text-xl font-black text-white tracking-tight">
                   {program.title}
                 </h3>
 
