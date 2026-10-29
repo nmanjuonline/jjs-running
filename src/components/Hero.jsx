@@ -61,60 +61,39 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
             <div
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
-              className={`relative ${
-                activeSlide === 5
-                  ? 'min-h-[660px] sm:min-h-0 sm:h-[420px] md:h-[480px]'
-                  : 'min-h-[540px] sm:min-h-0 sm:h-[420px] md:h-[480px]'
-              } w-full overflow-hidden bg-slate-950 p-4 sm:p-0 flex flex-col justify-between sm:block transition-all duration-300`}
+              className="relative min-h-[540px] sm:min-h-0 sm:h-[420px] md:h-[480px] w-full overflow-hidden bg-slate-950 p-4 sm:p-0 flex flex-col justify-between sm:block"
             >
               {/* Automatic Cross-Fade Carousel Slides */}
               {HERO_IMAGES.map((img, idx) => (
-                <div
+                <img
                   key={img.src}
-                  className={`absolute inset-0 w-full h-full transition-all duration-1000 ease-in-out ${
+                  src={img.src}
+                  alt={img.alt}
+                  className={`absolute inset-0 w-full h-full object-cover ${
+                    img.isCoach
+                      ? 'object-[75%_top] sm:object-[78%_center]'
+                      : 'object-center'
+                  } transition-all duration-1000 ease-in-out ${
                     activeSlide === idx
-                      ? 'opacity-100 scale-100 z-[1]'
-                      : 'opacity-0 scale-105 pointer-events-none z-0'
+                      ? 'opacity-100 scale-100'
+                      : 'opacity-0 scale-105 pointer-events-none'
                   }`}
-                >
-                  {img.isCoach ? (
-                    <div className="relative w-full h-full">
-                      {/* Mobile portrait: Coach Pramod occupies top ~270px in clear sunlight with zero text on face */}
-                      <img
-                        src="/images/jjs/coach-pramod-hd.jpg"
-                        alt={img.alt}
-                        className="sm:hidden w-full h-[270px] object-cover object-[center_12%]"
-                      />
-                      {/* Mobile bottom fade into slate-950 canvas where text begins */}
-                      <div className="sm:hidden absolute top-[180px] inset-x-0 h-[90px] bg-gradient-to-b from-transparent to-slate-950 pointer-events-none" />
-
-                      {/* Desktop panoramic banner with Coach anchored on right */}
-                      <img
-                        src={img.src}
-                        alt={img.alt}
-                        className="hidden sm:block w-full h-full object-cover object-[78%_center]"
-                      />
-                    </div>
-                  ) : (
-                    <img
-                      src={img.src}
-                      alt={img.alt}
-                      className="w-full h-full object-cover object-center"
-                    />
-                  )}
-                </div>
+                />
               ))}
 
-              {/* Cinematic multi-stop gradient overlay for crisp contrast (Scoped to avoid dimming Coach on mobile) */}
-              {activeSlide !== 5 ? (
+              {/* Cinematic multi-stop gradient overlay for crisp contrast */}
+              {activeSlide === 5 ? (
                 <>
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/25 pointer-events-none z-[1]" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/40 to-transparent pointer-events-none z-[1]" />
+                  {/* Mobile bottom gradient (leaves top 55% open for Coach's face) */}
+                  <div className="sm:hidden absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/85 via-45% to-transparent pointer-events-none z-[1]" />
+                  {/* Desktop left-to-right gradient */}
+                  <div className="hidden sm:block absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/40 to-transparent pointer-events-none z-[1]" />
+                  <div className="hidden sm:block absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none z-[1]" />
                 </>
               ) : (
                 <>
-                  <div className="hidden sm:block absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/40 to-transparent pointer-events-none z-[1]" />
-                  <div className="hidden sm:block absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none z-[1]" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/25 pointer-events-none z-[1]" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/40 to-transparent pointer-events-none z-[1]" />
                 </>
               )}
 
@@ -190,8 +169,8 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
 
               {/* Integrated Bottom Hero Content Overlay */}
               {activeSlide === 5 ? (
-                <div className="relative z-10 text-white max-w-xl md:max-w-2xl space-y-3 sm:space-y-4 mt-[200px] sm:mt-0 sm:absolute sm:bottom-0 sm:left-0 sm:p-8 md:p-10 px-2 pb-6">
-                  <h1 className="text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight leading-[0.98]">
+                <div className="relative z-10 text-white max-w-xl md:max-w-2xl space-y-2.5 sm:space-y-4 mt-auto sm:mt-0 sm:absolute sm:bottom-0 sm:left-0 sm:p-8 md:p-10 px-1 pb-3">
+                  <h1 className="text-lg sm:text-4xl md:text-5xl font-black uppercase tracking-tight leading-tight sm:leading-[0.98]">
                     EVERY RUNNER HAS AN
                     <br />
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4ca6f5] via-[#318cdd] to-[#ff4d4f]">
@@ -199,7 +178,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                     </span>
                   </h1>
 
-                  <p className="text-xs sm:text-sm md:text-base text-slate-200 leading-relaxed font-medium">
+                  <p className="text-xs sm:text-sm md:text-base text-slate-200 leading-snug sm:leading-relaxed font-medium line-clamp-3 sm:line-clamp-none">
                     "Running is never about competing with others. It is about discovering what you are truly capable of through science, discipline, and community. Start where you are; our coaches will guide every single stride."
                   </p>
 
@@ -210,25 +189,24 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                     </div>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row sm:flex-nowrap items-stretch sm:items-center gap-2.5 sm:gap-3 pt-1">
+                  <div className="flex flex-row items-center gap-2 sm:gap-3 pt-1">
                     <button
                       onClick={onBookTrial}
-                      className="py-3 px-6 sm:px-7 rounded-2xl bg-[#d02426] hover:bg-[#b51c1e] text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(208,36,38,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap flex-shrink-0 cursor-pointer"
+                      className="flex-1 sm:flex-initial py-2.5 sm:py-3 px-4 sm:px-7 rounded-2xl bg-[#d02426] hover:bg-[#b51c1e] text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(208,36,38,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer"
                     >
-                      <span>Book Free Trial Run</span>
-                      <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                      <span>Book Free Trial</span>
+                      <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
                     </button>
 
                     <button
                       onClick={onExploreCenters}
-                      className="py-3 px-5 sm:px-6 rounded-2xl bg-white/95 hover:bg-white text-slate-900 text-xs sm:text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap flex-shrink-0 cursor-pointer"
+                      className="flex-1 sm:flex-initial py-2.5 sm:py-3 px-3.5 sm:px-6 rounded-2xl bg-white/95 hover:bg-white text-slate-900 text-xs sm:text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer"
                     >
-                      <MapPin className="w-4 h-4 text-[#318cdd] stroke-[2.5]" />
-                      <span>Find Your Training Ground</span>
+                      <MapPin className="w-3.5 h-3.5 text-[#318cdd] stroke-[2.5]" />
+                      <span>Find Grounds</span>
                     </button>
                   </div>
-                </div>
-              ) : (
+                </div>) : (
                 <div className="relative z-10 text-white max-w-4xl space-y-3 sm:space-y-4 mt-auto sm:mt-0 sm:absolute sm:bottom-0 sm:inset-x-0 sm:p-8 md:p-10">
                   <h1 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[0.96]">
                     RUN WITH SCIENCE.
