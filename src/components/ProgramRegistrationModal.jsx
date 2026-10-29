@@ -1,15 +1,20 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { useForm, Controller, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import * as Select from '@radix-ui/react-select';
+import * as Popover from '@radix-ui/react-popover';
+import { DayPicker } from 'react-day-picker';
+import { format, parse, isValid } from 'date-fns';
 import {
   X,
   CheckCircle2,
   ShieldCheck,
   Clock,
-  ArrowRight,
   AlertCircle,
   Sparkles,
   ChevronDown,
-  ChevronLeft,
-  ChevronRight,
+  ChevronUp,
   Check,
   Search,
   Calendar as CalendarIcon,
@@ -35,114 +40,83 @@ const PB_EVENTS = [
   'None / First-timer'
 ];
 
-const MONTH_NAMES = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
-];
-
-const DAYS_OF_WEEK = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-
-const CURRENT_CALENDAR_YEAR = new Date().getFullYear();
+const CURRENT_YEAR = new Date().getFullYear();
+const REFERENCE_DATE = new Date(2000, 0, 1);
 
 // =============================================================================
-// 1. Bespoke Theme-Aware Calendar Control (No split dropdowns, no OS popup)
+// ZOD VALIDATION SCHEMA
 // =============================================================================
-function CustomCalendarPicker({ value, onChange, error = '' }) {
-  const [open, setOpen] = useState(false);
-  const containerRef = useRef(null);
+const registrationSchema = z
+  .object({
+    fullName: z
+      .string()
+      .min(1, 'Full Name is required')
+      .min(2, 'Please enter at least 2 characters'),
+    email: z
+      .string()
+      .min(1, 'Email Address is required')
+      .email('Please enter a valid email address'),
+    mobileNo: z
+      .string()
+      .min(1, 'Mobile Number is required')
+      .regex(/^[0-9]{10}$/, 'Must be a 10-digit mobile number'),
+    whatsappNo: z
+      .string()
+      .min(1, 'WhatsApp Number is required')
+      .regex(/^[0-9]{10}$/, 'Must be a 10-digit WhatsApp number'),
+    sameAsMobile: z.boolean().default(true),
+    emergencyName: z
+      .string()
+      .min(1, 'Emergency Contact Name is required')
+      .min(2, 'Please enter a valid contact name'),
+    emergencyNo: z
+      .string()
+      .min(1, 'Emergency Contact Number is required')
+      .regex(/^[0-9]{10}$/, 'Must be a 10-digit emergency number'),
+    gender: z.enum(['Male', 'Female']),
+    tshirtSize: z.enum(['S', 'M', 'L', 'XL', 'XXL']),
+    dob: z
+      .string()
+      .min(1, 'Date of Birth is required')
+      .refine((val) => {
+        const d = new Date(val);
+        if (isNaN(d.getTime())) return false;
+        const age = new Date().getFullYear() - d.getFullYear();
+        return age >= 10 && d <= new Date();
+      }, 'Age must be at least 10 years and cannot be in the future'),
+    bloodGroup: z.string().min(1, 'Please select your Blood Group'),
+    residentialAddress: z
+      .string()
+      .min(1, 'Residential Address is required')
+      .min(5, 'Address must be at least 5 characters'),
+    pinZipCode: z
+      .string()
+      .min(1, 'PIN / Zip Code is required')
+      .regex(/^[0-9]{6}$/, 'Must be a 6-digit PIN code'),
+    locationPreference: z.string().min(1, 'Please select your training location preference'),
+    maxDistance1Year: z.string().min(1, 'Please select your maximum distance'),
+    pbEvent: z.string().min(1, 'Please select personal best event'),
+    pbTiming: z.string().optional(),
+    healthProblem: z.string().optional(),
+    promocode: z.string().optional(),
+    acceptedTerms: z.literal(true, {
+      errorMap: () => ({ message: 'You must accept the terms and conditions waiver' })
+    })
+  })
+  .refine((data) => data.emergencyNo !== data.mobileNo, {
+    message: 'Emergency number cannot be identical to your personal mobile number',
+    path: ['emergencyNo']
+  });
 
-  // Parse current value (YYYY-MM-DD)
-  const parsedDate = useMemo(() => {
-    if (!value) return new Date(1995, 0, 15);
-    const [y, m, d] = value.split('-').map(Number);
-    if (!y || !m || !d) return new Date(1995, 0, 15);
-    return new Date(y, m - 1, d);
-  }, [value]);
-
-  const [viewYear, setViewYear] = useState(parsedDate.getFullYear());
-  const [viewMonth, setViewMonth] = useState(parsedDate.getMonth()); // 0-11
-  const [prevValue, setPrevValue] = useState(value);
-
-  // Synchronize when value changes externally
-  if (value !== prevValue) {
-    setPrevValue(value);
-    if (value) {
-      const [y, m] = value.split('-').map(Number);
-      if (y && m) {
-        setViewYear(y);
-        setViewMonth(m - 1);
-      }
-    }
-  }
-
-  // Click outside to close
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (containerRef.current && !containerRef.current.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  // Calendar calculations
-  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
-  const firstDayOfWeek = new Date(viewYear, viewMonth, 1).getDay(); // 0 is Sunday
-  const prevMonthDays = new Date(viewYear, viewMonth, 0).getDate();
-
-  const handlePrevMonth = (e) => {
-    e.stopPropagation();
-    if (viewMonth === 0) {
-      setViewMonth(11);
-      setViewYear(viewYear - 1);
-    } else {
-      setViewMonth(viewMonth - 1);
-    }
-  };
-
-  const handleNextMonth = (e) => {
-    e.stopPropagation();
-    if (viewMonth === 11) {
-      setViewMonth(0);
-      setViewYear(viewYear + 1);
-    } else {
-      setViewMonth(viewMonth + 1);
-    }
-  };
-
-  const handleSelectDay = (day) => {
-    const mStr = String(viewMonth + 1).padStart(2, '0');
-    const dStr = String(day).padStart(2, '0');
-    onChange(`${viewYear}-${mStr}-${dStr}`);
-    setOpen(false);
-  };
-
-  // Format display string e.g. "15 Jan 1995"
-  const formattedDisplay = useMemo(() => {
-    if (!value) return '';
-    const [y, m, d] = value.split('-').map(Number);
-    if (!y || !m || !d) return '';
-    const shortMonth = MONTH_NAMES[m - 1]?.slice(0, 3) || '';
-    return `${d} ${shortMonth} ${y}`;
-  }, [value]);
-
-  // Range of years for rapid birthday selection (from 1940 to 10 years ago)
-  const availableYears = useMemo(() => {
-    const years = [];
-    for (let yr = CURRENT_CALENDAR_YEAR - 10; yr >= 1940; yr--) {
-      years.push(yr);
-    }
-    return years;
-  }, []);
-
+// =============================================================================
+// 1. Radix UI Select Dropdown (Theme-Aware, Portaled)
+// =============================================================================
+function RadixSelect({ value, onValueChange, options = [], placeholder = 'Select...', error, id }) {
   return (
-    <div ref={containerRef} className="relative w-full">
-      <button
-        type="button"
-        id="reg-dob-btn"
-        onClick={() => setOpen(!open)}
-        className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm font-medium flex items-center justify-between gap-2 transition-all cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
+    <Select.Root value={value || undefined} onValueChange={onValueChange}>
+      <Select.Trigger
+        id={id}
+        className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm font-medium flex items-center justify-between gap-2 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
           error ? 'border-red-500 bg-red-500/5' : ''
         }`}
         style={{
@@ -150,144 +124,125 @@ function CustomCalendarPicker({ value, onChange, error = '' }) {
           borderColor: error ? '#ef4444' : 'var(--border-color)',
           color: value ? 'var(--text-heading)' : 'var(--text-secondary)'
         }}
-        aria-haspopup="dialog"
-        aria-expanded={open}
       >
-        <div className="flex items-center gap-2 truncate">
-          <CalendarIcon className="w-4 h-4 opacity-70 text-[#318cdd] flex-shrink-0" />
-          <span className="truncate">{formattedDisplay || 'DD / MM / YYYY (Click to pick)'}</span>
-        </div>
-        <ChevronDown
-          className={`w-4 h-4 opacity-60 flex-shrink-0 transition-transform duration-200 ${
-            open ? 'rotate-180' : ''
-          }`}
-        />
-      </button>
+        <Select.Value placeholder={placeholder} />
+        <Select.Icon asChild>
+          <ChevronDown className="w-4 h-4 opacity-60 flex-shrink-0" />
+        </Select.Icon>
+      </Select.Trigger>
 
-      {/* Floating Theme-Matched Calendar Popover */}
-      {open && (
-        <div
-          role="dialog"
-          aria-label="Choose date of birth"
-          className="absolute z-50 left-0 right-0 sm:left-auto sm:right-auto sm:w-80 mt-2 p-3.5 rounded-2xl border shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100"
+      <Select.Portal>
+        <Select.Content
+          position="popper"
+          sideOffset={6}
+          className="z-[9999] min-w-[var(--radix-select-trigger-width)] max-h-60 rounded-xl border shadow-2xl p-1.5 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100 overflow-y-auto"
           style={{
             backgroundColor: 'var(--card-bg)',
             borderColor: 'var(--border-color)',
-            boxShadow: '0 20px 45px -10px rgba(0,0,0,0.5)'
+            boxShadow: '0 20px 40px -10px rgba(0,0,0,0.5)',
+            color: 'var(--text-heading)'
           }}
         >
-          {/* Calendar Header with Fast Year / Month Navigation */}
-          <div className="flex items-center justify-between gap-1 mb-3 pb-2.5 border-b" style={{ borderColor: 'var(--border-color)' }}>
-            <button
-              type="button"
-              onClick={handlePrevMonth}
-              aria-label="Previous month"
-              className="p-1.5 rounded-lg border hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
-              style={{ borderColor: 'var(--border-color)', color: 'var(--text-heading)' }}
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
+          <Select.ScrollUpButton className="flex items-center justify-center p-1 cursor-default opacity-60">
+            <ChevronUp className="w-4 h-4" />
+          </Select.ScrollUpButton>
 
-            {/* Quick Month & Year Selectors */}
-            <div className="flex items-center gap-1.5">
-              <select
-                value={viewMonth}
-                onChange={(e) => setViewMonth(Number(e.target.value))}
-                className="text-xs font-bold px-2 py-1 rounded-md border bg-transparent cursor-pointer focus:outline-none"
-                style={{ borderColor: 'var(--border-color)', color: 'var(--text-heading)' }}
+          <Select.Viewport className="p-1">
+            {options.map((opt) => (
+              <Select.Item
+                key={opt}
+                value={opt}
+                className="relative flex items-center justify-between px-3 py-2 text-xs sm:text-sm rounded-lg cursor-pointer outline-none select-none transition-colors hover:bg-slate-500/10 data-[highlighted]:bg-[#318cdd]/15 data-[highlighted]:text-[#318cdd] data-[state=checked]:font-bold data-[state=checked]:text-[#318cdd]"
+                style={{ color: 'var(--text-heading)' }}
               >
-                {MONTH_NAMES.map((m, idx) => (
-                  <option key={m} value={idx} className="bg-slate-900 text-white">
-                    {m}
-                  </option>
-                ))}
-              </select>
-
-              <select
-                value={viewYear}
-                onChange={(e) => setViewYear(Number(e.target.value))}
-                className="text-xs font-bold px-2 py-1 rounded-md border bg-transparent cursor-pointer focus:outline-none"
-                style={{ borderColor: 'var(--border-color)', color: 'var(--text-heading)' }}
-              >
-                {availableYears.map((yr) => (
-                  <option key={yr} value={yr} className="bg-slate-900 text-white">
-                    {yr}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleNextMonth}
-              aria-label="Next month"
-              className="p-1.5 rounded-lg border hover:bg-black/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
-              style={{ borderColor: 'var(--border-color)', color: 'var(--text-heading)' }}
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-
-          {/* Days of Week Row */}
-          <div className="grid grid-cols-7 gap-1 text-center mb-1">
-            {DAYS_OF_WEEK.map((d) => (
-              <span
-                key={d}
-                className="text-[11px] font-bold uppercase tracking-wider opacity-60"
-                style={{ color: 'var(--text-secondary)' }}
-              >
-                {d}
-              </span>
+                <Select.ItemText>{opt}</Select.ItemText>
+                <Select.ItemIndicator>
+                  <Check className="w-4 h-4 text-[#318cdd]" />
+                </Select.ItemIndicator>
+              </Select.Item>
             ))}
+          </Select.Viewport>
+
+          <Select.ScrollDownButton className="flex items-center justify-center p-1 cursor-default opacity-60">
+            <ChevronDown className="w-4 h-4" />
+          </Select.ScrollDownButton>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
+  );
+}
+
+// =============================================================================
+// 2. Radix Popover + React Day Picker Calendar Control
+// =============================================================================
+function RadixCalendarPicker({ value, onChange, error }) {
+  const [open, setOpen] = useState(false);
+
+  // Parse YYYY-MM-DD
+  const selectedDate = useMemo(() => {
+    if (!value) return undefined;
+    const parsed = parse(value, 'yyyy-MM-dd', REFERENCE_DATE);
+    return isValid(parsed) ? parsed : undefined;
+  }, [value]);
+
+  const displayDate = selectedDate
+    ? format(selectedDate, 'dd MMM yyyy')
+    : 'Select Date of Birth...';
+
+  return (
+    <Popover.Root open={open} onOpenChange={setOpen}>
+      <Popover.Trigger asChild>
+        <button
+          type="button"
+          id="reg-dob-btn"
+          className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm font-medium flex items-center justify-between gap-2 transition-all cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
+            error ? 'border-red-500 bg-red-500/5' : ''
+          }`}
+          style={{
+            backgroundColor: 'var(--card-inner)',
+            borderColor: error ? '#ef4444' : 'var(--border-color)',
+            color: selectedDate ? 'var(--text-heading)' : 'var(--text-secondary)'
+          }}
+        >
+          <div className="flex items-center gap-2 truncate">
+            <CalendarIcon className="w-4 h-4 opacity-70 text-[#318cdd] flex-shrink-0" />
+            <span className="truncate">{displayDate}</span>
           </div>
+          <ChevronDown className="w-4 h-4 opacity-60 flex-shrink-0" />
+        </button>
+      </Popover.Trigger>
 
-          {/* Day Grid */}
-          <div className="grid grid-cols-7 gap-1 text-center">
-            {/* Previous month filler days */}
-            {Array.from({ length: firstDayOfWeek }).map((_, i) => {
-              const dayNum = prevMonthDays - firstDayOfWeek + i + 1;
-              return (
-                <div
-                  key={`prev-${i}`}
-                  className="py-1.5 text-xs opacity-25 cursor-default select-none"
-                  style={{ color: 'var(--text-secondary)' }}
-                >
-                  {dayNum}
-                </div>
-              );
-            })}
+      <Popover.Portal>
+        <Popover.Content
+          sideOffset={6}
+          align="start"
+          className="z-[9999] rounded-2xl border shadow-2xl p-3 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100"
+          style={{
+            backgroundColor: 'var(--card-bg)',
+            borderColor: 'var(--border-color)',
+            boxShadow: '0 20px 40px -10px rgba(0,0,0,0.5)',
+            color: 'var(--text-heading)'
+          }}
+        >
+          <DayPicker
+            mode="single"
+            selected={selectedDate}
+            onSelect={(date) => {
+              if (date) {
+                onChange(format(date, 'yyyy-MM-dd'));
+                setOpen(false);
+              }
+            }}
+            captionLayout="dropdown"
+            startMonth={new Date(1940, 0)}
+            endMonth={new Date(CURRENT_YEAR - 10, 11)}
+            defaultMonth={selectedDate || new Date(1995, 0)}
+          />
 
-            {/* Current month days */}
-            {Array.from({ length: daysInMonth }).map((_, i) => {
-              const dayNum = i + 1;
-              const isSelected =
-                parsedDate &&
-                parsedDate.getFullYear() === viewYear &&
-                parsedDate.getMonth() === viewMonth &&
-                parsedDate.getDate() === dayNum;
-
-              return (
-                <button
-                  type="button"
-                  key={dayNum}
-                  onClick={() => handleSelectDay(dayNum)}
-                  className={`py-1.5 text-xs rounded-lg font-medium transition-all cursor-pointer ${
-                    isSelected
-                      ? 'bg-[#d02426] text-white font-bold shadow-md shadow-red-500/30 scale-105'
-                      : 'hover:bg-black/5 dark:hover:bg-white/10'
-                  }`}
-                  style={{
-                    color: isSelected ? '#ffffff' : 'var(--text-heading)'
-                  }}
-                >
-                  {dayNum}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Footer with Clear & Today shortcuts */}
-          <div className="flex items-center justify-between pt-2.5 mt-2 border-t text-[11px]" style={{ borderColor: 'var(--border-color)' }}>
+          <div
+            className="flex items-center justify-between pt-2.5 mt-2 border-t text-[11px]"
+            style={{ borderColor: 'var(--border-color)' }}
+          >
             <button
               type="button"
               onClick={() => {
@@ -301,12 +256,8 @@ function CustomCalendarPicker({ value, onChange, error = '' }) {
             <button
               type="button"
               onClick={() => {
-                const now = new Date();
-                const defaultAdultYear = now.getFullYear() - 25; // Sensible default 25-yr-old
-                setViewYear(defaultAdultYear);
-                setViewMonth(0);
-                const dStr = `15`;
-                onChange(`${defaultAdultYear}-01-${dStr}`);
+                const defaultAdultYear = CURRENT_YEAR - 25;
+                onChange(`${defaultAdultYear}-01-15`);
                 setOpen(false);
               }}
               className="text-[#318cdd] font-semibold hover:underline cursor-pointer"
@@ -314,268 +265,16 @@ function CustomCalendarPicker({ value, onChange, error = '' }) {
               Default (25yo)
             </button>
           </div>
-        </div>
-      )}
-    </div>
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover.Root>
   );
 }
 
 // =============================================================================
-// 2. Dedicated Race Timing Control (HH : MM : SS)
-// Blocks alphabetic gibberish like "01:3asdfasdf9:44" entirely!
+// 3. Themed Location Dropdown with Grouping & Live Search
 // =============================================================================
-function RaceTimingInput({ value, onChange, disabled = false, error = '' }) {
-  // Parse incoming value "HH:MM:SS"
-  const [hours, minutes, seconds] = useMemo(() => {
-    if (!value) return ['01', '39', '44'];
-    const parts = value.split(':');
-    return [
-      parts[0] !== undefined ? parts[0] : '01',
-      parts[1] !== undefined ? parts[1] : '39',
-      parts[2] !== undefined ? parts[2] : '44'
-    ];
-  }, [value]);
-
-  const hRef = useRef(null);
-  const mRef = useRef(null);
-  const sRef = useRef(null);
-
-  const updateTiming = (h, m, s) => {
-    const formatted = `${h.padStart(2, '0')}:${m.padStart(2, '0')}:${s.padStart(2, '0')}`;
-    onChange(formatted);
-  };
-
-  const handleHourChange = (e) => {
-    const clean = e.target.value.replace(/[^0-9]/g, '').slice(-2);
-    const num = Math.min(99, Number(clean) || 0);
-    const val = clean === '' ? '' : String(num).padStart(clean.length, '0');
-    updateTiming(val || '00', minutes, seconds);
-    if (clean.length === 2 && mRef.current) {
-      mRef.current.focus();
-      mRef.current.select();
-    }
-  };
-
-  const handleMinuteChange = (e) => {
-    const clean = e.target.value.replace(/[^0-9]/g, '').slice(-2);
-    const num = Math.min(59, Number(clean) || 0);
-    const val = clean === '' ? '' : String(num).padStart(clean.length, '0');
-    updateTiming(hours, val || '00', seconds);
-    if (clean.length === 2 && sRef.current) {
-      sRef.current.focus();
-      sRef.current.select();
-    }
-  };
-
-  const handleSecondChange = (e) => {
-    const clean = e.target.value.replace(/[^0-9]/g, '').slice(-2);
-    const num = Math.min(59, Number(clean) || 0);
-    const val = clean === '' ? '' : String(num).padStart(clean.length, '0');
-    updateTiming(hours, minutes, val || '00');
-  };
-
-  const handleKeyDown = (e, currentUnit) => {
-    // Navigate backwards on Backspace when empty
-    if (e.key === 'Backspace' && e.target.value === '') {
-      if (currentUnit === 'seconds' && mRef.current) {
-        mRef.current.focus();
-      } else if (currentUnit === 'minutes' && hRef.current) {
-        hRef.current.focus();
-      }
-    }
-  };
-
-  if (disabled) {
-    return (
-      <div
-        className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm font-mono opacity-50 flex items-center justify-between"
-        style={{
-          backgroundColor: 'var(--card-inner)',
-          borderColor: 'var(--border-color)',
-          color: 'var(--text-secondary)'
-        }}
-      >
-        <span>First-Timer / No Prior Timing Required</span>
-        <Clock className="w-4 h-4 opacity-50" />
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className={`w-full px-3 py-1.5 sm:py-2 rounded-xl border flex items-center justify-between transition-all focus-within:ring-2 focus-within:ring-[#318cdd]/40 ${
-        error ? 'border-red-500 bg-red-500/5' : ''
-      }`}
-      style={{
-        backgroundColor: 'var(--card-inner)',
-        borderColor: error ? '#ef4444' : 'var(--border-color)'
-      }}
-    >
-      <div className="flex items-center gap-1.5 font-mono text-xs sm:text-sm">
-        {/* Hours Box */}
-        <div className="flex flex-col items-center">
-          <input
-            ref={hRef}
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            maxLength={2}
-            value={hours}
-            onChange={handleHourChange}
-            onKeyDown={(e) => handleKeyDown(e, 'hours')}
-            aria-label="Hours"
-            placeholder="01"
-            className="w-8 text-center bg-transparent font-bold focus:outline-none focus:bg-white/10 rounded"
-            style={{ color: 'var(--text-heading)' }}
-          />
-          <span className="text-[9px] uppercase tracking-wider opacity-60" style={{ color: 'var(--text-secondary)' }}>hrs</span>
-        </div>
-
-        <span className="font-bold opacity-40 -mt-3">:</span>
-
-        {/* Minutes Box */}
-        <div className="flex flex-col items-center">
-          <input
-            ref={mRef}
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            maxLength={2}
-            value={minutes}
-            onChange={handleMinuteChange}
-            onKeyDown={(e) => handleKeyDown(e, 'minutes')}
-            aria-label="Minutes"
-            placeholder="39"
-            className="w-8 text-center bg-transparent font-bold focus:outline-none focus:bg-white/10 rounded"
-            style={{ color: 'var(--text-heading)' }}
-          />
-          <span className="text-[9px] uppercase tracking-wider opacity-60" style={{ color: 'var(--text-secondary)' }}>min</span>
-        </div>
-
-        <span className="font-bold opacity-40 -mt-3">:</span>
-
-        {/* Seconds Box */}
-        <div className="flex flex-col items-center">
-          <input
-            ref={sRef}
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            maxLength={2}
-            value={seconds}
-            onChange={handleSecondChange}
-            onKeyDown={(e) => handleKeyDown(e, 'seconds')}
-            aria-label="Seconds"
-            placeholder="44"
-            className="w-8 text-center bg-transparent font-bold focus:outline-none focus:bg-white/10 rounded"
-            style={{ color: 'var(--text-heading)' }}
-          />
-          <span className="text-[9px] uppercase tracking-wider opacity-60" style={{ color: 'var(--text-secondary)' }}>sec</span>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-1.5 opacity-60" style={{ color: 'var(--text-secondary)' }}>
-        <Clock className="w-4 h-4" />
-      </div>
-    </div>
-  );
-}
-
-// =============================================================================
-// 3. Custom Dropdown for Blood Group & Events
-// =============================================================================
-function CustomDropdown({
-  value,
-  onChange,
-  options = [],
-  placeholder = 'Select...',
-  error = false,
-  id = ''
-}) {
-  const [open, setOpen] = useState(false);
-  const containerRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (containerRef.current && !containerRef.current.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const displayLabel = value || placeholder;
-
-  return (
-    <div ref={containerRef} className="relative w-full">
-      <button
-        type="button"
-        id={id}
-        onClick={() => setOpen(!open)}
-        className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm font-medium flex items-center justify-between gap-2 transition-all cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-          error ? 'border-red-500 bg-red-500/5' : ''
-        }`}
-        style={{
-          backgroundColor: 'var(--card-inner)',
-          borderColor: error ? '#ef4444' : 'var(--border-color)',
-          color: value ? 'var(--text-heading)' : 'var(--text-secondary)'
-        }}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-      >
-        <span className="truncate">{displayLabel}</span>
-        <ChevronDown
-          className={`w-4 h-4 opacity-60 flex-shrink-0 transition-transform duration-200 ${
-            open ? 'rotate-180' : ''
-          }`}
-        />
-      </button>
-
-      {open && (
-        <div
-          role="listbox"
-          className="absolute z-50 left-0 right-0 mt-1.5 rounded-xl border shadow-2xl py-1.5 max-h-60 overflow-y-auto backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100"
-          style={{
-            backgroundColor: 'var(--card-bg)',
-            borderColor: 'var(--border-color)',
-            boxShadow: '0 20px 40px -10px rgba(0,0,0,0.45)'
-          }}
-        >
-          {options.map((opt) => {
-            const isSelected = opt === value;
-            return (
-              <button
-                type="button"
-                key={opt}
-                role="option"
-                aria-selected={isSelected}
-                onClick={() => {
-                  onChange(opt);
-                  setOpen(false);
-                }}
-                className={`w-full text-left px-3.5 py-2 text-xs sm:text-sm flex items-center justify-between gap-2 transition-colors cursor-pointer ${
-                  isSelected ? 'bg-[#318cdd]/15 text-[#318cdd] font-bold' : 'hover:bg-slate-500/10'
-                }`}
-                style={{
-                  color: isSelected ? 'var(--accent)' : 'var(--text-heading)'
-                }}
-              >
-                <span className="truncate">{opt}</span>
-                {isSelected && <Check className="w-4 h-4 flex-shrink-0 text-[#318cdd]" />}
-              </button>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// =============================================================================
-// 4. Location Dropdown Grouped by City from centersData with Search
-// =============================================================================
-function LocationDropdown({ value, onChange, error = false }) {
+function RadixLocationSelect({ value, onChange, error }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const containerRef = useRef(null);
@@ -650,85 +349,101 @@ function LocationDropdown({ value, onChange, error = false }) {
       {open && (
         <div
           role="listbox"
-          className="absolute z-50 left-0 right-0 mt-1.5 rounded-2xl border shadow-2xl py-2 max-h-72 overflow-y-auto backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100"
+          className="absolute z-50 left-0 right-0 mt-1.5 rounded-xl border shadow-2xl overflow-hidden backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100"
           style={{
             backgroundColor: 'var(--card-bg)',
             borderColor: 'var(--border-color)',
             boxShadow: '0 20px 40px -10px rgba(0,0,0,0.5)'
           }}
         >
-          <div className="px-3 pb-2 pt-1 border-b" style={{ borderColor: 'var(--border-color)' }}>
-            <div className="relative">
-              <input
-                type="text"
-                autoFocus
-                placeholder="Search center, ground, or city..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border focus:outline-none focus:ring-1 focus:ring-[#318cdd]"
-                style={{
-                  backgroundColor: 'var(--card-inner)',
-                  borderColor: 'var(--border-color)',
-                  color: 'var(--text-heading)'
-                }}
-              />
-              <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 opacity-50" />
-            </div>
+          {/* Search Header */}
+          <div
+            className="p-2 border-b flex items-center gap-2"
+            style={{
+              backgroundColor: 'var(--card-inner)',
+              borderColor: 'var(--border-color)'
+            }}
+          >
+            <Search className="w-4 h-4 opacity-50 flex-shrink-0" style={{ color: 'var(--text-secondary)' }} />
+            <input
+              type="text"
+              autoFocus
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by center, venue or city..."
+              className="w-full text-xs bg-transparent focus:outline-none"
+              style={{ color: 'var(--text-heading)' }}
+            />
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch('')}
+                className="text-[10px] opacity-60 hover:opacity-100 px-1 cursor-pointer"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                Clear
+              </button>
+            )}
           </div>
 
-          {Object.keys(groupedCenters).length === 0 ? (
-            <div className="px-4 py-3 text-xs text-center opacity-60" style={{ color: 'var(--text-secondary)' }}>
-              No grounds matched "{search}"
-            </div>
-          ) : (
-            Object.entries(groupedCenters).map(([city, centers]) => (
-              <div key={city} className="pt-2">
-                <div
-                  className="px-3.5 py-1 text-[10px] font-mono font-bold uppercase tracking-wider opacity-60"
-                  style={{ color: 'var(--text-secondary)' }}
-                >
-                  {city} ({centers.length} Grounds)
-                </div>
-                {centers.map((center) => {
-                  const isSelected =
-                    value === center.name ||
-                    value === `${center.city} - ${center.name}` ||
-                    value === center.id;
-
-                  return (
-                    <button
-                      type="button"
-                      key={center.id}
-                      onClick={() => {
-                        onChange(center.name);
-                        setOpen(false);
-                        setSearch('');
-                      }}
-                      className={`w-full text-left px-3.5 py-2 text-xs sm:text-sm flex items-start justify-between gap-2 transition-colors cursor-pointer ${
-                        isSelected ? 'bg-[#318cdd]/15 text-[#318cdd] font-bold' : 'hover:bg-slate-500/10'
-                      }`}
-                      style={{
-                        color: isSelected ? 'var(--accent)' : 'var(--text-heading)'
-                      }}
-                    >
-                      <div className="truncate">
-                        <div className="font-semibold truncate">{center.name}</div>
-                        {center.venue && (
-                          <div
-                            className="text-[11px] truncate opacity-70 font-normal"
-                            style={{ color: 'var(--text-secondary)' }}
-                          >
-                            {center.venue}
-                          </div>
-                        )}
-                      </div>
-                      {isSelected && <Check className="w-4 h-4 flex-shrink-0 text-[#318cdd] mt-0.5" />}
-                    </button>
-                  );
-                })}
+          {/* Grouped Centers List */}
+          <div className="max-h-56 overflow-y-auto py-1">
+            {Object.keys(groupedCenters).length === 0 ? (
+              <div className="py-6 text-center text-xs opacity-60" style={{ color: 'var(--text-secondary)' }}>
+                No training centers match "{search}"
               </div>
-            ))
-          )}
+            ) : (
+              Object.entries(groupedCenters).map(([city, centers]) => (
+                <div key={city}>
+                  <div
+                    className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider opacity-60 sticky top-0 backdrop-blur-md"
+                    style={{
+                      backgroundColor: 'var(--card-bg)',
+                      color: 'var(--text-secondary)'
+                    }}
+                  >
+                    {city} ({centers.length})
+                  </div>
+                  {centers.map((c) => {
+                    const isSelected =
+                      value === c.name || value === c.id || value === `${c.city} - ${c.name}`;
+                    return (
+                      <button
+                        type="button"
+                        key={c.id}
+                        role="option"
+                        aria-selected={isSelected}
+                        onClick={() => {
+                          onChange(c.name);
+                          setOpen(false);
+                          setSearch('');
+                        }}
+                        className={`w-full text-left px-3.5 py-2 text-xs sm:text-sm flex items-center justify-between gap-2 transition-colors cursor-pointer ${
+                          isSelected ? 'bg-[#318cdd]/15 text-[#318cdd] font-bold' : 'hover:bg-slate-500/10'
+                        }`}
+                        style={{
+                          color: isSelected ? 'var(--accent)' : 'var(--text-heading)'
+                        }}
+                      >
+                        <div className="truncate">
+                          <span className="font-semibold">{c.name}</span>
+                          {c.venue && (
+                            <span
+                              className="text-[11px] opacity-60 ml-1.5 truncate hidden sm:inline"
+                              style={{ color: 'var(--text-secondary)' }}
+                            >
+                              • {c.venue}
+                            </span>
+                          )}
+                        </div>
+                        {isSelected && <Check className="w-4 h-4 flex-shrink-0 text-[#318cdd]" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              ))
+            )}
+          </div>
         </div>
       )}
     </div>
@@ -736,38 +451,175 @@ function LocationDropdown({ value, onChange, error = false }) {
 }
 
 // =============================================================================
-// Main Official Program Registration Modal with Full Control Validations
+// 4. Dedicated Masked Race Timing Control (HH : MM : SS)
+// =============================================================================
+function RaceTimingInput({ value, onChange, disabled = false, error = '' }) {
+  const [hours, minutes, seconds] = useMemo(() => {
+    if (!value) return ['01', '39', '44'];
+    const parts = value.split(':');
+    return [
+      parts[0] !== undefined ? parts[0] : '01',
+      parts[1] !== undefined ? parts[1] : '39',
+      parts[2] !== undefined ? parts[2] : '44'
+    ];
+  }, [value]);
+
+  const hRef = useRef(null);
+  const mRef = useRef(null);
+  const sRef = useRef(null);
+
+  const updateTiming = (h, m, s) => {
+    const formatted = `${h.padStart(2, '0')}:${m.padStart(2, '0')}:${s.padStart(2, '0')}`;
+    onChange(formatted);
+  };
+
+  const handleHourChange = (e) => {
+    const clean = e.target.value.replace(/[^0-9]/g, '').slice(-2);
+    const num = Math.min(99, Number(clean) || 0);
+    const val = clean === '' ? '' : String(num).padStart(clean.length, '0');
+    updateTiming(val || '00', minutes, seconds);
+    if (clean.length === 2 && mRef.current) {
+      mRef.current.focus();
+      mRef.current.select();
+    }
+  };
+
+  const handleMinuteChange = (e) => {
+    const clean = e.target.value.replace(/[^0-9]/g, '').slice(-2);
+    const num = Math.min(59, Number(clean) || 0);
+    const val = clean === '' ? '' : String(num).padStart(clean.length, '0');
+    updateTiming(hours, val || '00', seconds);
+    if (clean.length === 2 && sRef.current) {
+      sRef.current.focus();
+      sRef.current.select();
+    }
+  };
+
+  const handleSecondChange = (e) => {
+    const clean = e.target.value.replace(/[^0-9]/g, '').slice(-2);
+    const num = Math.min(59, Number(clean) || 0);
+    const val = clean === '' ? '' : String(num).padStart(clean.length, '0');
+    updateTiming(hours, minutes, val || '00');
+  };
+
+  const handleKeyDown = (e, currentUnit) => {
+    if (e.key === 'Backspace' && e.target.value === '') {
+      if (currentUnit === 'seconds' && mRef.current) {
+        mRef.current.focus();
+      } else if (currentUnit === 'minutes' && hRef.current) {
+        hRef.current.focus();
+      }
+    }
+  };
+
+  if (disabled) {
+    return (
+      <div
+        className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm font-mono opacity-50 flex items-center justify-between"
+        style={{
+          backgroundColor: 'var(--card-inner)',
+          borderColor: 'var(--border-color)',
+          color: 'var(--text-secondary)'
+        }}
+      >
+        <span>First-Timer / No Prior Timing Required</span>
+        <Clock className="w-4 h-4 opacity-50" />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`w-full px-3 py-1.5 sm:py-2 rounded-xl border flex items-center justify-between transition-all focus-within:ring-2 focus-within:ring-[#318cdd]/40 ${
+        error ? 'border-red-500 bg-red-500/5' : ''
+      }`}
+      style={{
+        backgroundColor: 'var(--card-inner)',
+        borderColor: error ? '#ef4444' : 'var(--border-color)'
+      }}
+    >
+      <div className="flex items-center gap-1.5 font-mono text-xs sm:text-sm">
+        <div className="flex flex-col items-center">
+          <input
+            ref={hRef}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            maxLength={2}
+            value={hours}
+            onChange={handleHourChange}
+            onKeyDown={(e) => handleKeyDown(e, 'hours')}
+            aria-label="Hours"
+            placeholder="01"
+            className="w-8 text-center bg-transparent font-bold focus:outline-none focus:bg-white/10 rounded"
+            style={{ color: 'var(--text-heading)' }}
+          />
+          <span className="text-[9px] uppercase tracking-wider opacity-60" style={{ color: 'var(--text-secondary)' }}>
+            hrs
+          </span>
+        </div>
+
+        <span className="font-bold opacity-40 -mt-3">:</span>
+
+        <div className="flex flex-col items-center">
+          <input
+            ref={mRef}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            maxLength={2}
+            value={minutes}
+            onChange={handleMinuteChange}
+            onKeyDown={(e) => handleKeyDown(e, 'minutes')}
+            aria-label="Minutes"
+            placeholder="39"
+            className="w-8 text-center bg-transparent font-bold focus:outline-none focus:bg-white/10 rounded"
+            style={{ color: 'var(--text-heading)' }}
+          />
+          <span className="text-[9px] uppercase tracking-wider opacity-60" style={{ color: 'var(--text-secondary)' }}>
+            min
+          </span>
+        </div>
+
+        <span className="font-bold opacity-40 -mt-3">:</span>
+
+        <div className="flex flex-col items-center">
+          <input
+            ref={sRef}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            maxLength={2}
+            value={seconds}
+            onChange={handleSecondChange}
+            onKeyDown={(e) => handleKeyDown(e, 'seconds')}
+            aria-label="Seconds"
+            placeholder="44"
+            className="w-8 text-center bg-transparent font-bold focus:outline-none focus:bg-white/10 rounded"
+            style={{ color: 'var(--text-heading)' }}
+          />
+          <span className="text-[9px] uppercase tracking-wider opacity-60" style={{ color: 'var(--text-secondary)' }}>
+            sec
+          </span>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-1.5 opacity-60" style={{ color: 'var(--text-secondary)' }}>
+        <Clock className="w-4 h-4" />
+      </div>
+    </div>
+  );
+}
+
+// =============================================================================
+// MAIN COMPONENT: ProgramRegistrationModal
 // =============================================================================
 export default function ProgramRegistrationModal({
   isOpen,
   onClose,
   selectedProgram = null,
-  onSwitchToTrial
+  onSwitchToTrial = null
 }) {
-  const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    mobileNo: '',
-    whatsappNo: '',
-    sameAsMobile: true,
-    emergencyName: '',
-    emergencyNo: '',
-    gender: 'Male',
-    tshirtSize: 'M',
-    dob: '1995-01-15',
-    bloodGroup: 'B+',
-    residentialAddress: '',
-    pinZipCode: '',
-    locationPreference: 'Malleshwaram',
-    maxDistance1Year: 'HM',
-    pbEvent: 'Half Marathon (21.1K)',
-    pbTiming: '01:39:44',
-    healthProblem: '',
-    promocode: '',
-    acceptedTerms: false,
-    selectedProgramId: ''
-  });
-
   const resolveProgram = (prog) => {
     if (!prog) return programsData[2];
     if (typeof prog === 'string') {
@@ -789,77 +641,77 @@ export default function ProgramRegistrationModal({
     setPrevSelectedProgram(selectedProgram);
     const resolved = resolveProgram(selectedProgram);
     setActiveProgram(resolved);
-    setFormData((prev) => ({
-      ...prev,
-      selectedProgramId: resolved?.id || resolved?.title || ''
-    }));
   }
 
-  const [promoApplied, setPromoApplied] = useState(false);
+  // React Hook Form with Zod Resolver
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    reset,
+    formState: { errors }
+  } = useForm({
+    resolver: zodResolver(registrationSchema),
+    defaultValues: {
+      fullName: '',
+      email: '',
+      mobileNo: '',
+      whatsappNo: '',
+      sameAsMobile: true,
+      emergencyName: '',
+      emergencyNo: '',
+      gender: 'Male',
+      tshirtSize: 'M',
+      dob: '1995-01-15',
+      bloodGroup: 'B+',
+      residentialAddress: '',
+      pinZipCode: '',
+      locationPreference: 'Malleshwaram',
+      maxDistance1Year: 'HM',
+      pbEvent: 'Half Marathon (21.1K)',
+      pbTiming: '01:39:44',
+      healthProblem: '',
+      promocode: '',
+      acceptedTerms: false
+    },
+    mode: 'onTouched'
+  });
+
+  const watchSameAsMobile = useWatch({ control, name: 'sameAsMobile' });
+  const watchMobileNo = useWatch({ control, name: 'mobileNo' });
+  const watchPbEvent = useWatch({ control, name: 'pbEvent' });
+  const watchPromocode = useWatch({ control, name: 'promocode' });
+
+  // Sync WhatsApp when "Same as Mobile" is true
+  useEffect(() => {
+    if (watchSameAsMobile && watchMobileNo) {
+      setValue('whatsappNo', watchMobileNo, { shouldValidate: true });
+    }
+  }, [watchMobileNo, watchSameAsMobile, setValue]);
+
+  // Pricing & Promocode State
   const [promoDiscount, setPromoDiscount] = useState(0);
   const [promoMessage, setPromoMessage] = useState('');
   const [promoError, setPromoError] = useState('');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [registrationId, setRegistrationId] = useState('');
-  const [errors, setErrors] = useState({});
-  const [touched, setTouched] = useState({});
 
   const dialogRef = useRef(null);
-  const firstInputRef = useRef(null);
 
-  const handleClose = useCallback(() => {
-    setSubmitted(false);
-    setPromoApplied(false);
-    setPromoDiscount(0);
-    setPromoMessage('');
-    setPromoError('');
-    setErrors({});
-    setTouched({});
-    onClose();
-  }, [onClose]);
+  const baseFee = useMemo(() => {
+    if (!activeProgram?.price) return 6300;
+    const numeric = parseInt(activeProgram.price.replace(/[^0-9]/g, ''), 10);
+    return isNaN(numeric) ? 6300 : numeric;
+  }, [activeProgram]);
 
-  // Focus lock & Escape key
-  useEffect(() => {
-    if (!isOpen) return;
+  const finalFee = Math.max(0, baseFee - promoDiscount);
 
-    const timer = setTimeout(() => {
-      if (firstInputRef.current) {
-        firstInputRef.current.focus();
-      }
-    }, 60);
-
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        handleClose();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isOpen, handleClose]);
-
-  // Pricing calculations
-  const parseBasePrice = (priceStr) => {
-    if (!priceStr) return 6000;
-    const num = parseInt(priceStr.replace(/[^0-9]/g, ''), 10);
-    return isNaN(num) ? 6000 : num;
-  };
-
-  const baseFee = activeProgram ? parseBasePrice(activeProgram.price) : 6000;
-  const discountAmount = promoApplied ? promoDiscount : 0;
-  const taxableAmount = Math.max(0, baseFee - discountAmount);
-  const gstAmount = Math.round(taxableAmount * 0.05);
-  const totalAmount = taxableAmount + gstAmount;
-
-  // Promocode Handler
-  const handleApplyPromo = (e) => {
-    e.preventDefault();
+  const handleApplyPromo = () => {
     setPromoError('');
     setPromoMessage('');
-    const code = (formData.promocode || '').trim().toUpperCase();
+    const code = (watchPromocode || '').trim().toUpperCase();
 
     if (!code) {
       setPromoError('Please enter a promocode before applying.');
@@ -869,194 +721,50 @@ export default function ProgramRegistrationModal({
     if (code === 'JAGUAR10' || code === 'JJS10') {
       const discount = Math.round(baseFee * 0.1);
       setPromoDiscount(discount);
-      setPromoApplied(true);
       setPromoMessage('10% Jaguar Athlete Discount Applied!');
     } else if (code === 'EARLYBIRD') {
       setPromoDiscount(500);
-      setPromoApplied(true);
       setPromoMessage('₹500 Early Bird Discount Applied!');
     } else if (code === 'JJACTIVE') {
       const discount = Math.round(baseFee * 0.15);
       setPromoDiscount(discount);
-      setPromoApplied(true);
       setPromoMessage('15% Club Partner Discount Applied!');
     } else {
       setPromoError(`Code "${code}" is invalid or expired. You can still proceed directly.`);
-      setPromoApplied(false);
       setPromoDiscount(0);
     }
   };
 
-  // ===========================================================================
-  // Comprehensive Control Validation Rules
-  // ===========================================================================
-  const validateField = (field, value, allData = formData) => {
-    switch (field) {
-      case 'fullName':
-        if (!value || !value.trim()) return 'Full Name is required';
-        if (value.trim().length < 2) return 'Please enter at least 2 characters';
-        return '';
+  const handleClose = useCallback(() => {
+    setSubmitted(false);
+    setPromoDiscount(0);
+    setPromoMessage('');
+    setPromoError('');
+    reset();
+    onClose();
+  }, [onClose, reset]);
 
-      case 'email':
-        if (!value || !value.trim()) return 'Email Address is required';
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) return 'Please enter a valid email address';
-        return '';
+  // Escape key listener
+  useEffect(() => {
+    if (!isOpen) return;
 
-      case 'mobileNo': {
-        const clean = (value || '').replace(/[^0-9]/g, '');
-        if (!clean) return 'Mobile Number is required';
-        if (clean.length !== 10) return 'Must be a 10-digit mobile number';
-        return '';
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        handleClose();
       }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, handleClose]);
 
-      case 'whatsappNo': {
-        const target = allData.sameAsMobile ? allData.mobileNo : value;
-        const clean = (target || '').replace(/[^0-9]/g, '');
-        if (!clean) return 'WhatsApp Number is required';
-        if (clean.length !== 10) return 'Must be a 10-digit WhatsApp number';
-        return '';
-      }
-
-      case 'emergencyName':
-        if (!value || !value.trim()) return 'Emergency Contact Name is required';
-        if (value.trim().length < 2) return 'Please enter a valid contact name';
-        return '';
-
-      case 'emergencyNo': {
-        const clean = (value || '').replace(/[^0-9]/g, '');
-        if (!clean) return 'Emergency Contact Number is required';
-        if (clean.length !== 10) return 'Emergency contact number must be 10 digits';
-        const ownMobile = (allData.mobileNo || '').replace(/[^0-9]/g, '');
-        if (clean === ownMobile && ownMobile.length === 10) {
-          return 'Emergency contact must be different from your personal mobile';
-        }
-        return '';
-      }
-
-      case 'dob': {
-        if (!value) return 'Date of Birth is required';
-        const [y, m, d] = value.split('-').map(Number);
-        if (!y || !m || !d) return 'Invalid Date of Birth';
-        const birthDate = new Date(y, m - 1, d);
-        if (birthDate > new Date()) return 'Date of Birth cannot be in the future';
-        const ageYears = (Date.now() - birthDate.getTime()) / (365.25 * 24 * 3600 * 1000);
-        if (ageYears < 10) return 'Runner must be at least 10 years of age';
-        if (ageYears > 100) return 'Please check the birth year';
-        return '';
-      }
-
-      case 'bloodGroup':
-        if (!value || value === 'Select Blood Group') return 'Please select your blood group';
-        return '';
-
-      case 'residentialAddress':
-        if (!value || !value.trim()) return 'Residential Address is required';
-        if (value.trim().length < 5) return 'Please enter a complete residential address (min 5 characters)';
-        return '';
-
-      case 'pinZipCode': {
-        const clean = (value || '').replace(/[^0-9]/g, '');
-        if (!clean) return 'PIN / Zip Code is required';
-        if (clean.length !== 6) return 'PIN Code must be 6 numeric digits';
-        return '';
-      }
-
-      case 'locationPreference':
-        if (!value || !value.trim()) return 'Please select your preferred training ground';
-        return '';
-
-      case 'maxDistance1Year':
-        if (!value) return 'Please select your max distance run in the last year';
-        return '';
-
-      case 'pbTiming': {
-        if (allData.pbEvent === 'None / First-timer') return '';
-        if (!value || value === '00:00:00') return 'Please enter your PB finish time';
-        return '';
-      }
-
-      case 'acceptedTerms':
-        if (!value) return 'You must accept the medical clearance & liability waiver to register';
-        return '';
-
-      default:
-        return '';
-    }
-  };
-
-  const handleFieldChange = (field, value) => {
-    setFormData((prev) => {
-      const next = { ...prev, [field]: value };
-      if (field === 'sameAsMobile' && value === true) {
-        next.whatsappNo = next.mobileNo;
-      }
-      if (field === 'mobileNo' && next.sameAsMobile) {
-        next.whatsappNo = value;
-      }
-      return next;
-    });
-
-    // Clear error dynamically if valid
-    const err = validateField(field, value, { ...formData, [field]: value });
-    setErrors((prev) => ({ ...prev, [field]: err }));
-  };
-
-  const handleBlur = (field) => {
-    setTouched((prev) => ({ ...prev, [field]: true }));
-    const err = validateField(field, formData[field], formData);
-    setErrors((prev) => ({ ...prev, [field]: err }));
-  };
-
-  const validateAll = () => {
-    const fields = [
-      'fullName',
-      'email',
-      'mobileNo',
-      'whatsappNo',
-      'emergencyName',
-      'emergencyNo',
-      'dob',
-      'bloodGroup',
-      'residentialAddress',
-      'pinZipCode',
-      'locationPreference',
-      'maxDistance1Year',
-      'pbTiming',
-      'acceptedTerms'
-    ];
-
-    const newErrors = {};
-    let firstInvalidField = null;
-
-    fields.forEach((field) => {
-      const err = validateField(field, formData[field], formData);
-      if (err) {
-        newErrors[field] = err;
-        if (!firstInvalidField) firstInvalidField = field;
-      }
-    });
-
-    setErrors(newErrors);
-    setTouched(fields.reduce((acc, f) => ({ ...acc, [f]: true }), {}));
-
-    if (firstInvalidField) {
-      // Find element and scroll smoothly to it
-      const el = document.getElementById(`reg-${firstInvalidField.toLowerCase()}`) ||
-                 document.getElementById('reg-title');
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      return false;
-    }
-    return true;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!validateAll()) return;
-
+  // On form submit
+  const onSubmit = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      setRegistrationId(`JJs-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`);
+      setRegistrationId(
+        `JJs-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`
+      );
       setSubmitted(true);
     }, 1200);
   };
@@ -1082,7 +790,7 @@ export default function ProgramRegistrationModal({
           color: 'var(--text-primary)'
         }}
       >
-        {/* High-Contrast Close Button */}
+        {/* Close Button */}
         <button
           onClick={handleClose}
           aria-label="Close registration dialog"
@@ -1123,11 +831,7 @@ export default function ProgramRegistrationModal({
                 className="text-xs sm:text-sm max-w-lg mx-auto mt-2 leading-relaxed"
                 style={{ color: 'var(--text-secondary)' }}
               >
-                Congratulations,{' '}
-                <span className="font-bold" style={{ color: 'var(--text-heading)' }}>
-                  {formData.fullName}
-                </span>
-                ! Your slot for{' '}
+                Congratulations, your slot for{' '}
                 <span className="font-bold text-[#d02426]">
                   {activeProgram?.title || 'Training Program'}
                 </span>{' '}
@@ -1147,60 +851,51 @@ export default function ProgramRegistrationModal({
                 className="flex items-center justify-between pb-3 border-b"
                 style={{ borderColor: 'var(--border-color)' }}
               >
-                <span
-                  className="text-xs uppercase tracking-wider font-semibold"
-                  style={{ color: 'var(--text-secondary)' }}
-                >
+                <span className="text-xs uppercase tracking-wider font-semibold" style={{ color: 'var(--text-secondary)' }}>
                   Registration ID:
                 </span>
-                <span className="font-mono font-black text-sm text-[#318cdd]">{registrationId}</span>
+                <span className="font-mono font-bold text-sm text-[#318cdd]">{registrationId}</span>
               </div>
 
-              <div className="flex items-center justify-between">
-                <span style={{ color: 'var(--text-secondary)' }}>Program Track:</span>
-                <span
-                  className="font-bold text-right truncate max-w-[220px]"
-                  style={{ color: 'var(--text-heading)' }}
-                >
-                  {activeProgram?.title || 'Program Registration'}
+              <div className="flex items-center justify-between" style={{ color: 'var(--text-secondary)' }}>
+                <span>Program Track:</span>
+                <span className="font-bold" style={{ color: 'var(--text-heading)' }}>
+                  {activeProgram?.title}
                 </span>
               </div>
 
-              <div className="flex items-center justify-between">
-                <span style={{ color: 'var(--text-secondary)' }}>Assigned Ground / Center:</span>
-                <span className="font-bold text-right" style={{ color: 'var(--text-heading)' }}>
-                  {formData.locationPreference}
+              <div className="flex items-center justify-between" style={{ color: 'var(--text-secondary)' }}>
+                <span>Program Duration:</span>
+                <span className="font-bold" style={{ color: 'var(--text-heading)' }}>
+                  {activeProgram?.duration || '12 Weeks'}
                 </span>
               </div>
 
-              <div className="flex items-center justify-between">
-                <span style={{ color: 'var(--text-secondary)' }}>T-Shirt Size / Blood Group:</span>
+              <div className="flex items-center justify-between" style={{ color: 'var(--text-secondary)' }}>
+                <span>Base Enrollment Fee:</span>
                 <span className="font-mono font-bold" style={{ color: 'var(--text-heading)' }}>
-                  Size {formData.tshirtSize} • {formData.bloodGroup}
+                  ₹{baseFee.toLocaleString('en-IN')}
                 </span>
               </div>
 
-              <div className="flex items-center justify-between">
-                <span style={{ color: 'var(--text-secondary)' }}>Amount Paid:</span>
-                <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
-                  ₹{totalAmount.toLocaleString('en-IN')} (Incl. 5% GST)
-                </span>
-              </div>
+              {promoDiscount > 0 && (
+                <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 font-bold">
+                  <span>Promocode Discount:</span>
+                  <span className="font-mono">-₹{promoDiscount.toLocaleString('en-IN')}</span>
+                </div>
+              )}
 
               <div
-                className="flex items-center justify-between pt-2 border-t"
-                style={{ borderColor: 'var(--border-color)' }}
+                className="flex items-center justify-between pt-3 border-t text-sm sm:text-base font-black"
+                style={{ borderColor: 'var(--border-color)', color: 'var(--text-heading)' }}
               >
-                <span style={{ color: 'var(--text-secondary)' }}>TCH WhatsApp Onboarding:</span>
-                <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4" /> Dispatched to{' '}
-                  {formData.sameAsMobile ? formData.mobileNo : formData.whatsappNo}
-                </span>
+                <span>Total Amount Paid:</span>
+                <span className="font-mono text-[#d02426]">₹{finalFee.toLocaleString('en-IN')}</span>
               </div>
             </div>
 
             <p className="text-xs max-w-md mx-auto" style={{ color: 'var(--text-secondary)' }}>
-              Your Training Center Head (TCH) will add you to the squad WhatsApp group for morning warmup drills, hydration pacing, and track coordinates.
+              An official PDF receipt and WhatsApp training briefing with coach contacts have been dispatched.
             </p>
 
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -1228,7 +923,7 @@ export default function ProgramRegistrationModal({
               </h2>
               <div className="w-16 h-1 bg-[#ea580c] mx-auto mt-2 rounded-full" />
 
-              {/* Active Program Banner with Option to Switch */}
+              {/* Active Program Banner */}
               {activeProgram && (
                 <div
                   className="mt-4 inline-flex flex-wrap items-center justify-center gap-2 px-4 py-2 rounded-xl border text-xs shadow-xs"
@@ -1265,51 +960,38 @@ export default function ProgramRegistrationModal({
               )}
             </div>
 
-            {/* Error Banner when attempting to submit with errors */}
-            {Object.keys(errors).some((k) => errors[k]) && Object.keys(touched).length > 0 && (
-              <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-xs flex items-center gap-2 animate-shake">
-                <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                <span>Please fix the highlighted required fields below before proceeding to payment.</span>
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} noValidate className="space-y-4 sm:space-y-6">
-              {/* Desktop 2-Column Grid / Mobile 1-Column Flow */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                {/* 1. Full Name */}
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-5">
+              {/* Row 1: Full Name & Email Address */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label
-                    htmlFor="reg-fullname"
+                    htmlFor="reg-fullName"
                     className="block text-xs sm:text-sm font-bold mb-1.5"
                     style={{ color: 'var(--text-heading)' }}
                   >
                     Full Name <span className="text-[#d02426]">*</span>
                   </label>
                   <input
-                    ref={firstInputRef}
-                    id="reg-fullname"
+                    id="reg-fullName"
                     type="text"
-                    placeholder="Enter your full name"
-                    value={formData.fullName}
-                    onChange={(e) => handleFieldChange('fullName', e.target.value)}
-                    onBlur={() => handleBlur('fullName')}
+                    placeholder="Enter full name"
+                    {...register('fullName')}
                     className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      touched.fullName && errors.fullName ? 'border-red-500 bg-red-500/5' : ''
+                      errors.fullName ? 'border-red-500 bg-red-500/5' : ''
                     }`}
                     style={{
                       backgroundColor: 'var(--card-inner)',
-                      borderColor: touched.fullName && errors.fullName ? '#ef4444' : 'var(--border-color)',
+                      borderColor: errors.fullName ? '#ef4444' : 'var(--border-color)',
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {touched.fullName && errors.fullName && (
+                  {errors.fullName && (
                     <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.fullName}
+                      <AlertCircle className="w-3 h-3" /> {errors.fullName.message}
                     </p>
                   )}
                 </div>
 
-                {/* 2. Email Address */}
                 <div>
                   <label
                     htmlFor="reg-email"
@@ -1321,233 +1003,211 @@ export default function ProgramRegistrationModal({
                   <input
                     id="reg-email"
                     type="email"
-                    inputMode="email"
                     placeholder="name@example.com"
-                    value={formData.email}
-                    onChange={(e) => handleFieldChange('email', e.target.value)}
-                    onBlur={() => handleBlur('email')}
+                    {...register('email')}
                     className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      touched.email && errors.email ? 'border-red-500 bg-red-500/5' : ''
+                      errors.email ? 'border-red-500 bg-red-500/5' : ''
                     }`}
                     style={{
                       backgroundColor: 'var(--card-inner)',
-                      borderColor: touched.email && errors.email ? '#ef4444' : 'var(--border-color)',
+                      borderColor: errors.email ? '#ef4444' : 'var(--border-color)',
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {touched.email && errors.email && (
+                  {errors.email && (
                     <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.email}
+                      <AlertCircle className="w-3 h-3" /> {errors.email.message}
                     </p>
                   )}
                 </div>
+              </div>
 
-                {/* 3. Mobile No */}
+              {/* Row 2: Mobile No & WhatsApp No */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label
-                    htmlFor="reg-mobileno"
+                    htmlFor="reg-mobile"
                     className="block text-xs sm:text-sm font-bold mb-1.5"
                     style={{ color: 'var(--text-heading)' }}
                   >
-                    Mobile No (10 Digits) <span className="text-[#d02426]">*</span>
+                    Mobile No <span className="text-[#d02426]">*</span>
                   </label>
                   <input
-                    id="reg-mobileno"
+                    id="reg-mobile"
                     type="tel"
                     inputMode="numeric"
                     maxLength={10}
-                    placeholder="e.g. 9876543210"
-                    value={formData.mobileNo}
-                    onChange={(e) => {
-                      const clean = e.target.value.replace(/[^0-9]/g, '');
-                      handleFieldChange('mobileNo', clean);
-                    }}
-                    onBlur={() => handleBlur('mobileNo')}
-                    className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      touched.mobileNo && errors.mobileNo ? 'border-red-500 bg-red-500/5' : ''
+                    placeholder="10-digit mobile number"
+                    {...register('mobileNo', {
+                      onChange: (e) => {
+                        const clean = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+                        setValue('mobileNo', clean);
+                      }
+                    })}
+                    className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border font-mono text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
+                      errors.mobileNo ? 'border-red-500 bg-red-500/5' : ''
                     }`}
                     style={{
                       backgroundColor: 'var(--card-inner)',
-                      borderColor: touched.mobileNo && errors.mobileNo ? '#ef4444' : 'var(--border-color)',
+                      borderColor: errors.mobileNo ? '#ef4444' : 'var(--border-color)',
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {touched.mobileNo && errors.mobileNo && (
+                  {errors.mobileNo && (
                     <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.mobileNo}
+                      <AlertCircle className="w-3 h-3" /> {errors.mobileNo.message}
                     </p>
                   )}
                 </div>
 
-                {/* 4. Whatsapp No */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
                     <label
-                      htmlFor="reg-whatsappno"
-                      className="text-xs sm:text-sm font-bold"
+                      htmlFor="reg-whatsapp"
+                      className="block text-xs sm:text-sm font-bold"
                       style={{ color: 'var(--text-heading)' }}
                     >
                       Whatsapp No <span className="text-[#d02426]">*</span>
                     </label>
-                    <label
-                      className="flex items-center gap-1.5 text-[11px] cursor-pointer select-none"
-                      style={{ color: 'var(--text-secondary)' }}
-                    >
+                    <label className="flex items-center gap-1.5 text-[11px] cursor-pointer opacity-80 hover:opacity-100">
                       <input
                         type="checkbox"
-                        checked={formData.sameAsMobile}
-                        onChange={(e) => handleFieldChange('sameAsMobile', e.target.checked)}
-                        className="rounded accent-[#d02426]"
+                        {...register('sameAsMobile')}
+                        className="rounded accent-[#d02426] cursor-pointer"
                       />
                       <span>Same as Mobile</span>
                     </label>
                   </div>
                   <input
-                    id="reg-whatsappno"
+                    id="reg-whatsapp"
                     type="tel"
                     inputMode="numeric"
                     maxLength={10}
-                    placeholder="e.g. 9876543210"
-                    disabled={formData.sameAsMobile}
-                    value={formData.sameAsMobile ? formData.mobileNo : formData.whatsappNo}
-                    onChange={(e) => {
-                      const clean = e.target.value.replace(/[^0-9]/g, '');
-                      handleFieldChange('whatsappNo', clean);
-                    }}
-                    onBlur={() => handleBlur('whatsappNo')}
-                    className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      touched.whatsappNo && errors.whatsappNo ? 'border-red-500 bg-red-500/5' : ''
-                    } ${formData.sameAsMobile ? 'opacity-80' : ''}`}
+                    placeholder="10-digit WhatsApp number"
+                    disabled={watchSameAsMobile}
+                    {...register('whatsappNo', {
+                      onChange: (e) => {
+                        const clean = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+                        setValue('whatsappNo', clean);
+                      }
+                    })}
+                    className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border font-mono text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
+                      watchSameAsMobile ? 'opacity-60 cursor-not-allowed' : ''
+                    } ${errors.whatsappNo ? 'border-red-500 bg-red-500/5' : ''}`}
                     style={{
                       backgroundColor: 'var(--card-inner)',
-                      borderColor: touched.whatsappNo && errors.whatsappNo ? '#ef4444' : 'var(--border-color)',
+                      borderColor: errors.whatsappNo ? '#ef4444' : 'var(--border-color)',
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {touched.whatsappNo && errors.whatsappNo && (
+                  {errors.whatsappNo && (
                     <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.whatsappNo}
+                      <AlertCircle className="w-3 h-3" /> {errors.whatsappNo.message}
                     </p>
                   )}
                 </div>
+              </div>
 
-                {/* 5. Emergency Contact Name */}
+              {/* Row 3: Emergency Contact Name & Emergency Contact No */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label
-                    htmlFor="reg-emergencyname"
+                    htmlFor="reg-emergency-name"
                     className="block text-xs sm:text-sm font-bold mb-1.5"
                     style={{ color: 'var(--text-heading)' }}
                   >
                     Emergency Contact Name <span className="text-[#d02426]">*</span>
                   </label>
                   <input
-                    id="reg-emergencyname"
+                    id="reg-emergency-name"
                     type="text"
-                    placeholder="Contact person name (e.g. Spouse / Parent)"
-                    value={formData.emergencyName}
-                    onChange={(e) => handleFieldChange('emergencyName', e.target.value)}
-                    onBlur={() => handleBlur('emergencyName')}
+                    placeholder="Relative, spouse, or friend"
+                    {...register('emergencyName')}
                     className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      touched.emergencyName && errors.emergencyName ? 'border-red-500 bg-red-500/5' : ''
+                      errors.emergencyName ? 'border-red-500 bg-red-500/5' : ''
                     }`}
                     style={{
                       backgroundColor: 'var(--card-inner)',
-                      borderColor: touched.emergencyName && errors.emergencyName ? '#ef4444' : 'var(--border-color)',
+                      borderColor: errors.emergencyName ? '#ef4444' : 'var(--border-color)',
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {touched.emergencyName && errors.emergencyName && (
+                  {errors.emergencyName && (
                     <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.emergencyName}
+                      <AlertCircle className="w-3 h-3" /> {errors.emergencyName.message}
                     </p>
                   )}
                 </div>
 
-                {/* 6. Emergency Contact No */}
                 <div>
                   <label
-                    htmlFor="reg-emergencyno"
+                    htmlFor="reg-emergency-no"
                     className="block text-xs sm:text-sm font-bold mb-1.5"
                     style={{ color: 'var(--text-heading)' }}
                   >
                     Emergency Contact No <span className="text-[#d02426]">*</span>
                   </label>
                   <input
-                    id="reg-emergencyno"
+                    id="reg-emergency-no"
                     type="tel"
                     inputMode="numeric"
                     maxLength={10}
-                    placeholder="e.g. 9811122233"
-                    value={formData.emergencyNo}
-                    onChange={(e) => {
-                      const clean = e.target.value.replace(/[^0-9]/g, '');
-                      handleFieldChange('emergencyNo', clean);
-                    }}
-                    onBlur={() => handleBlur('emergencyNo')}
-                    className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      touched.emergencyNo && errors.emergencyNo ? 'border-red-500 bg-red-500/5' : ''
+                    placeholder="10-digit emergency number"
+                    {...register('emergencyNo', {
+                      onChange: (e) => {
+                        const clean = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+                        setValue('emergencyNo', clean);
+                      }
+                    })}
+                    className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border font-mono text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
+                      errors.emergencyNo ? 'border-red-500 bg-red-500/5' : ''
                     }`}
                     style={{
                       backgroundColor: 'var(--card-inner)',
-                      borderColor: touched.emergencyNo && errors.emergencyNo ? '#ef4444' : 'var(--border-color)',
+                      borderColor: errors.emergencyNo ? '#ef4444' : 'var(--border-color)',
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {touched.emergencyNo && errors.emergencyNo && (
+                  {errors.emergencyNo && (
                     <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.emergencyNo}
+                      <AlertCircle className="w-3 h-3" /> {errors.emergencyNo.message}
                     </p>
                   )}
                 </div>
+              </div>
 
-                {/* 7. Gender */}
+              {/* Row 4: Gender & T-Shirt Size */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label
-                    className="block text-xs sm:text-sm font-bold mb-2"
-                    style={{ color: 'var(--text-heading)' }}
-                  >
+                  <label className="block text-xs sm:text-sm font-bold mb-2" style={{ color: 'var(--text-heading)' }}>
                     Gender <span className="text-[#d02426]">*</span>
                   </label>
-                  <div className="flex items-center gap-4 sm:gap-6 pt-1">
-                    {['Male', 'Female'].map((gender) => (
-                      <label
-                        key={gender}
-                        className="inline-flex items-center gap-2 cursor-pointer text-xs sm:text-sm font-semibold select-none min-h-[40px] px-2 py-1"
-                      >
+                  <div className="flex items-center gap-6 pt-1">
+                    {['Male', 'Female'].map((g) => (
+                      <label key={g} className="flex items-center gap-2 cursor-pointer text-xs sm:text-sm font-medium">
                         <input
                           type="radio"
-                          name="gender"
-                          value={gender}
-                          checked={formData.gender === gender}
-                          onChange={(e) => handleFieldChange('gender', e.target.value)}
+                          value={g}
+                          {...register('gender')}
                           className="w-4 h-4 accent-[#318cdd] cursor-pointer"
                         />
-                        <span style={{ color: 'var(--text-heading)' }}>{gender}</span>
+                        <span style={{ color: 'var(--text-heading)' }}>{g}</span>
                       </label>
                     ))}
                   </div>
                 </div>
 
-                {/* 8. T-Shirt Size */}
                 <div>
-                  <label
-                    className="block text-xs sm:text-sm font-bold mb-2"
-                    style={{ color: 'var(--text-heading)' }}
-                  >
+                  <label className="block text-xs sm:text-sm font-bold mb-2" style={{ color: 'var(--text-heading)' }}>
                     T-Shirt Size <span className="text-[#d02426]">*</span>
                   </label>
-                  <div className="flex items-center flex-wrap gap-2 sm:gap-4 pt-1">
+                  <div className="flex flex-wrap items-center gap-4 sm:gap-5 pt-1">
                     {TSHIRT_SIZES.map((size) => (
-                      <label
-                        key={size}
-                        className="inline-flex items-center gap-1.5 cursor-pointer text-xs sm:text-sm font-semibold select-none min-h-[40px] px-1"
-                      >
+                      <label key={size} className="flex items-center gap-1.5 cursor-pointer text-xs sm:text-sm font-medium">
                         <input
                           type="radio"
-                          name="tshirtSize"
                           value={size}
-                          checked={formData.tshirtSize === size}
-                          onChange={(e) => handleFieldChange('tshirtSize', e.target.value)}
+                          {...register('tshirtSize')}
                           className="w-4 h-4 accent-[#318cdd] cursor-pointer"
                         />
                         <span style={{ color: 'var(--text-heading)' }}>{size}</span>
@@ -1555,208 +1215,221 @@ export default function ProgramRegistrationModal({
                     ))}
                   </div>
                 </div>
+              </div>
 
-                {/* 9. Date of Birth (Theme-Aware Calendar Control) */}
+              {/* Row 5: Date of Birth & Blood Group */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label
-                    htmlFor="reg-dob-btn"
-                    className="block text-xs sm:text-sm font-bold mb-1.5"
-                    style={{ color: 'var(--text-heading)' }}
-                  >
+                  <label className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
                     Date of Birth <span className="text-[#d02426]">*</span>
                   </label>
-                  <CustomCalendarPicker
-                    value={formData.dob}
-                    onChange={(newDob) => handleFieldChange('dob', newDob)}
-                    error={touched.dob && errors.dob ? errors.dob : ''}
+                  <Controller
+                    name="dob"
+                    control={control}
+                    render={({ field }) => (
+                      <RadixCalendarPicker
+                        value={field.value}
+                        onChange={field.onChange}
+                        error={errors.dob?.message}
+                      />
+                    )}
                   />
-                  {touched.dob && errors.dob && (
+                  {errors.dob && (
                     <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.dob}
+                      <AlertCircle className="w-3 h-3" /> {errors.dob.message}
                     </p>
                   )}
                 </div>
 
-                {/* 10. Blood Group */}
                 <div>
-                  <label
-                    htmlFor="reg-bloodgroup"
-                    className="block text-xs sm:text-sm font-bold mb-1.5"
-                    style={{ color: 'var(--text-heading)' }}
-                  >
+                  <label className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
                     Blood Group <span className="text-[#d02426]">*</span>
                   </label>
-                  <CustomDropdown
-                    id="reg-bloodgroup"
-                    value={formData.bloodGroup}
-                    onChange={(bg) => handleFieldChange('bloodGroup', bg)}
-                    options={BLOOD_GROUPS}
-                    placeholder="Select Blood Group"
-                    error={touched.bloodGroup && Boolean(errors.bloodGroup)}
+                  <Controller
+                    name="bloodGroup"
+                    control={control}
+                    render={({ field }) => (
+                      <RadixSelect
+                        id="reg-blood-group"
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        options={BLOOD_GROUPS}
+                        placeholder="Select Blood Group"
+                        error={errors.bloodGroup?.message}
+                      />
+                    )}
                   />
-                  {touched.bloodGroup && errors.bloodGroup && (
+                  {errors.bloodGroup && (
                     <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.bloodGroup}
+                      <AlertCircle className="w-3 h-3" /> {errors.bloodGroup.message}
                     </p>
                   )}
                 </div>
+              </div>
 
-                {/* 11. Residential Address */}
-                <div className="md:row-span-2">
+              {/* Row 6: Residential Address & Pin Code + Location Preference */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
                   <label
-                    htmlFor="reg-residentialaddress"
+                    htmlFor="reg-address"
                     className="block text-xs sm:text-sm font-bold mb-1.5"
                     style={{ color: 'var(--text-heading)' }}
                   >
                     Residential Address <span className="text-[#d02426]">*</span>
                   </label>
                   <textarea
-                    id="reg-residentialaddress"
+                    id="reg-address"
                     rows={4}
-                    placeholder="House/Flat No, Street, Locality..."
-                    value={formData.residentialAddress}
-                    onChange={(e) => handleFieldChange('residentialAddress', e.target.value)}
-                    onBlur={() => handleBlur('residentialAddress')}
+                    placeholder="Enter full postal address"
+                    {...register('residentialAddress')}
                     className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 resize-none ${
-                      touched.residentialAddress && errors.residentialAddress ? 'border-red-500 bg-red-500/5' : ''
+                      errors.residentialAddress ? 'border-red-500 bg-red-500/5' : ''
                     }`}
                     style={{
                       backgroundColor: 'var(--card-inner)',
-                      borderColor: touched.residentialAddress && errors.residentialAddress ? '#ef4444' : 'var(--border-color)',
+                      borderColor: errors.residentialAddress ? '#ef4444' : 'var(--border-color)',
                       color: 'var(--text-heading)'
                     }}
                   />
-                  {touched.residentialAddress && errors.residentialAddress && (
+                  {errors.residentialAddress && (
                     <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.residentialAddress}
+                      <AlertCircle className="w-3 h-3" /> {errors.residentialAddress.message}
                     </p>
                   )}
                 </div>
 
-                {/* 12. Pin / Zip Code */}
-                <div>
-                  <label
-                    htmlFor="reg-pinzipcode"
-                    className="block text-xs sm:text-sm font-bold mb-1.5"
-                    style={{ color: 'var(--text-heading)' }}
-                  >
-                    Pin / Zip Code (6 Digits) <span className="text-[#d02426]">*</span>
-                  </label>
-                  <input
-                    id="reg-pinzipcode"
-                    type="text"
-                    inputMode="numeric"
-                    maxLength={6}
-                    placeholder="e.g. 560003"
-                    value={formData.pinZipCode}
-                    onChange={(e) => {
-                      const clean = e.target.value.replace(/[^0-9]/g, '');
-                      handleFieldChange('pinZipCode', clean);
-                    }}
-                    onBlur={() => handleBlur('pinZipCode')}
-                    className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
-                      touched.pinZipCode && errors.pinZipCode ? 'border-red-500 bg-red-500/5' : ''
-                    }`}
-                    style={{
-                      backgroundColor: 'var(--card-inner)',
-                      borderColor: touched.pinZipCode && errors.pinZipCode ? '#ef4444' : 'var(--border-color)',
-                      color: 'var(--text-heading)'
-                    }}
-                  />
-                  {touched.pinZipCode && errors.pinZipCode && (
-                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.pinZipCode}
-                    </p>
-                  )}
-                </div>
-
-                {/* 13. Location Preference (from centersData with Ground/City Search) */}
-                <div>
-                  <label
-                    htmlFor="reg-locationpreference"
-                    className="block text-xs sm:text-sm font-bold mb-1.5"
-                    style={{ color: 'var(--text-heading)' }}
-                  >
-                    Location Preference (20+ Training Centers) <span className="text-[#d02426]">*</span>
-                  </label>
-                  <LocationDropdown
-                    value={formData.locationPreference}
-                    onChange={(loc) => handleFieldChange('locationPreference', loc)}
-                    error={touched.locationPreference && Boolean(errors.locationPreference)}
-                  />
-                  {touched.locationPreference && errors.locationPreference && (
-                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.locationPreference}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {/* 14. Maximum Distance Run in last 1year (Full Width) */}
-              <div className="pt-2">
-                <label
-                  className="block text-xs sm:text-sm font-bold mb-2.5"
-                  style={{ color: 'var(--text-heading)' }}
-                >
-                  Maximum Distance Run in last 1year <span className="text-[#d02426]">*</span>
-                </label>
-                <div className="flex items-center flex-wrap gap-3 sm:gap-6">
-                  {DISTANCE_OPTIONS.map((dist) => (
-                    <label
-                      key={dist}
-                      className="inline-flex items-center gap-1.5 cursor-pointer text-xs sm:text-sm font-medium select-none min-h-[44px] px-1"
-                    >
-                      <input
-                        type="radio"
-                        name="maxDistance1Year"
-                        value={dist}
-                        checked={formData.maxDistance1Year === dist}
-                        onChange={(e) => handleFieldChange('maxDistance1Year', e.target.value)}
-                        className="w-4 h-4 accent-[#318cdd] cursor-pointer"
-                      />
-                      <span style={{ color: 'var(--text-heading)' }}>{dist}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* 15. Personal Best Event & Timing (Masked Numeric Time Control) */}
-              <div>
-                <label
-                  className="block text-xs sm:text-sm font-bold mb-2"
-                  style={{ color: 'var(--text-heading)' }}
-                >
-                  Personal Best Event &amp; Timing <span className="text-[#d02426]">*</span>
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  {/* Event Dropdown */}
+                <div className="space-y-4">
                   <div>
-                    <CustomDropdown
-                      value={formData.pbEvent}
-                      onChange={(ev) => handleFieldChange('pbEvent', ev)}
-                      options={PB_EVENTS}
-                      placeholder="Select PB Event"
+                    <label
+                      htmlFor="reg-pincode"
+                      className="block text-xs sm:text-sm font-bold mb-1.5"
+                      style={{ color: 'var(--text-heading)' }}
+                    >
+                      Pin / Zip Code <span className="text-[#d02426]">*</span>
+                    </label>
+                    <input
+                      id="reg-pincode"
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={6}
+                      placeholder="6-digit PIN code (e.g. 560003)"
+                      {...register('pinZipCode', {
+                        onChange: (e) => {
+                          const clean = e.target.value.replace(/[^0-9]/g, '').slice(0, 6);
+                          setValue('pinZipCode', clean);
+                        }
+                      })}
+                      className={`w-full px-3.5 py-2.5 sm:py-3 rounded-xl border font-mono text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 ${
+                        errors.pinZipCode ? 'border-red-500 bg-red-500/5' : ''
+                      }`}
+                      style={{
+                        backgroundColor: 'var(--card-inner)',
+                        borderColor: errors.pinZipCode ? '#ef4444' : 'var(--border-color)',
+                        color: 'var(--text-heading)'
+                      }}
                     />
+                    {errors.pinZipCode && (
+                      <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" /> {errors.pinZipCode.message}
+                      </p>
+                    )}
                   </div>
 
-                  {/* Masked Numeric Race Time Input (HH : MM : SS) */}
                   <div>
-                    <RaceTimingInput
-                      value={formData.pbTiming}
-                      onChange={(t) => handleFieldChange('pbTiming', t)}
-                      disabled={formData.pbEvent === 'None / First-timer'}
-                      error={touched.pbTiming && errors.pbTiming ? errors.pbTiming : ''}
+                    <label className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
+                      Location Preference <span className="text-[#d02426]">*</span>
+                    </label>
+                    <Controller
+                      name="locationPreference"
+                      control={control}
+                      render={({ field }) => (
+                        <RadixLocationSelect
+                          value={field.value}
+                          onChange={field.onChange}
+                          error={errors.locationPreference?.message}
+                        />
+                      )}
                     />
-                    {touched.pbTiming && errors.pbTiming && (
+                    {errors.locationPreference && (
                       <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
-                        <AlertCircle className="w-3 h-3" /> {errors.pbTiming}
+                        <AlertCircle className="w-3 h-3" /> {errors.locationPreference.message}
                       </p>
                     )}
                   </div>
                 </div>
               </div>
 
-              {/* 16. Specify health problem */}
+              {/* Maximum Distance Run in last 1 year */}
+              <div className="pt-2">
+                <label className="block text-xs sm:text-sm font-bold mb-2" style={{ color: 'var(--text-heading)' }}>
+                  Maximum Distance Run in last 1 year <span className="text-[#d02426]">*</span>
+                </label>
+                <div className="flex flex-wrap items-center gap-3 sm:gap-5">
+                  {DISTANCE_OPTIONS.map((dist) => (
+                    <label key={dist} className="flex items-center gap-1.5 cursor-pointer text-xs sm:text-sm font-medium">
+                      <input
+                        type="radio"
+                        value={dist}
+                        {...register('maxDistance1Year')}
+                        className="w-4 h-4 accent-[#318cdd] cursor-pointer"
+                      />
+                      <span style={{ color: 'var(--text-heading)' }}>{dist}</span>
+                    </label>
+                  ))}
+                </div>
+                {errors.maxDistance1Year && (
+                  <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" /> {errors.maxDistance1Year.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Personal Best Event & Timing */}
+              <div>
+                <label className="block text-xs sm:text-sm font-bold mb-1.5" style={{ color: 'var(--text-heading)' }}>
+                  Personal Best Event &amp; Timing <span className="text-[#d02426]">*</span>
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <Controller
+                      name="pbEvent"
+                      control={control}
+                      render={({ field }) => (
+                        <RadixSelect
+                          id="reg-pb-event"
+                          value={field.value}
+                          onValueChange={(val) => {
+                            field.onChange(val);
+                            if (val === 'None / First-timer') {
+                              setValue('pbTiming', '');
+                            }
+                          }}
+                          options={PB_EVENTS}
+                          placeholder="Select PB Event"
+                          error={errors.pbEvent?.message}
+                        />
+                      )}
+                    />
+                  </div>
+
+                  <div>
+                    <Controller
+                      name="pbTiming"
+                      control={control}
+                      render={({ field }) => (
+                        <RaceTimingInput
+                          value={field.value}
+                          onChange={field.onChange}
+                          disabled={watchPbEvent === 'None / First-timer'}
+                          error={errors.pbTiming?.message}
+                        />
+                      )}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Health Problem */}
               <div>
                 <label
                   htmlFor="reg-health"
@@ -1769,8 +1442,7 @@ export default function ProgramRegistrationModal({
                   id="reg-health"
                   rows={3}
                   placeholder="e.g. Asthma, prior ACL tear, hypertension, cardiac conditions, or write 'None'..."
-                  value={formData.healthProblem}
-                  onChange={(e) => handleFieldChange('healthProblem', e.target.value)}
+                  {...register('healthProblem')}
                   className="w-full px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40 resize-none"
                   style={{
                     backgroundColor: 'var(--card-inner)',
@@ -1780,34 +1452,24 @@ export default function ProgramRegistrationModal({
                 />
               </div>
 
-              {/* 17. Promocode Section */}
-              <div
-                className="p-4 sm:p-5 rounded-2xl border space-y-3"
-                style={{
-                  backgroundColor: 'var(--card-inner)',
-                  borderColor: 'var(--border-color)'
-                }}
-              >
+              {/* Promocode Section */}
+              <div className="pt-2 space-y-2">
                 <label
-                  htmlFor="reg-promocode"
+                  htmlFor="reg-promo-input"
                   className="block text-xs sm:text-sm font-bold"
                   style={{ color: 'var(--text-heading)' }}
                 >
                   If you have Promocode, Enter your Promocode
                 </label>
-                <div className="flex flex-col sm:flex-row gap-2.5">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 max-w-md">
                   <input
-                    id="reg-promocode"
+                    id="reg-promo-input"
                     type="text"
                     placeholder="Enter your Promocode"
-                    value={formData.promocode}
-                    onChange={(e) => {
-                      setFormData({ ...formData, promocode: e.target.value.toUpperCase() });
-                      setPromoError('');
-                    }}
-                    className="flex-1 px-3.5 py-2.5 rounded-xl border font-mono text-xs sm:text-sm uppercase transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40"
+                    {...register('promocode')}
+                    className="flex-1 px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm uppercase font-mono transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40"
                     style={{
-                      backgroundColor: 'var(--card-bg)',
+                      backgroundColor: 'var(--card-inner)',
                       borderColor: 'var(--border-color)',
                       color: 'var(--text-heading)'
                     }}
@@ -1815,19 +1477,19 @@ export default function ProgramRegistrationModal({
                   <button
                     type="button"
                     onClick={handleApplyPromo}
-                    className="py-2.5 px-6 rounded-xl text-xs font-bold uppercase tracking-wider text-white bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 transition-all cursor-pointer min-h-[44px]"
+                    className="px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider text-white transition-all cursor-pointer shadow-sm active:scale-95 bg-[#2d3748] hover:bg-[#1a202c]"
                   >
                     Apply
                   </button>
                 </div>
 
                 {promoMessage && (
-                  <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                  <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1.5 pt-1">
                     <CheckCircle2 className="w-4 h-4" /> {promoMessage}
                   </p>
                 )}
                 {promoError && (
-                  <p className="text-xs text-red-500 flex items-center gap-1.5">
+                  <p className="text-xs text-red-500 font-semibold flex items-center gap-1.5 pt-1">
                     <AlertCircle className="w-4 h-4" /> {promoError}
                   </p>
                 )}
@@ -1835,98 +1497,66 @@ export default function ProgramRegistrationModal({
                 <div className="bg-[#24639c] text-white text-[11px] sm:text-xs font-medium px-4 py-2.5 rounded-lg inline-block w-full sm:w-auto shadow-xs">
                   If you don't have promocode, please proceed the Payment.
                 </div>
-
-                {/* Live Cost Breakdown */}
-                <div
-                  className="pt-2 border-t text-xs space-y-1.5 font-mono"
-                  style={{ borderColor: 'var(--border-color)' }}
-                >
-                  <div className="flex justify-between" style={{ color: 'var(--text-secondary)' }}>
-                    <span>Program Base Fee:</span>
-                    <span>₹{baseFee.toLocaleString('en-IN')}</span>
-                  </div>
-                  {promoApplied && (
-                    <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-bold">
-                      <span>Promo Discount:</span>
-                      <span>-₹{discountAmount.toLocaleString('en-IN')}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between" style={{ color: 'var(--text-secondary)' }}>
-                    <span>GST (5%):</span>
-                    <span>₹{gstAmount.toLocaleString('en-IN')}</span>
-                  </div>
-                  <div
-                    className="flex justify-between font-black text-sm pt-1 border-t"
-                    style={{
-                      borderColor: 'var(--border-color)',
-                      color: 'var(--text-heading)'
-                    }}
-                  >
-                    <span>Total Payable:</span>
-                    <span className="text-[#d02426]">₹{totalAmount.toLocaleString('en-IN')}</span>
-                  </div>
-                </div>
               </div>
 
-              {/* 18. Medical & Legal Declaration (Exact Text) */}
-              <div className="space-y-3 pt-2">
-                <p
-                  className="text-xs sm:text-[13px] leading-relaxed text-justify opacity-90"
-                  style={{ color: 'var(--text-secondary)' }}
-                >
-                  I declare that, I am not suffering from any health condition that will hamper
-                  physical activity that I'm undertaking as part of this training program, and I have
-                  clearance from medical practitioner for participating in the said activity. I agree
-                  that JJActive Pvt. Ltd. &amp; it's trainers will not be held responsible for any
-                  accidents/injuries or complications related to my health while training with
-                  JJActive Pvt. Ltd.
+              {/* Terms and Conditions Waiver */}
+              <div className="pt-2 space-y-2">
+                <p className="text-[11px] sm:text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                  I declare that, I am not suffering from any health condition that will hamper physical activity that I'm undertaking as part of this training program, and I have clearance from medical practitioner for participating in the said activity. I agree that JJActive Pvt. Ltd. &amp; it's trainers will not be held responsible for any accidents/injuries or complications related to my health while training with JJActive Pvt. Ltd.
                 </p>
 
-                <label className="flex items-start gap-3 cursor-pointer select-none">
+                <label className="flex items-start gap-2.5 cursor-pointer pt-1">
                   <input
                     type="checkbox"
-                    checked={formData.acceptedTerms}
-                    onChange={(e) => handleFieldChange('acceptedTerms', e.target.checked)}
+                    {...register('acceptedTerms')}
                     className="mt-0.5 w-4 h-4 rounded accent-[#d02426] cursor-pointer flex-shrink-0"
                   />
                   <span
                     className={`text-xs sm:text-sm font-bold ${
-                      touched.acceptedTerms && errors.acceptedTerms ? 'text-red-500' : ''
+                      errors.acceptedTerms ? 'text-red-500' : ''
                     }`}
                     style={{
-                      color: touched.acceptedTerms && errors.acceptedTerms ? '#ef4444' : 'var(--text-heading)'
+                      color: errors.acceptedTerms ? '#ef4444' : 'var(--text-heading)'
                     }}
                   >
                     I Accept(Please Select the Checkbox) <span className="text-[#d02426]">*</span>
                   </span>
                 </label>
-                {touched.acceptedTerms && errors.acceptedTerms && (
+                {errors.acceptedTerms && (
                   <p className="text-[11px] text-red-500 flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3" /> {errors.acceptedTerms}
+                    <AlertCircle className="w-3 h-3" /> {errors.acceptedTerms.message}
                   </p>
                 )}
               </div>
 
-              {/* 19. PAY Button - Vibrant Official JJs Running Brand Red */}
-              <div className="text-center pt-5 sm:pt-7 space-y-2.5">
+              {/* JJs Running Brand Red Pay Button */}
+              <div className="pt-4 pb-2 text-center">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full sm:w-80 py-4 px-8 rounded-full text-sm sm:text-base font-black uppercase tracking-wider text-white shadow-xl transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] cursor-pointer disabled:opacity-75 flex items-center justify-center gap-2.5 mx-auto bg-gradient-to-r from-[#e11d48] via-[#d02426] to-[#b51c1e] hover:from-[#d02426] hover:to-[#991b1b] shadow-red-600/35 hover:shadow-red-600/55 border border-white/20"
+                  className="w-full sm:w-auto min-w-[240px] px-10 py-4 rounded-full text-base sm:text-lg font-black tracking-wider uppercase transition-all duration-300 shadow-xl shadow-red-500/25 hover:shadow-red-500/40 hover:scale-[1.02] active:scale-[0.98] cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed bg-gradient-to-r from-[#e11d48] via-[#d02426] to-[#b51c1e] text-white border border-red-500/30"
                 >
-                  <Lock className="w-4 h-4 stroke-[2.5]" />
-                  <span>
-                    {loading ? 'Processing Payment...' : `PAY ₹${totalAmount.toLocaleString('en-IN')}`}
-                  </span>
-                  <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                  <div className="flex items-center justify-center gap-3">
+                    {loading ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <span>Processing Roster Slot...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Lock className="w-5 h-5" />
+                        <span>PAY ₹{finalFee.toLocaleString('en-IN')}</span>
+                      </>
+                    )}
+                  </div>
                 </button>
 
                 <p
-                  className="text-[11px] opacity-75 flex items-center justify-center gap-1.5"
+                  className="text-[11px] mt-2 flex items-center justify-center gap-1.5 opacity-70"
                   style={{ color: 'var(--text-secondary)' }}
                 >
-                  <ShieldCheck className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                  <span>256-Bit SSL Encrypted • Direct Razorpay Gateway</span>
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>256–Bit SSL Encrypted • Direct Razorpay Gateway</span>
                 </p>
               </div>
             </form>
