@@ -1,9 +1,10 @@
 import React from 'react';
-import { Smartphone, Activity, Heart, Trophy, ShieldCheck, Download, ChevronRight } from 'lucide-react';
+import { Smartphone, Activity, Heart, Trophy, ShieldCheck, ArrowRight } from 'lucide-react';
 
 export default function OncaAppSection({ onGetApp }) {
   return (
-    <div className="rounded-3xl p-5 sm:p-8 md:p-12 border relative overflow-hidden transition-all shadow-2xl max-w-full"
+    <div
+      className="rounded-3xl p-5 sm:p-8 md:p-12 border relative overflow-hidden transition-all shadow-2xl max-w-full"
       style={{
         backgroundColor: 'var(--card-bg)',
         borderColor: 'var(--border-color)',
@@ -11,21 +12,28 @@ export default function OncaAppSection({ onGetApp }) {
       }}
     >
       {/* Background ambient gradient glow safely constrained */}
-      <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full blur-3xl opacity-15 pointer-events-none"
+      <div
+        className="absolute bottom-0 left-0 w-72 h-72 rounded-full blur-3xl opacity-15 pointer-events-none"
         style={{ backgroundColor: 'var(--accent)' }}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10 items-center relative z-10">
         {/* Left Column: Text & Features */}
         <div className="lg:col-span-7 space-y-4 sm:space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase"
-            style={{ backgroundColor: 'var(--badge-bg)', color: 'var(--accent)' }}
+          <div
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase border shadow-xs"
+            style={{
+              backgroundColor: 'var(--badge-bg)',
+              borderColor: 'var(--border-color)',
+              color: 'var(--accent)'
+            }}
           >
             <Smartphone className="w-3.5 h-3.5" />
             Official Mobile Companion
           </div>
 
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight"
+          <h2
+            className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight uppercase"
             style={{ color: 'var(--text-heading)' }}
           >
             Meet the Onca Run App. Your pocket running coach.
@@ -37,28 +45,37 @@ export default function OncaAppSection({ onGetApp }) {
 
           {/* Key pillars */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-            <div className="p-3.5 rounded-2xl border space-y-1.5"
+            <div
+              className="p-3.5 rounded-2xl border space-y-1.5"
               style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}
             >
               <Activity className="w-4 h-4" style={{ color: 'var(--accent)' }} />
-              <h4 className="text-xs font-black uppercase tracking-wider" style={{ color: 'var(--text-heading)' }}>Structured Training</h4>
+              <h4 className="text-xs font-black uppercase tracking-wider" style={{ color: 'var(--text-heading)' }}>
+                Structured Training
+              </h4>
               <p className="text-[11px] opacity-70">Daily prescribed workouts, pace bands, and cadence drills.</p>
             </div>
 
-            <div className="p-3.5 rounded-2xl border space-y-1.5"
+            <div
+              className="p-3.5 rounded-2xl border space-y-1.5"
               style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}
             >
               <Heart className="w-4 h-4 text-rose-500" />
-              <h4 className="text-xs font-black uppercase tracking-wider" style={{ color: 'var(--text-heading)' }}>Nutrition & Health</h4>
-              <p className="text-[11px] opacity-70">Pre-race carb loading protocols, hydration guides & gut training.</p>
+              <h4 className="text-xs font-black uppercase tracking-wider" style={{ color: 'var(--text-heading)' }}>
+                Nutrition &amp; Health
+              </h4>
+              <p className="text-[11px] opacity-70">Pre-race carb loading protocols, hydration guides &amp; gut training.</p>
             </div>
 
-            <div className="p-3.5 rounded-2xl border space-y-1.5"
+            <div
+              className="p-3.5 rounded-2xl border space-y-1.5"
               style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}
             >
               <Trophy className="w-4 h-4 text-amber-500" />
-              <h4 className="text-xs font-black uppercase tracking-wider" style={{ color: 'var(--text-heading)' }}>Jaguar Network</h4>
-              <p className="text-[11px] opacity-70">Weekend group run meetups, cheer squads & inter-center leaderboard.</p>
+              <h4 className="text-xs font-black uppercase tracking-wider" style={{ color: 'var(--text-heading)' }}>
+                Jaguar Network
+              </h4>
+              <p className="text-[11px] opacity-70">Weekend group run meetups, cheer squads &amp; inter-center leaderboard.</p>
             </div>
           </div>
 
@@ -101,6 +118,16 @@ export default function OncaAppSection({ onGetApp }) {
                 <span className="text-xs font-bold leading-none" style={{ color: 'var(--text-heading)' }}>Google Play</span>
               </div>
             </a>
+
+            {onGetApp && (
+              <button
+                onClick={onGetApp}
+                className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all hover:scale-105 shadow-sm text-white bg-[#318cdd] hover:bg-[#2573b8] cursor-pointer"
+              >
+                <span>Connect with Coach</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
         </div>
 
@@ -122,7 +149,7 @@ export default function OncaAppSection({ onGetApp }) {
 
               {/* Main Metric */}
               <div className="text-center py-1 border-b border-white/5">
-                <span className="text-4xl sm:text-5xl font-black tracking-tight" style={{ color: 'var(--accent)' }}>
+                <span className="text-4xl sm:text-5xl font-black font-mono tabular-num tracking-tight" style={{ color: 'var(--accent)' }}>
                   18.42
                 </span>
                 <span className="text-[10px] text-gray-400 block font-mono mt-0.5">KILOMETERS COMPLETED</span>
@@ -132,15 +159,15 @@ export default function OncaAppSection({ onGetApp }) {
               <div className="grid grid-cols-3 gap-1.5 text-center py-1">
                 <div className="p-1.5 rounded-xl bg-white/5">
                   <span className="block text-[9px] text-gray-400">AVG PACE</span>
-                  <span className="text-xs font-black font-mono">5:18 /km</span>
+                  <span className="text-xs font-black font-mono tabular-num">5:18 /km</span>
                 </div>
                 <div className="p-1.5 rounded-xl bg-white/5">
                   <span className="block text-[9px] text-gray-400">TIME</span>
-                  <span className="text-xs font-black font-mono">1:37:40</span>
+                  <span className="text-xs font-black font-mono tabular-num">1:37:40</span>
                 </div>
                 <div className="p-1.5 rounded-xl bg-white/5">
                   <span className="block text-[9px] text-gray-400">CADENCE</span>
-                  <span className="text-xs font-black font-mono" style={{ color: 'var(--accent)' }}>180 spm</span>
+                  <span className="text-xs font-black font-mono tabular-num" style={{ color: 'var(--accent)' }}>180 spm</span>
                 </div>
               </div>
 
@@ -148,7 +175,7 @@ export default function OncaAppSection({ onGetApp }) {
               <div className="p-2.5 rounded-xl bg-white/5 border border-white/5">
                 <div className="flex items-center justify-between text-[9px] text-gray-400 mb-1">
                   <span>ELEVATION PROFILE</span>
-                  <span className="font-mono text-amber-400">+142m GAIN</span>
+                  <span className="font-mono tabular-num text-amber-400">+142m GAIN</span>
                 </div>
                 <svg className="w-full h-11" viewBox="0 0 200 60">
                   <defs>

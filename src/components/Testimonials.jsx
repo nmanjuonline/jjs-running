@@ -1,5 +1,5 @@
 import React from 'react';
-import { Quote, Award, MapPin, TrendingUp } from 'lucide-react';
+import { Quote, MapPin, TrendingUp } from 'lucide-react';
 import { runnerStories } from '../data/eventsData';
 
 export default function Testimonials() {

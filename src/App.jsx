@@ -12,7 +12,7 @@ import Testimonials from './components/Testimonials';
 import RegisterModal from './components/RegisterModal';
 import Footer from './components/Footer';
 import JJSLogo from './components/JJSLogo';
-import { Sparkles, ArrowRight, ShieldCheck, Zap, Activity, Flame, Sun, Award } from 'lucide-react';
+import { Sparkles, ArrowRight, ShieldCheck, Activity, Award } from 'lucide-react';
 
 export default function App() {
   const [theme, setTheme] = useState(() => {
