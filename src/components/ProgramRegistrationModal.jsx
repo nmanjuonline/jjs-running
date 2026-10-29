@@ -1451,67 +1451,55 @@ export default function ProgramRegistrationModal({
                 />
               </div>
 
-              {/* Promocode & Direct Payment Notice Row (Aligned 2-Column Grid) */}
+              {/* Promocode Section */}
               <div className="pt-1">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-                  <div>
-                    <label
-                      htmlFor="reg-promo-input"
-                      className="block text-xs sm:text-sm font-bold mb-1.5"
-                      style={{ color: 'var(--text-heading)' }}
-                    >
-                      If you have Promocode, Enter your Promocode
-                    </label>
-                    <div className="flex items-center gap-2">
-                      <input
-                        id="reg-promo-input"
-                        type="text"
-                        placeholder="ENTER YOUR PROMOCODE"
-                        {...register('promocode')}
-                        className="flex-1 px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm uppercase font-mono transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40"
-                        style={{
-                          backgroundColor: 'var(--card-inner)',
-                          borderColor: 'var(--border-color)',
-                          color: 'var(--text-heading)'
-                        }}
-                      />
-                      <button
-                        type="button"
-                        onClick={handleApplyPromo}
-                        className="px-6 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-bold uppercase tracking-wider text-white transition-all cursor-pointer shadow-sm active:scale-95 bg-[#2d3748] hover:bg-[#1a202c]"
-                      >
-                        Apply
-                      </button>
-                    </div>
-
-                    {promoMessage && (
-                      <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1.5 pt-1.5">
-                        <CheckCircle2 className="w-4 h-4" /> {promoMessage}
-                      </p>
-                    )}
-                    {promoError && (
-                      <p className="text-xs text-red-500 font-semibold flex items-center gap-1.5 pt-1.5">
-                        <AlertCircle className="w-4 h-4" /> {promoError}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <span className="block text-xs sm:text-sm font-bold mb-1.5 opacity-0 select-none hidden md:block">
-                      Payment Notice
-                    </span>
-                    <div
-                      className="flex items-center gap-2.5 px-4 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm font-medium"
+                <div className="max-w-md">
+                  <label
+                    htmlFor="reg-promo-input"
+                    className="block text-xs sm:text-sm font-bold mb-1.5"
+                    style={{ color: 'var(--text-heading)' }}
+                  >
+                    If you have Promocode, Enter your Promocode
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      id="reg-promo-input"
+                      type="text"
+                      placeholder="ENTER YOUR PROMOCODE"
+                      {...register('promocode')}
+                      className="flex-1 px-3.5 py-2.5 sm:py-3 rounded-xl border text-xs sm:text-sm uppercase font-mono transition-all focus:outline-none focus:ring-2 focus:ring-[#318cdd]/40"
                       style={{
                         backgroundColor: 'var(--card-inner)',
                         borderColor: 'var(--border-color)',
-                        color: 'var(--text-secondary)'
+                        color: 'var(--text-heading)'
                       }}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleApplyPromo}
+                      className="px-6 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-bold uppercase tracking-wider text-white transition-all cursor-pointer shadow-sm active:scale-95 bg-[#2d3748] hover:bg-[#1a202c]"
                     >
-                      <Sparkles className="w-4 h-4 text-[#318cdd] flex-shrink-0" />
-                      <span>If you don't have promocode, please proceed the Payment.</span>
-                    </div>
+                      Apply
+                    </button>
                   </div>
+
+                  {promoMessage && (
+                    <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1.5 pt-1.5">
+                      <CheckCircle2 className="w-4 h-4" /> {promoMessage}
+                    </p>
+                  )}
+                  {promoError && (
+                    <p className="text-xs text-red-500 font-semibold flex items-center gap-1.5 pt-1.5">
+                      <AlertCircle className="w-4 h-4" /> {promoError}
+                    </p>
+                  )}
+
+                  <p
+                    className="text-[11px] sm:text-xs mt-2 opacity-70 leading-relaxed"
+                    style={{ color: 'var(--text-secondary)' }}
+                  >
+                    If you don't have promocode, please proceed the Payment.
+                  </p>
                 </div>
               </div>
 
