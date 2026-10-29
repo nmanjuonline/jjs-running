@@ -34,7 +34,7 @@ section[id] {
     --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
   }
 
-  /* 🏔️ SWISS CLEAN - VERSION 1: LOGO MATCH (Light • Cerulean Blue & Sprint Red) */
+  /* SWISS CLEAN - VERSION 1: LOGO MATCH (Light • Cerulean Blue & Sprint Red) */
   body[data-theme='swiss-light'], body[data-theme='olympic-clean'], body[data-theme='street-crew'] {
     --bg-page: #ffffff;
     --text-primary: #0f172a;
@@ -60,7 +60,7 @@ section[id] {
     --card-shadow: 0 14px 30px -8px rgba(49, 140, 221, 0.12);
   }
 
-  /* 🌌 SWISS CLEAN - VERSION 2: LOGO CONTRAST (Dark • Deep Obsidian & Logo Palette) */
+  /* SWISS CLEAN - VERSION 2: LOGO CONTRAST (Dark • Deep Obsidian & Logo Palette) */
   body[data-theme='swiss-dark'] {
     --bg-page: #090d16;
     --text-primary: #f8fafc;
@@ -86,7 +86,7 @@ section[id] {
     --card-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.6);
   }
 
-  /* 🌅 THEME 2 (LIGHT): Sunrise Stride (Nike Run Club / Radiant Dawn) */
+  /* THEME 2 (LIGHT): Sunrise Stride (Nike Run Club / Radiant Dawn) */
   body[data-theme='sunrise-coral'], body[data-theme='heritage-gold'] {
     --bg-page: #faf8f5;
     --text-primary: #18181b;
@@ -109,7 +109,7 @@ section[id] {
     --card-shadow: 0 14px 30px -8px rgba(255, 72, 0, 0.10);
   }
 
-  /* ⚡ THEME 3 (DARK): Kinetic Volt (Asymmetric Bento Cockpit) */
+  /* THEME 3 (DARK): Kinetic Volt (Asymmetric Bento Cockpit) */
   body[data-theme='kinetic'] {
     --bg-page: #090a0f;
     --text-primary: #ffffff;
@@ -132,7 +132,7 @@ section[id] {
     --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
   }
 
-  /* 🔴 THEME 4 (DARK): Crimson Velocity (Breaking2 Speed Runway) */
+  /* THEME 4 (DARK): Crimson Velocity (Breaking2 Speed Runway) */
   body[data-theme='crimson'] {
     --bg-page: #070709;
     --text-primary: #ffffff;

@@ -453,7 +453,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                   onClick={onOpenCalc}
                   className="text-xs font-mono text-[#ccff00] underline underline-offset-4 font-bold hover:text-white"
                 >
-                  Splits ➔
+                  Splits
                 </button>
               </div>
             </div>
@@ -569,7 +569,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                       onClick={onBookTrial}
                       className="px-3 py-1.5 rounded-lg bg-[#ff1e42] hover:bg-white hover:text-black text-white text-[11px] font-black uppercase transition-all"
                     >
-                      LOCK SPOT ➔
+                      LOCK SPOT
                     </button>
                   </div>
                 </div>

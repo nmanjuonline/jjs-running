@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, MapPin, Users, ArrowUpRight, Flame, Mountain, CheckCircle2 } from 'lucide-react';
+import { Calendar, MapPin, Users, ArrowUpRight, Flame, Mountain, CheckCircle2, Flag } from 'lucide-react';
 import { eventsData } from '../data/eventsData';
 
 export default function RaceCalendar({ onJoinCamp }) {
@@ -94,7 +94,7 @@ export default function RaceCalendar({ onJoinCamp }) {
                   <span className="text-[11px] font-mono font-bold tabular-num px-2.5 py-1 rounded-lg"
                     style={{ backgroundColor: 'var(--card-inner)' }}
                   >
-                    🎯 {event.targetDistance}
+                    {event.targetDistance}
                   </span>
                   {event.elevation && (
                     <span className="text-[11px] font-mono font-bold tabular-num px-2.5 py-1 rounded-lg flex items-center gap-1"
@@ -110,7 +110,7 @@ export default function RaceCalendar({ onJoinCamp }) {
               {/* Card Footer / Action */}
               <div className="pt-3 border-t flex items-center justify-between" style={{ borderColor: 'var(--border-color)' }}>
                 <span className="text-xs font-bold" style={{ color: isSelected ? 'var(--accent)' : 'inherit' }}>
-                  {isSelected ? '✓ Active View' : 'Click to View Full Details'}
+                  {isSelected ? 'Selected' : 'Click to View Full Details'}
                 </span>
                 <span className="text-xs font-black uppercase tracking-wider flex items-center gap-1 px-3 py-1.5 rounded-lg transition-all"
                   style={{

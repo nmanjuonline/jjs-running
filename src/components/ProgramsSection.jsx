@@ -56,7 +56,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
 
         {/* Mobile Swipe Hint */}
         <div className={`md:hidden flex items-center justify-between text-xs font-medium px-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-          <span>👈 Swipe horizontally to view all</span>
+          <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-[#318cdd] animate-pulse" />Swipe to explore</span>
           <span>{filtered.length} Programs</span>
         </div>
 
