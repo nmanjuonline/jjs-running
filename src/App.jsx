@@ -201,7 +201,7 @@ export default function App() {
               Marathon Campaigns & Squads
             </h2>
             <p className="text-xs sm:text-base mt-1.5" style={{ color: 'var(--text-secondary)' }}>
-              Train with our official target race squads with supported weekend LSD simulations, pacing groups, and finish-line hospitality.
+              Train with our official target race squads with supported weekend SLR simulations, pacing groups, and finish-line hospitality.
             </p>
           </div>
 

@@ -48,7 +48,7 @@ export const centersData = [
         vicinity: 'Bangalore University, Gnana Bharathi, Nagarabhavi, Kengeri, RR Nagar, Chandra Layout',
         mapUrl: 'https://maps.app.goo.gl/gZNBEzXZLhKDf68K7',
         runnersCount: '310+ Active Runners',
-        level: 'LSD & Elevation Training',
+        level: 'SLR & Elevation Training',
         amenities: ["Long 15K+ Protected Loops","Forest Hills","Support Vehicles"]
     },
     {

@@ -20,10 +20,10 @@ export default function LiveTicker({ onActionClick }) {
       actionTarget: 'programs'
     },
     {
-      badge: 'WEEKEND LSD',
+      badge: 'WEEKEND SLR',
       badgeColor: '#318cdd',
       icon: Clock,
-      text: '5:30 AM Long Slow Distance gathering across all 20+ morning centers',
+      text: '5:30 AM Slow Long Run (SLR) gathering across all 20+ morning centers',
       actionText: 'Explore Centers',
       actionTarget: 'centers'
     },

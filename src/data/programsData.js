@@ -49,7 +49,7 @@ export const programsData = [
     frequency: '4 Days / Week',
     price: '₹6,000',
     tax: '+ 5% GST',
-    description: 'Our celebrated "Reach Your Full Potential" half marathon curriculum. Systematic weekend Long Slow Distance (LSD) progression.',
+    description: 'Our celebrated "Reach Your Full Potential" half marathon curriculum. Systematic weekend Slow Long Run (SLR) progression.',
     highlights: [
       'Progressive mileage buildup up to 18-20 km',
       'Fueling, gel ingestion & hydration pacing',
@@ -69,7 +69,7 @@ export const programsData = [
     frequency: '5 Days / Week',
     price: '₹6,000',
     tax: '+ 5% GST',
-    description: 'Comprehensive periodization for 42.195 km. Aerobic peak blocks, 30+ km LSD simulations, gut training, and negative split tactics.',
+    description: 'Comprehensive periodization for 42.195 km. Aerobic peak blocks, 30+ km SLR simulations, gut training, and negative split tactics.',
     highlights: [
       '30-34km supported simulation runs with hydration stations',
       'Glycogen depletion and re-fueling drills',
@@ -114,7 +114,7 @@ export const programsData = [
       'Full Onca Run App premium access',
       'Sync with Garmin, Apple Watch, Coros & Suunto',
       'Bi-weekly video call form check',
-      'Digital community forum & weekend virtual LSDs'
+      'Digital community forum & weekend virtual SLRs'
     ],
     image: '/images/jjs/Slider_3.png',
     targetRace: 'Any target race worldwide'

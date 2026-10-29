@@ -59,7 +59,7 @@ export default function PaceCalculator({ onSelectProgram, defaultExpanded = fals
 
     const zones = [
       {
-        name: 'Zone 2 (Aerobic Base / Easy LSD)',
+        name: 'Zone 2 (Aerobic Base / Easy SLR)',
         pace: `${paceKmMin + 1}:${paceKmSec < 10 ? '0' : ''}${paceKmSec} - ${paceKmMin + 1}:${(paceKmSec + 30) % 60 < 10 ? '0' : ''}${(paceKmSec + 30) % 60} /km`,
         description: '70% of weekly volume. Builds mitochondrial density and fat adaptation.',
         color: '#10B981'

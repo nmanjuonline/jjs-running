@@ -32,7 +32,7 @@ export default function OncaAppSection({ onGetApp }) {
           </h2>
 
           <p className="text-xs sm:text-base opacity-75 leading-relaxed max-w-xl">
-            The digital gateway to the JJs Running structured training ecosystem. Sync seamlessly with your Garmin, Apple Watch, Coros, or phone GPS. Get audio pace cues, track your weekly LSD mileage, log nutrition, and stay in direct sync with your Training Center Head.
+            The digital gateway to the JJs Running structured training ecosystem. Sync seamlessly with your Garmin, Apple Watch, Coros, or phone GPS. Get audio pace cues, track your weekly SLR mileage, log nutrition, and stay in direct sync with your Training Center Head.
           </p>
 
           {/* Key pillars */}
@@ -115,7 +115,7 @@ export default function OncaAppSection({ onGetApp }) {
               <div className="flex items-center justify-between text-[11px] text-gray-400">
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                  <span className="font-mono text-emerald-400 font-bold">LIVE LSD WORKOUT</span>
+                  <span className="font-mono text-emerald-400 font-bold">LIVE SLR WORKOUT</span>
                 </div>
                 <span className="font-mono text-[10px]">Shalini Grounds</span>
               </div>

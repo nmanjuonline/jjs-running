@@ -26,8 +26,8 @@ export default function MethodologySection({ currentTheme = 'olympic-clean', onE
     },
     {
       icon: Compass,
-      title: 'Supported Weekend LSDs',
-      subtitle: 'Long Slow Distance',
+      title: 'Supported Weekend SLRs',
+      subtitle: 'Slow Long Runs',
       description: 'Progressive weekend distance simulations with dedicated on-route hydration, electrolyte fluids, nutrition stations, and pace mentors.',
       highlight: 'Fully supported routes'
     }
@@ -55,8 +55,8 @@ export default function MethodologySection({ currentTheme = 'olympic-clean', onE
     {
       day: 'Sunday',
       time: '05:30 AM',
-      focus: 'The Signature LSD',
-      description: 'Progressive Long Slow Distance run with full hydration support, followed by post-run chai and debrief.'
+      focus: 'The Signature SLR',
+      description: 'Progressive Slow Long Run (SLR) with full hydration support, followed by post-run chai and debrief.'
     }
   ];
 
@@ -144,7 +144,7 @@ export default function MethodologySection({ currentTheme = 'olympic-clean', onE
         })}
       </div>
 
-      {/* Weekly Training Blueprint & LSD Protocol */}
+      {/* Weekly Training Blueprint & SLR Protocol */}
       <div
         className="rounded-3xl p-6 sm:p-8 md:p-10 border shadow-xl relative overflow-hidden"
         style={{

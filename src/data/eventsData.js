@@ -55,7 +55,7 @@ export const runnerStories = [
     role: 'Software Architect & Boston Marathon Qualifier',
     center: 'Jayanagar HQ',
     journey: 'From breathlessness on a 500m jog to a 3:24:12 Boston Qualifier',
-    quote: 'Before JJs Running, I thought marathoners were born superhuman. The coaches taught me that endurance is pure scientific compounding: heart-rate control, consistent weekend LSDs, and a pack that never lets you give up.',
+    quote: 'Before JJs Running, I thought marathoners were born superhuman. The coaches taught me that endurance is pure scientific compounding: heart-rate control, consistent weekend SLRs, and a pack that never lets you give up.',
     avatar: '/images/jjs/1296547704.jpg',
     stats: {
       initialPace: '8:45 min/km',
