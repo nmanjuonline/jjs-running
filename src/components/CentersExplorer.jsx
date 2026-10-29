@@ -97,9 +97,9 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
         </div>
 
         {/* Master Detail Split */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[380px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 lg:min-h-[380px]">
           {/* Left Column: Center List */}
-          <div className={`lg:col-span-5 border-b lg:border-b-0 lg:border-r max-h-[400px] overflow-y-auto divide-y ${
+          <div className={`lg:col-span-5 border-b lg:border-b-0 lg:border-r max-h-48 sm:max-h-60 lg:max-h-[420px] overflow-y-auto divide-y ${
             isDark ? 'border-slate-800 divide-slate-800/80' : 'border-slate-100 divide-slate-100'
           }`}>
             {filteredCenters.map((center) => {
@@ -296,9 +296,9 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
         </div>
 
         {/* Compact Dual-Panel Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[420px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 lg:min-h-[420px]">
           {/* Left Column: Scrollable Ground Directory */}
-          <div className="lg:col-span-5 border-b lg:border-b-0 lg:border-r border-orange-100 max-h-[440px] overflow-y-auto divide-y divide-orange-100/70">
+          <div className="lg:col-span-5 border-b lg:border-b-0 lg:border-r border-orange-100 max-h-48 sm:max-h-60 lg:max-h-[420px] overflow-y-auto divide-y divide-orange-100/70">
             {filteredCenters.map((center) => {
               const isSelected = currentCenter && currentCenter.id === center.id;
               return (
@@ -478,8 +478,8 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
         </div>
 
         {/* Tactical Cockpit Split */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[440px]">
-          <div className="lg:col-span-5 border-b lg:border-b-0 lg:border-r border-[#1e2230] max-h-[460px] overflow-y-auto divide-y divide-[#1e2230]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 lg:min-h-[440px]">
+          <div className="lg:col-span-5 border-b lg:border-b-0 lg:border-r border-[#1e2230] max-h-48 sm:max-h-60 lg:max-h-[420px] overflow-y-auto divide-y divide-[#1e2230]">
             {filteredCenters.map((center) => {
               const isSelected = currentCenter && currentCenter.id === center.id;
               return (
@@ -648,8 +648,8 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[440px]">
-        <div className="lg:col-span-5 border-b lg:border-b-0 lg:border-r border-zinc-800 max-h-[460px] overflow-y-auto divide-y divide-zinc-900">
+      <div className="grid grid-cols-1 lg:grid-cols-12 lg:min-h-[440px]">
+        <div className="lg:col-span-5 border-b lg:border-b-0 lg:border-r border-zinc-800 max-h-48 sm:max-h-60 lg:max-h-[420px] overflow-y-auto divide-y divide-zinc-900">
           {filteredCenters.map((center) => {
             const isSelected = currentCenter && currentCenter.id === center.id;
             return (
