@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Flame, Shield, MapPin, Play, Activity, Sparkles, ChevronRight, ChevronLeft, Award, Clock, Compass, Zap, CheckCircle2, Sun } from 'lucide-react';
+import { ArrowRight, Flame, Shield, MapPin, Play, Activity, Sparkles, ChevronRight, ChevronLeft, Award, Clock, Compass, Zap, CheckCircle2, Sun, Quote } from 'lucide-react';
 
 const HERO_IMAGES = [
   {
@@ -21,6 +21,11 @@ const HERO_IMAGES = [
   {
     src: '/images/jjs/home_2.jpg',
     alt: 'Morning aerobic base conditioning workout'
+  },
+  {
+    src: '/images/jjs/coach_slide_wide.jpg',
+    alt: 'Coach Pramod Deshpande, Founder and Chief Coach of Jayanagar Jaguars',
+    isCoach: true
   }
 ];
 import JJSLogo from './JJSLogo';
@@ -64,7 +69,9 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                   key={img.src}
                   src={img.src}
                   alt={img.alt}
-                  className={`absolute inset-0 w-full h-full object-cover object-center transition-all duration-1000 ease-in-out ${
+                  className={`absolute inset-0 w-full h-full object-cover ${
+                    img.isCoach ? 'object-[78%_center]' : 'object-center'
+                  } transition-all duration-1000 ease-in-out ${
                     activeSlide === idx
                       ? 'opacity-100 scale-100'
                       : 'opacity-0 scale-105 pointer-events-none'
@@ -117,22 +124,77 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                 <ChevronRight className="w-5 h-5 stroke-[2.5]" />
               </button>
 
-              {/* Floating Top Pills (Diversified Information) */}
-              <div className="relative z-10 flex flex-wrap items-center gap-2 mb-6 sm:mb-0 sm:absolute sm:top-5 sm:left-6 md:top-6 md:left-8">
-                <span className="px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#d02426] text-white shadow-lg flex items-center gap-1.5">
-                  <Zap className="w-3.5 h-3.5 fill-white" />
-                  AEROBIC PERIODIZATION
-                </span>
-                <span className="hidden sm:inline-flex px-3 py-1 rounded-full text-xs font-bold bg-white/95 text-slate-900 backdrop-blur-md shadow-md">
-                  17,000+ Coached Runners
-                </span>
-                <span className="hidden md:inline-flex px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#318cdd]/25 border border-[#318cdd]/50 text-[#4ca6f5] backdrop-blur-md">
-                  3 CITIES • TUE, THU, SAT &amp; SUN @ 5:30 AM
-                </span>
-              </div>
+              {/* Floating Top Pills */}
+              {activeSlide === 5 ? (
+                <div className="relative z-10 flex flex-wrap items-center gap-2 mb-6 sm:mb-0 sm:absolute sm:top-5 sm:left-6 md:top-6 md:left-8">
+                  <span className="px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#d02426] text-white shadow-lg flex items-center gap-1.5">
+                    <Quote className="w-3.5 h-3.5 fill-white" />
+                    MESSAGE FROM CHIEF COACH
+                  </span>
+                  <span className="hidden sm:inline-flex px-3 py-1 rounded-full text-xs font-bold bg-white/95 text-slate-900 backdrop-blur-md shadow-md">
+                    Pramod Deshpande • Founder
+                  </span>
+                  <span className="hidden md:inline-flex px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#318cdd]/25 border border-[#318cdd]/50 text-[#4ca6f5] backdrop-blur-md">
+                    17,000+ RUNNERS TRANSFORMED
+                  </span>
+                </div>
+              ) : (
+                <div className="relative z-10 flex flex-wrap items-center gap-2 mb-6 sm:mb-0 sm:absolute sm:top-5 sm:left-6 md:top-6 md:left-8">
+                  <span className="px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#d02426] text-white shadow-lg flex items-center gap-1.5">
+                    <Zap className="w-3.5 h-3.5 fill-white" />
+                    AEROBIC PERIODIZATION
+                  </span>
+                  <span className="hidden sm:inline-flex px-3 py-1 rounded-full text-xs font-bold bg-white/95 text-slate-900 backdrop-blur-md shadow-md">
+                    17,000+ Coached Runners
+                  </span>
+                  <span className="hidden md:inline-flex px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#318cdd]/25 border border-[#318cdd]/50 text-[#4ca6f5] backdrop-blur-md">
+                    3 CITIES • TUE, THU, SAT &amp; SUN @ 5:30 AM
+                  </span>
+                </div>
+              )}
 
               {/* Integrated Bottom Hero Content Overlay */}
-              <div className="relative z-10 text-white max-w-4xl space-y-3 sm:space-y-4 mt-auto sm:mt-0 sm:absolute sm:bottom-0 sm:inset-x-0 sm:p-8 md:p-10">
+              {activeSlide === 5 ? (
+                <div className="relative z-10 text-white max-w-xl md:max-w-2xl space-y-3 sm:space-y-4 mt-auto sm:mt-0 sm:absolute sm:bottom-0 sm:left-0 sm:p-8 md:p-10 bg-slate-950/80 sm:bg-transparent backdrop-blur-sm sm:backdrop-blur-none rounded-2xl sm:rounded-none p-4">
+                  <h1 className="text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight leading-[0.98]">
+                    EVERY RUNNER HAS AN
+                    <br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4ca6f5] via-[#318cdd] to-[#ff4d4f]">
+                      ATHLETE WAITING WITHIN.
+                    </span>
+                  </h1>
+
+                  <p className="text-xs sm:text-sm md:text-base text-slate-200 leading-relaxed font-medium">
+                    "Running is never about competing with others. It is about discovering what you are truly capable of through science, discipline, and community. Start where you are; our coaches will guide every single stride."
+                  </p>
+
+                  <div className="flex items-center gap-3 pt-0.5">
+                    <div className="border-l-2 border-[#d02426] pl-2.5">
+                      <span className="text-xs sm:text-sm font-black text-white block">Coach Pramod Deshpande</span>
+                      <span className="text-[10px] sm:text-xs text-slate-300 font-medium block">Founder &amp; Chief Coach, Jayanagar Jaguars</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row sm:flex-nowrap items-stretch sm:items-center gap-2.5 sm:gap-3 pt-1">
+                    <button
+                      onClick={onBookTrial}
+                      className="py-3 px-6 sm:px-7 rounded-2xl bg-[#d02426] hover:bg-[#b51c1e] text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(208,36,38,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap flex-shrink-0 cursor-pointer"
+                    >
+                      <span>Book Free Trial Run</span>
+                      <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                    </button>
+
+                    <button
+                      onClick={onExploreCenters}
+                      className="py-3 px-5 sm:px-6 rounded-2xl bg-white/95 hover:bg-white text-slate-900 text-xs sm:text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap flex-shrink-0 cursor-pointer"
+                    >
+                      <MapPin className="w-4 h-4 text-[#318cdd] stroke-[2.5]" />
+                      <span>Find Your Training Ground</span>
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="relative z-10 text-white max-w-4xl space-y-3 sm:space-y-4 mt-auto sm:mt-0 sm:absolute sm:bottom-0 sm:inset-x-0 sm:p-8 md:p-10">
                   <h1 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[0.96]">
                     RUN WITH SCIENCE.
                     <br />
@@ -148,7 +210,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                   <div className="flex flex-col sm:flex-row sm:flex-nowrap items-stretch sm:items-center gap-2.5 sm:gap-3 pt-2">
                     <button
                       onClick={onBookTrial}
-                      className="py-3 px-6 sm:px-7 rounded-2xl bg-[#d02426] hover:bg-[#b51c1e] text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(208,36,38,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap flex-shrink-0"
+                      className="py-3 px-6 sm:px-7 rounded-2xl bg-[#d02426] hover:bg-[#b51c1e] text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(208,36,38,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap flex-shrink-0 cursor-pointer"
                     >
                       <span>Book Free Trial Run</span>
                       <ArrowRight className="w-4 h-4 stroke-[2.5]" />
@@ -156,7 +218,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
 
                     <button
                       onClick={onExploreCenters}
-                      className="py-3 px-5 sm:px-6 rounded-2xl bg-white/95 hover:bg-white text-slate-900 text-xs sm:text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap flex-shrink-0"
+                      className="py-3 px-5 sm:px-6 rounded-2xl bg-white/95 hover:bg-white text-slate-900 text-xs sm:text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap flex-shrink-0 cursor-pointer"
                     >
                       <MapPin className="w-4 h-4 text-[#318cdd] stroke-[2.5]" />
                       <span>Explore Nearby Grounds</span>
@@ -164,13 +226,14 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
 
                     <button
                       onClick={onOpenCalc}
-                      className="py-3 px-4 rounded-2xl bg-black/40 hover:bg-black/60 text-white border border-white/20 backdrop-blur-md text-xs sm:text-sm font-mono font-bold uppercase transition-all hover:-translate-y-0.5 flex items-center justify-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                      className="py-3 px-4 rounded-2xl bg-black/40 hover:bg-black/60 text-white border border-white/20 backdrop-blur-md text-xs sm:text-sm font-mono font-bold uppercase transition-all hover:-translate-y-0.5 flex items-center justify-center gap-1.5 whitespace-nowrap flex-shrink-0 cursor-pointer"
                     >
                       <Activity className="w-4 h-4 text-[#4ca6f5]" />
                       <span>Pace Calculator</span>
                     </button>
                   </div>
-              </div>
+                </div>
+              )}
             </div>
           </div>
 
