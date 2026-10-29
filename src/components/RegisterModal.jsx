@@ -47,7 +47,10 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-all">
+    <div
+      onClick={(e) => { if (e.target === e.currentTarget) handleReset(); }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-all"
+    >
       <div
         className="w-full max-w-xl rounded-3xl p-6 md:p-8 border shadow-2xl relative overflow-hidden transition-all max-h-[90vh] overflow-y-auto"
         style={{
@@ -56,12 +59,14 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
           color: 'var(--text-primary)'
         }}
       >
-        {/* Close Button */}
+        {/* Prominent High-Contrast Close Button */}
         <button
           onClick={handleReset}
-          className="absolute top-5 right-5 p-2 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all"
+          aria-label="Close dialog"
+          title="Close dialog"
+          className="absolute top-4 right-4 sm:top-5 sm:right-5 w-9 h-9 flex items-center justify-center rounded-full bg-slate-800 text-white hover:bg-[#d02426] border border-slate-700/90 shadow-lg transition-all duration-200 hover:scale-105 z-30 cursor-pointer"
         >
-          <X className="w-5 h-5" />
+          <X className="w-5 h-5 stroke-[2.5]" />
         </button>
 
         {submitted ? (
@@ -108,12 +113,14 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
         ) : (
           <div>
             <div className="mb-6">
-              <div className="flex items-center justify-between gap-3 mb-3">
-                <JJSLogo className="h-9 sm:h-10 w-auto" />
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-red-50 text-[#d02426] border border-red-200/80">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  Zero Obligation
-                </span>
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-3 pr-10">
+                <div className="flex items-center gap-3">
+                  <JJSLogo className="h-8 sm:h-9 w-auto" />
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-red-50 text-[#d02426] border border-red-200/80">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    Zero Obligation
+                  </span>
+                </div>
               </div>
               <h3 className="text-2xl font-black tracking-tight">
                 Join JJs Running / Book Free Trial Run
