@@ -20,7 +20,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
           <div className={`rounded-3xl border overflow-hidden relative group shadow-[0_20px_50px_-15px_rgba(0,50,150,0.18)] ${
             isDark ? 'border-slate-800 bg-slate-950 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.7)]' : 'border-slate-200/90 bg-white'
           }`}>
-            <div className="relative min-h-[540px] sm:min-h-[460px] md:h-[500px] w-full overflow-hidden bg-slate-950 p-5 sm:p-8 md:p-10 flex flex-col justify-between">
+            <div className="relative min-h-[540px] sm:min-h-0 sm:h-[420px] md:h-[480px] w-full overflow-hidden bg-slate-950 p-5 sm:p-0 flex flex-col justify-between sm:block">
               <img
                 src="/images/jjs/login_bg1.jpg"
                 alt="JJs Running squad stride in morning light"
@@ -31,7 +31,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
               <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-950/30 to-transparent pointer-events-none" />
 
               {/* Floating Top Pills (Diversified Information) */}
-              <div className="relative z-10 flex flex-wrap items-center gap-2 mb-6 sm:mb-8">
+              <div className="relative z-10 flex flex-wrap items-center gap-2 mb-6 sm:mb-0 sm:absolute sm:top-5 sm:left-6 md:top-6 md:left-8">
                 <span className="px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#d02426] text-white shadow-lg flex items-center gap-1.5">
                   <Zap className="w-3.5 h-3.5 fill-white" />
                   AEROBIC PERIODIZATION
@@ -45,7 +45,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
               </div>
 
               {/* Integrated Bottom Hero Content Overlay */}
-              <div className="relative z-10 text-white max-w-3xl space-y-3 sm:space-y-4 mt-auto">
+              <div className="relative z-10 text-white max-w-3xl space-y-3 sm:space-y-4 mt-auto sm:mt-0 sm:absolute sm:bottom-0 sm:inset-x-0 sm:p-8 md:p-10">
                   <h1 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[0.96]">
                     RUN WITH SCIENCE.
                     <br />
@@ -170,7 +170,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
 
           {/* Grand Panoramic Dawn Card with Authentic JJs Pack Photo */}
           <div className="rounded-3xl border border-orange-200/90 bg-white shadow-[0_20px_50px_-15px_rgba(255,72,0,0.15)] overflow-hidden relative group">
-            <div className="relative min-h-[520px] sm:min-h-[440px] md:h-[480px] w-full overflow-hidden bg-zinc-950 p-5 sm:p-8 md:p-10 flex flex-col justify-between">
+            <div className="relative min-h-[520px] sm:min-h-0 sm:h-[420px] md:h-[480px] w-full overflow-hidden bg-zinc-950 p-5 sm:p-0 flex flex-col justify-between sm:block">
               <img
                 src="/images/jjs/login_bg1.jpg"
                 alt="JJs Running massive squad on morning run"
@@ -179,7 +179,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
               <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/95 via-zinc-950/40 to-zinc-950/15" />
 
               {/* Floating Top Pill */}
-              <div className="relative z-10 flex flex-wrap items-center gap-2 mb-6 sm:mb-8">
+              <div className="relative z-10 flex flex-wrap items-center gap-2 mb-6 sm:mb-0 sm:absolute sm:top-5 sm:left-6 md:top-6 md:left-8">
                 <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-gradient-to-r from-orange-600 to-amber-500 text-white shadow-lg flex items-center gap-1.5">
                   <Sun className="w-3.5 h-3.5" />
                   THE SUNRISE STRIDE
@@ -190,7 +190,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
               </div>
 
               {/* Integrated Bottom Hero Content Overlay */}
-              <div className="relative z-10 text-white max-w-3xl space-y-3 sm:space-y-4 mt-auto">
+              <div className="relative z-10 text-white max-w-3xl space-y-3 sm:space-y-4 mt-auto sm:mt-0 sm:absolute sm:bottom-0 sm:inset-x-0 sm:p-8 md:p-10">
                   <h1 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[0.96]">
                     WAKE UP WITH PURPOSE.
                     <br />
