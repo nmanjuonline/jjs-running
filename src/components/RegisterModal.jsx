@@ -446,9 +446,9 @@ export default function RegisterModal({ isOpen, onClose, initialData = null, onS
     mobile: '',
     location: '',
     program: '',
-    experience: 'Beginner (0 - 5 km)',
+    experience: '',
     promocode: '',
-    referral: 'Saw runners / Community'
+    referral: ''
   });
 
   const [errors, setErrors] = useState({});

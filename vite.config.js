@@ -5,6 +5,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [react()],
   server: {
+    host: true,
     watch: {
       ignored: ['**/.vs/**', '**/.git/**', '**/dist/**', '**/.wrangler/**']
     }

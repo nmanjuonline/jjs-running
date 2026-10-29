@@ -64,7 +64,7 @@ const registrationSchema = z
       .string()
       .min(1, 'WhatsApp Number is required')
       .regex(/^[0-9]{10}$/, 'Must be a 10-digit WhatsApp number'),
-    sameAsMobile: z.boolean().default(true),
+    sameAsMobile: z.boolean().default(false),
     emergencyName: z
       .string()
       .min(1, 'Emergency Contact Name is required')
@@ -73,8 +73,8 @@ const registrationSchema = z
       .string()
       .min(1, 'Emergency Contact Number is required')
       .regex(/^[0-9]{10}$/, 'Must be a 10-digit emergency number'),
-    gender: z.enum(['Male', 'Female']),
-    tshirtSize: z.enum(['S', 'M', 'L', 'XL', 'XXL']),
+    gender: z.string().min(1, 'Please select your Gender'),
+    tshirtSize: z.string().min(1, 'Please select your T-Shirt size'),
     dob: z
       .string()
       .min(1, 'Date of Birth is required')
@@ -552,12 +552,12 @@ function PopoverTimePicker({ value, onChange, disabled = false, error = '' }) {
 
   // Parse incoming value "HH:MM:SS"
   const [hours, minutes, seconds] = useMemo(() => {
-    if (!value) return ['01', '39', '44'];
+    if (!value) return ['00', '00', '00'];
     const parts = value.split(':');
     return [
-      parts[0] !== undefined ? parts[0].padStart(2, '0') : '01',
-      parts[1] !== undefined ? parts[1].padStart(2, '0') : '39',
-      parts[2] !== undefined ? parts[2].padStart(2, '0') : '44'
+      parts[0] !== undefined ? parts[0].padStart(2, '0') : '00',
+      parts[1] !== undefined ? parts[1].padStart(2, '0') : '00',
+      parts[2] !== undefined ? parts[2].padStart(2, '0') : '00'
     ];
   }, [value]);
 
@@ -603,8 +603,6 @@ function PopoverTimePicker({ value, onChange, disabled = false, error = '' }) {
     );
   }
 
-  const displayTime = value || `${hours}:${minutes}:${seconds}`;
-
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger asChild>
@@ -617,10 +615,14 @@ function PopoverTimePicker({ value, onChange, disabled = false, error = '' }) {
           style={{
             backgroundColor: 'var(--card-inner)',
             borderColor: error ? '#ef4444' : 'var(--border-color)',
-            color: 'var(--text-heading)'
+            color: value ? 'var(--text-heading)' : 'var(--text-secondary)'
           }}
         >
-          <span className="font-mono font-bold tracking-wider">{displayTime}</span>
+          {value ? (
+            <span className="font-mono font-bold tracking-wider">{value}</span>
+          ) : (
+            <span className="font-normal opacity-75">Select PB Timing (HH:MM:SS)</span>
+          )}
           <Clock className="w-4 h-4 opacity-60 text-[#318cdd] flex-shrink-0" />
         </button>
       </Popover.Trigger>
@@ -656,7 +658,7 @@ function PopoverTimePicker({ value, onChange, disabled = false, error = '' }) {
               </span>
             </div>
             <span className="font-mono font-black text-xs px-2 py-0.5 rounded-md bg-[#318cdd]/15 text-[#318cdd] tracking-wider">
-              {displayTime}
+              {value || `${hours}:${minutes}:${seconds}`}
             </span>
           </div>
 
@@ -793,19 +795,19 @@ export default function ProgramRegistrationModal({
       email: '',
       mobileNo: '',
       whatsappNo: '',
-      sameAsMobile: true,
+      sameAsMobile: false,
       emergencyName: '',
       emergencyNo: '',
-      gender: 'Male',
-      tshirtSize: 'M',
-      dob: '1995-01-15',
-      bloodGroup: 'B+',
+      gender: '',
+      tshirtSize: '',
+      dob: '',
+      bloodGroup: '',
       residentialAddress: '',
       pinZipCode: '',
-      locationPreference: 'Malleshwaram',
-      maxDistance1Year: 'HM',
-      pbEvent: 'Half Marathon (21.1K)',
-      pbTiming: '01:39:44',
+      locationPreference: '',
+      maxDistance1Year: '',
+      pbEvent: '',
+      pbTiming: '',
       healthProblem: '',
       promocode: '',
       acceptedTerms: false
@@ -1330,6 +1332,11 @@ export default function ProgramRegistrationModal({
                       </label>
                     ))}
                   </div>
+                  {errors.gender && (
+                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" /> {errors.gender.message}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -1349,6 +1356,11 @@ export default function ProgramRegistrationModal({
                       </label>
                     ))}
                   </div>
+                  {errors.tshirtSize && (
+                    <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" /> {errors.tshirtSize.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
