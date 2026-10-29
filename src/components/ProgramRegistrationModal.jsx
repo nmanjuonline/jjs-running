@@ -912,7 +912,7 @@ export default function ProgramRegistrationModal({
              OFFICIAL PROGRAM REGISTRATION FORM
              ========================================================================= */
           <div>
-            {/* Header: Title + Warm Underline */}
+            {/* Header: Title + Brand Underline */}
             <div className="text-center mb-6 sm:mb-8 pr-8 sm:pr-0">
               <h2
                 id="reg-title"
@@ -921,7 +921,7 @@ export default function ProgramRegistrationModal({
               >
                 Program Registration
               </h2>
-              <div className="w-16 h-1 bg-[#ea580c] mx-auto mt-2 rounded-full" />
+              <div className="w-12 h-1 bg-[#d02426] mx-auto mt-2.5 rounded-full" />
 
               {/* Active Program Banner */}
               {activeProgram && (

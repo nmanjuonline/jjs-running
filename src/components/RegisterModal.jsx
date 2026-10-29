@@ -386,7 +386,7 @@ function ThemedProgramSelect({ value, onChange, customProgram = null, error = ''
             >
               <div>
                 <span className="font-bold">{customProgram}</span>
-                <span className="ml-2 text-[10px] uppercase font-bold text-[#ea580c] bg-orange-500/10 px-1.5 py-0.5 rounded">
+                <span className="ml-2 text-[10px] uppercase font-bold text-[#d02426] bg-red-500/10 px-1.5 py-0.5 rounded border border-red-500/20">
                   Special Camp
                 </span>
               </div>
