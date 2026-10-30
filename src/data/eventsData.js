@@ -11,7 +11,7 @@ export const eventsData = [
     targetDistance: '5K Timed / 3K Walk-Jog / Kids Fun Run',
     elevation: 'Flat Track & Stadium Loop',
     image: '/images/events/the-saree-run.jpg',
-    description: 'An iconic nationwide fitness movement founded by Jayanagar Jaguars and Coach Pramod Deshpande. Shattering stereotypes by running proud in traditional six-yard sarees and running shoes, celebrating sisterhood, wellness, and self-empowerment.',
+    description: 'An iconic nationwide fitness movement founded by Jayanagar Jaguars and Coach Pramod Deshpande, the Saree Run celebrates women who proudly run in traditional six-yard sarees and running shoes, promoting sisterhood, wellness, and self-empowerment.',
     highlights: [
       'Chip-timed 5K competitive run with age-category podiums',
       'Open non-timed 3K walk/jog for beginners of all ages',

@@ -239,7 +239,7 @@ export default function App() {
               Flagship Races & Festivals
             </h2>
             <p className="text-xs sm:text-base mt-1.5" style={{ color: 'var(--text-secondary)' }}>
-              From high-altitude monsoon hill climbs to iconic women fitness movements, experience running events founded and powered by Jayanagar Jaguars.
+              From high-altitude monsoon hill climbs to iconic women’s fitness movements, experience running events founded and powered by Jayanagar Jaguars.
             </p>
           </div>
 
