@@ -1,0 +1,38 @@
+name: "💡 Feature Request"
+description: "Suggest an idea or enhancement for JJs Running"
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting ideas to improve **JJs Running**!
+  - type: textarea
+    id: problem
+    attributes:
+      label: Is your feature request related to a problem?
+      description: A clear and concise description of the pain point or motivation.
+      placeholder: "e.g. I'm always frustrated when I can't export race split times as CSV..."
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution / Feature
+      description: Describe what you want to happen and how it should look or work.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Any alternative solutions or workarounds you've thought about.
+    validations:
+      required: false
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Mockups, screenshots, or reference links.
+    validations:
+      required: false
