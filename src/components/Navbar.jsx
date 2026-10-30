@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, Sun, Moon, ArrowRight } from 'lucide-react';
+import { Menu, X, Sun, Moon, ArrowRight, ChevronRight } from 'lucide-react';
 import JJsLogo from './JJsLogo';
 
 export default function Navbar({ currentTheme = 'swiss-dark', setTheme, onOpenRegister, onScrollTo }) {
@@ -26,7 +26,7 @@ export default function Navbar({ currentTheme = 'swiss-dark', setTheme, onOpenRe
 
   return (
     <header
-      className="sticky top-0 z-40 w-full border-b backdrop-blur-xl transition-all duration-300"
+      className="sticky top-0 z-50 w-full border-b backdrop-blur-xl transition-all duration-300"
       style={{
         backgroundColor: 'var(--nav-bg)',
         borderColor: 'var(--border-color)',
@@ -77,8 +77,8 @@ export default function Navbar({ currentTheme = 'swiss-dark', setTheme, onOpenRe
             ))}
           </nav>
 
-          {/* Right Action: Theme Switcher & Register CTA */}
-          <div className="hidden sm:flex items-center gap-3">
+          {/* Desktop Right Action: Theme Switcher & Register CTA (Visible on lg and above) */}
+          <div className="hidden lg:flex items-center gap-3">
             {/* Sleek Light / Dark Segmented Switcher */}
             <div
               className="flex items-center p-1 rounded-full border shadow-xs transition-colors flex-shrink-0"
@@ -129,11 +129,21 @@ export default function Navbar({ currentTheme = 'swiss-dark', setTheme, onOpenRe
             </button>
           </div>
 
-          {/* Mobile Actions: Contrast Toggle & Accessible Menu Button (>=44x44px Touch Targets) */}
-          <div className="flex items-center gap-2 sm:hidden">
+          {/* Mobile & Tablet Actions (Guaranteed visible on all screens below lg < 1024px) */}
+          <div className="flex lg:hidden items-center gap-2">
+            {/* Quick Trial Pill on tablet / medium view */}
+            <button
+              onClick={() => { if (onOpenRegister) onOpenRegister(); }}
+              className="hidden sm:flex py-2 px-3.5 rounded-full text-xs font-black uppercase tracking-wider text-white bg-[#d02426] hover:bg-[#b51c1e] shadow-sm cursor-pointer whitespace-nowrap items-center gap-1"
+            >
+              <span>Free Trial</span>
+              <ArrowRight className="w-3 h-3 stroke-[2.5]" />
+            </button>
+
+            {/* Compact Light / Dark Toggle */}
             <button
               onClick={() => setTheme && setTheme(isDark ? 'swiss-light' : 'swiss-dark')}
-              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl border flex-shrink-0 cursor-pointer"
+              className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-xl border flex-shrink-0 cursor-pointer shadow-xs transition-colors"
               style={{
                 backgroundColor: 'var(--card-inner)',
                 borderColor: 'var(--border-color)',
@@ -145,32 +155,38 @@ export default function Navbar({ currentTheme = 'swiss-dark', setTheme, onOpenRe
               {isDark ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-slate-700" />}
             </button>
 
+            {/* Mobile & Tablet Hamburger Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl border flex-shrink-0 cursor-pointer"
+              className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-xl border flex-shrink-0 cursor-pointer shadow-xs transition-colors"
               style={{
-                backgroundColor: 'var(--card-inner)',
-                borderColor: 'var(--border-color)',
-                color: 'var(--text-primary)'
+                backgroundColor: mobileMenuOpen ? 'var(--card-bg)' : 'var(--card-inner)',
+                borderColor: mobileMenuOpen ? 'var(--accent)' : 'var(--border-color)',
+                color: 'var(--text-heading)'
               }}
               aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-navigation"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? (
+                <X className="w-5 h-5 text-rose-500 stroke-[2.5]" />
+              ) : (
+                <Menu className="w-5 h-5 stroke-[2.5]" />
+              )}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile & Tablet Navigation Drawer */}
       {mobileMenuOpen && (
         <div
           id="mobile-navigation"
-          className="lg:hidden p-4 border-t space-y-3 shadow-xl max-w-full"
+          className="lg:hidden p-4 sm:p-5 border-t space-y-3.5 shadow-2xl max-h-[calc(100vh-5rem)] overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200"
           style={{
             backgroundColor: 'var(--card-bg)',
-            borderColor: 'var(--border-color)'
+            borderColor: 'var(--border-color)',
+            color: 'var(--text-primary)'
           }}
         >
           <div className="flex flex-col space-y-1">
@@ -178,35 +194,24 @@ export default function Navbar({ currentTheme = 'swiss-dark', setTheme, onOpenRe
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.id)}
-                className="text-left py-2.5 px-3 rounded-xl font-bold text-sm tracking-wide transition-colors hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer"
-                style={{ color: 'var(--text-primary)' }}
+                className="text-left py-3 px-3.5 rounded-xl font-bold text-sm tracking-wide transition-colors hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer flex items-center justify-between"
+                style={{ color: 'var(--text-heading)' }}
               >
-                {item.label}
+                <span>{item.label}</span>
+                <ChevronRight className="w-4 h-4 opacity-40" />
               </button>
             ))}
           </div>
 
-          <div className="pt-2 border-t space-y-2" style={{ borderColor: 'var(--border-color)' }}>
+          <div className="pt-3 border-t space-y-2.5" style={{ borderColor: 'var(--border-color)' }}>
             <button
               onClick={() => { setMobileMenuOpen(false); if (onOpenRegister) onOpenRegister(); }}
-              className="w-full py-3.5 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 cursor-pointer bg-[#d02426] text-white hover:bg-[#b51c1e]"
+              className="w-full py-3.5 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 cursor-pointer bg-[#d02426] text-white hover:bg-[#b51c1e] transition-all hover:scale-[1.01] active:scale-95"
             >
               <span>Book Free Trial (1st Run Free)</span>
               <ArrowRight className="w-4 h-4 stroke-[2.5]" />
             </button>
 
-            {onOpenProgramRegister && (
-              <button
-                onClick={() => { setMobileMenuOpen(false); onOpenProgramRegister(); }}
-                className="w-full py-3 rounded-xl text-xs font-bold uppercase tracking-wider border flex items-center justify-center gap-2 cursor-pointer hover:bg-black/5 dark:hover:bg-white/5"
-                style={{
-                  borderColor: 'var(--border-color)',
-                  color: 'var(--text-heading)'
-                }}
-              >
-                <span>Program Registration</span>
-              </button>
-            )}
           </div>
         </div>
       )}
