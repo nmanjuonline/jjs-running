@@ -37,6 +37,7 @@ section[id] {
 
   /* SWISS CLEAN - VERSION 1: LOGO MATCH (Light • Cerulean Blue & Sprint Red) */
   body[data-theme='swiss-light'], body[data-theme='olympic-clean'], body[data-theme='street-crew'] {
+    color-scheme: light;
     --bg-page: #ffffff;
     --text-primary: #0f172a;
     --text-secondary: #475569;
@@ -63,6 +64,7 @@ section[id] {
 
   /* SWISS CLEAN - VERSION 2: LOGO CONTRAST (Dark • Deep Obsidian & Logo Palette) */
   body[data-theme='swiss-dark'] {
+    color-scheme: dark;
     --bg-page: #090d16;
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
@@ -112,6 +114,7 @@ section[id] {
 
   /* THEME 3 (DARK): Kinetic Volt (Asymmetric Bento Cockpit) */
   body[data-theme='kinetic'] {
+    color-scheme: dark;
     --bg-page: #090a0f;
     --text-primary: #ffffff;
     --text-secondary: #94a3b8;
@@ -135,6 +138,7 @@ section[id] {
 
   /* THEME 4 (DARK): Crimson Velocity (Breaking2 Speed Runway) */
   body[data-theme='crimson'] {
+    color-scheme: dark;
     --bg-page: #070709;
     --text-primary: #ffffff;
     --text-secondary: #a1a1aa;
