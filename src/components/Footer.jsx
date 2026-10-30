@@ -4,7 +4,7 @@ import JJsLogo from './JJsLogo';
 
 const CURRENT_YEAR = 2026;
 
-export default function Footer({ onScrollTo, onOpenRegister }) {
+export default function Footer({ onScrollTo, onOpenRegister, onOpenProgramRegister }) {
   const [subscribed, setSubscribed] = useState(false);
   const [email, setEmail] = useState('');
 
@@ -308,6 +308,12 @@ export default function Footer({ onScrollTo, onOpenRegister }) {
               style={{ color: 'var(--accent)' }}
             >
               Free Trial
+            </button>
+            <button
+              onClick={() => onOpenProgramRegister && onOpenProgramRegister()}
+              className="font-bold cursor-pointer hover:underline text-[#318cdd]"
+            >
+              Program Registration
             </button>
           </div>
         </div>
