@@ -9,7 +9,7 @@ export const programsData = [
     frequency: '3 Days / Week',
     price: '₹6,000',
     tax: '+ 5% GST',
-    description: 'Transform your lifestyle with scientific run-walk intervals, biomechanics analysis, breathing control, and injury-proofing.',
+    description: 'Transform your lifestyle with scientific run-walk intervals, biomechanical analysis, breathing control, and injury-proofing.',
     highlights: [
       'Gradual aerobic base building',
       'Posture, cadence & stride correction',
@@ -29,7 +29,7 @@ export const programsData = [
     frequency: '4 Days / Week',
     price: '₹6,000',
     tax: '+ 5% GST',
-    description: 'Take your 10K pace to the next tier with structured lactate-threshold workouts, interval track sessions, and hill repeats.',
+    description: 'Take your 10K performance to the next level with structured lactate-threshold workouts, interval track sessions, and hill repeats.',
     highlights: [
       'Weekly track workouts & 400m/800m repeats',
       'Tempo runs dialed to VO2 threshold',
@@ -49,9 +49,9 @@ export const programsData = [
     frequency: '4 Days / Week',
     price: '₹6,000',
     tax: '+ 5% GST',
-    description: 'Our celebrated "Reach Your Full Potential" half marathon curriculum. Systematic weekend Slow Long Run (SLR) progression.',
+    description: 'Our celebrated "Reach Your Full Potential" half-marathon program features systematic weekend slow long runs (SLRs).',
     highlights: [
-      'Progressive mileage buildup up to 18-20 km',
+      'Progressive mileage build-up to 18-20 km',
       'Fueling, gel ingestion & hydration pacing',
       'Pace group mentors (Sub-1:45, Sub-2:00, Sub-2:15, Sub-2:30)',
       'Pre-race taper & psychological prep'
