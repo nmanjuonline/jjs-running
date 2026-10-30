@@ -157,13 +157,13 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                 <div className="relative z-10 flex flex-wrap items-center gap-2 mb-6 sm:mb-0 sm:absolute sm:top-5 sm:left-6 md:top-6 md:left-8">
                   <span className="px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#d02426] text-white shadow-lg flex items-center gap-1.5">
                     <Zap className="w-3.5 h-3.5 fill-white" />
-                    AEROBIC PERIODIZATION
+                    STRUCTURED COACHING FOR EVERY RUNNER
                   </span>
                   <span className="hidden sm:inline-flex px-3 py-1 rounded-full text-xs font-bold bg-white/95 text-slate-900 backdrop-blur-md shadow-md">
                     17,000+ Runners Trained
                   </span>
                   <span className="hidden md:inline-flex px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#318cdd]/25 border border-[#318cdd]/50 text-[#4ca6f5] backdrop-blur-md">
-                    3 CITIES • TUE, THU, SAT &amp; SUN | 5:30 AM
+                    20+ GROUNDS • TUE, THU, SAT &amp; SUN | 5:30 AM
                   </span>
                 </div>
               )}
@@ -209,6 +209,10 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                   </div>
                 </div>) : (
                 <div className="relative z-10 text-white max-w-4xl space-y-3 sm:space-y-4 mt-auto sm:mt-0 sm:absolute sm:bottom-0 sm:inset-x-0 sm:p-8 md:p-10">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-black/60 border border-white/20 backdrop-blur-md text-[#38bdf8]">
+                    <span>STRUCTURED COACHING FOR EVERY RUNNER</span>
+                  </div>
+
                   <h1 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[0.96]">
                     RUN WITH SCIENCE.
                     <br />
@@ -218,31 +222,31 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                   </h1>
 
                   <p className="text-xs sm:text-base text-slate-200 max-w-2xl leading-relaxed font-medium">
-                    Structured heart-rate zone training, cadence calibration, and injury-free marathon preparation, led by dedicated Training Center Heads across 20+ neighborhood grounds.
+                    Whether you are starting your first 5K or preparing for a marathon, train with a structured plan, dedicated coaching, and a community that helps you stay consistent.
                   </p>
 
                   <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3 pt-2">
                     <button
                       onClick={onBookTrial}
-                      className="py-3 px-5 sm:px-6 rounded-2xl bg-[#d02426] hover:bg-[#b51c1e] text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(208,36,38,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer"
+                      className="py-3.5 px-6 sm:px-7 rounded-2xl bg-[#d02426] hover:bg-[#b51c1e] text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(208,36,38,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer"
                     >
-                      <span>Book Free Trial Run</span>
+                      <span>BOOK A FREE TRIAL RUN</span>
                       <ArrowRight className="w-4 h-4 stroke-[2.5]" />
                     </button>
 
                     <button
                       onClick={onExploreCenters}
-                      className="py-3 px-4 sm:px-5 rounded-2xl bg-white/95 hover:bg-white text-slate-900 text-xs sm:text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer"
+                      className="py-3.5 px-5 sm:px-6 rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-md text-xs sm:text-sm font-bold uppercase tracking-wider transition-all shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer"
                     >
-                      <MapPin className="w-4 h-4 text-[#318cdd] stroke-[2.5]" />
-                      <span>Explore Nearby Grounds</span>
+                      <MapPin className="w-4 h-4 text-[#38bdf8] stroke-[2.5]" />
+                      <span>FIND A TRAINING GROUND</span>
                     </button>
 
                     <button
                       onClick={onOpenCalc}
-                      className="py-3 px-4 rounded-2xl bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-md text-xs sm:text-sm font-mono font-bold uppercase transition-all hover:-translate-y-0.5 flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer"
+                      className="py-3.5 px-4 rounded-2xl bg-black/40 hover:bg-black/60 text-slate-200 hover:text-white border border-white/15 backdrop-blur-md text-xs font-mono font-bold uppercase transition-all hover:-translate-y-0.5 flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer"
                     >
-                      <Activity className="w-4 h-4 text-[#38bdf8]" />
+                      <Activity className="w-3.5 h-3.5 text-[#38bdf8]" />
                       <span>Pace Calculator</span>
                     </button>
                   </div>
@@ -258,8 +262,8 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
             }`}>
               <div className="flex items-center justify-between">
                 <div>
-                  <span className={`block text-2xl sm:text-3xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>17,000+</span>
-                  <span className={`text-[11px] font-semibold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Runners Trained • 12+ Years</span>
+                  <span className={`block text-lg sm:text-xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>STRUCTURED PLANS</span>
+                  <span className={`text-[11px] font-semibold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Goal-Based Progression</span>
                 </div>
                 <div className="w-9 h-9 rounded-xl bg-[#d02426]/10 flex items-center justify-center text-[#d02426]">
                   <Flame className="w-5 h-5 fill-[#d02426]" />
@@ -272,11 +276,11 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
             }`}>
               <div className="flex items-center justify-between">
                 <div>
-                  <span className={`block text-2xl sm:text-3xl font-black ${isDark ? 'text-[#4ca6f5]' : 'text-[#1d72bd]'}`}>20+</span>
-                  <span className={`text-[11px] font-semibold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-[#1d72bd]'}`}>Active Training Grounds</span>
+                  <span className={`block text-lg sm:text-xl font-black tracking-tight ${isDark ? 'text-[#4ca6f5]' : 'text-[#1d72bd]'}`}>DEDICATED COACHING</span>
+                  <span className={`text-[11px] font-semibold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-[#1d72bd]'}`}>Guidance At Every Stage</span>
                 </div>
                 <div className="w-9 h-9 rounded-xl bg-[#318cdd]/20 flex items-center justify-center text-[#318cdd]">
-                  <MapPin className="w-5 h-5" />
+                  <CheckCircle2 className="w-5 h-5" />
                 </div>
               </div>
             </div>
@@ -286,11 +290,11 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
             }`}>
               <div className="flex items-center justify-between">
                 <div>
-                  <span className={`block text-2xl sm:text-3xl font-black ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>98.4%</span>
-                  <span className={`text-[11px] font-semibold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Injury-Free Completion Rate</span>
+                  <span className={`block text-lg sm:text-xl font-black tracking-tight ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>LOCAL COMMUNITY</span>
+                  <span className={`text-[11px] font-semibold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Train Consistently Together</span>
                 </div>
                 <div className="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600">
-                  <CheckCircle2 className="w-5 h-5" />
+                  <MapPin className="w-5 h-5" />
                 </div>
               </div>
             </div>
@@ -371,7 +375,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                       onClick={onBookTrial}
                       className="py-3 px-6 sm:px-7 rounded-2xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(255,72,0,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap flex-shrink-0"
                     >
-                      <span>Book Free Sunrise Trial</span>
+                      <span>BOOK A FREE TRIAL RUN</span>
                       <ArrowRight className="w-4 h-4 stroke-[2.5]" />
                     </button>
 
@@ -380,7 +384,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                       className="py-3 px-5 sm:px-6 rounded-2xl bg-white/95 hover:bg-white text-zinc-900 text-xs sm:text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap flex-shrink-0"
                     >
                       <MapPin className="w-4 h-4 text-orange-600 stroke-[2.5]" />
-                      <span>Find Your Morning Ground</span>
+                      <span>FIND A TRAINING GROUND</span>
                     </button>
                   </div>
               </div>
@@ -458,7 +462,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                   className="py-3 px-6 rounded-2xl bg-[#ccff00] text-black text-xs sm:text-sm font-black uppercase tracking-wider hover:bg-white hover:scale-105 transition-all shadow-[0_0_25px_rgba(204,255,0,0.3)] flex items-center gap-2"
                 >
                   <Zap className="w-4 h-4 fill-black" />
-                  <span>INITIALIZE FREE TRIAL</span>
+                  <span>BOOK A FREE TRIAL RUN</span>
                 </button>
 
                 <button
@@ -466,7 +470,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                   className="py-3 px-5 rounded-2xl bg-white/5 hover:bg-white/10 text-white text-xs sm:text-sm font-bold border border-white/10 transition-all flex items-center gap-2"
                 >
                   <MapPin className="w-4 h-4 text-[#ccff00]" />
-                  <span>RADAR 20+ CENTERS</span>
+                  <span>FIND A TRAINING GROUND</span>
                 </button>
               </div>
 
@@ -589,7 +593,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                 onClick={onBookTrial}
                 className="py-3.5 px-8 rounded-xl bg-[#ff1e42] text-white text-xs sm:text-sm font-black uppercase tracking-wider hover:bg-white hover:text-black transition-all shadow-[0_0_25px_rgba(255,30,66,0.4)] flex items-center gap-2"
               >
-                <span>JOIN SPEED CAMP NOW</span>
+                <span>BOOK A FREE TRIAL RUN</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
@@ -598,7 +602,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                 className="py-3.5 px-6 rounded-xl bg-zinc-900 text-white text-xs sm:text-sm font-bold border border-zinc-800 hover:border-[#ff1e42] transition-all flex items-center gap-2"
               >
                 <MapPin className="w-4 h-4 text-[#ff1e42]" />
-                <span>20+ Training Camps</span>
+                <span>FIND A TRAINING GROUND</span>
               </button>
             </div>
 
