@@ -21,7 +21,7 @@ export default function RaceCalendar({ onJoinCamp }) {
       <div className="flex items-center justify-between gap-4 px-1">
         <div className="flex items-center gap-2 text-xs font-semibold opacity-75">
           <span className="w-2 h-2 rounded-full bg-[#318cdd] animate-pulse" />
-          <span>Click any race card to preview squad details</span>
+          <span>Click any race card to preview details & register</span>
         </div>
 
         <div className="flex items-center gap-1.5">
@@ -124,26 +124,39 @@ export default function RaceCalendar({ onJoinCamp }) {
                 </div>
               </div>
 
-              {/* Card Footer: Distance + Select Action */}
+              {/* Card Footer: Distance + Action */}
               <div
-                className="pt-2.5 border-t flex items-center justify-between text-xs mt-auto"
+                className="pt-2.5 border-t flex items-center justify-between text-xs mt-auto gap-2"
                 style={{ borderColor: 'var(--border-color)' }}
               >
-                <span className="font-mono tabular-num text-[11px] opacity-75 truncate max-w-[160px]">
+                <span className="font-mono tabular-num text-[11px] opacity-75 truncate max-w-[140px]">
                   {event.targetDistance}
                 </span>
 
-                <span
-                  className={`font-bold text-xs flex items-center gap-0.5 transition-colors ${
-                    isSelected ? 'text-[#318cdd]' : 'opacity-70 group-hover:opacity-100'
-                  }`}
-                  style={{
-                    color: isSelected ? '#318cdd' : 'inherit'
-                  }}
-                >
-                  <span>{isSelected ? 'Selected' : 'Select'}</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </span>
+                {event.registrationUrl ? (
+                  <a
+                    href={event.registrationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="font-black text-[11px] px-2.5 py-1 rounded-lg bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white flex items-center gap-1 shadow-sm hover:scale-105 active:scale-95 transition-all cursor-pointer whitespace-nowrap"
+                  >
+                    <span>Register</span>
+                    <ArrowUpRight className="w-3 h-3" />
+                  </a>
+                ) : (
+                  <span
+                    className={`font-bold text-xs flex items-center gap-0.5 transition-colors ${
+                      isSelected ? 'text-[#318cdd]' : 'opacity-70 group-hover:opacity-100'
+                    }`}
+                    style={{
+                      color: isSelected ? '#318cdd' : 'inherit'
+                    }}
+                  >
+                    <span>{isSelected ? 'Selected' : 'Select'}</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </span>
+                )}
               </div>
             </div>
           );
@@ -188,7 +201,7 @@ export default function RaceCalendar({ onJoinCamp }) {
                 className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight"
                 style={{ color: 'var(--text-heading)' }}
               >
-                {selectedEvent.title} - Official Squad Camp
+                {selectedEvent.registrationUrl ? selectedEvent.title : `${selectedEvent.title} - Official Squad Camp`}
               </h3>
 
               {/* Description */}
@@ -219,7 +232,7 @@ export default function RaceCalendar({ onJoinCamp }) {
                   className="w-full sm:w-auto py-3.5 px-7 rounded-2xl bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-rose-600/30 hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap"
                 >
                   <Flame className="w-4 h-4 fill-white" />
-                  <span>REGISTER ON RACEIQ</span>
+                  <span>REGISTER FOR THE SAREE RUN</span>
                   <ArrowUpRight className="w-4 h-4" />
                 </a>
               ) : (
