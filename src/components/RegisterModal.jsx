@@ -262,7 +262,8 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
                     style={{
                       backgroundColor: 'var(--card-inner)',
                       borderColor: 'var(--border-color)',
-                      color: 'var(--text-heading)'
+                      color: 'var(--text-heading)',
+                      colorScheme: 'inherit'
                     }}
                   />
                 </div>
@@ -281,7 +282,8 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
                     style={{
                       backgroundColor: 'var(--card-inner)',
                       borderColor: 'var(--border-color)',
-                      color: 'var(--text-heading)'
+                      color: 'var(--text-heading)',
+                      colorScheme: 'inherit'
                     }}
                   />
                 </div>
@@ -300,7 +302,8 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
                     style={{
                       backgroundColor: 'var(--card-inner)',
                       borderColor: 'var(--border-color)',
-                      color: 'var(--text-heading)'
+                      color: 'var(--text-heading)',
+                      colorScheme: 'inherit'
                     }}
                   >
                     <option value="">Select your preferred ground...</option>
@@ -327,7 +330,8 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
                     style={{
                       backgroundColor: 'var(--card-inner)',
                       borderColor: 'var(--border-color)',
-                      color: 'var(--text-heading)'
+                      color: 'var(--text-heading)',
+                      colorScheme: 'inherit'
                     }}
                   >
                     <option value="">Choose program (or decide after trial)...</option>
@@ -360,7 +364,8 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
                     style={{
                       backgroundColor: 'var(--card-inner)',
                       borderColor: 'var(--border-color)',
-                      color: 'var(--text-heading)'
+                      color: 'var(--text-heading)',
+                      colorScheme: 'inherit'
                     }}
                   >
                     <option value="Beginner (0 - 5 km)">Beginner (0 - 5 km)</option>
@@ -384,7 +389,8 @@ export default function RegisterModal({ isOpen, onClose, initialData = null }) {
                     style={{
                       backgroundColor: 'var(--card-inner)',
                       borderColor: 'var(--border-color)',
-                      color: 'var(--text-heading)'
+                      color: 'var(--text-heading)',
+                      colorScheme: 'inherit'
                     }}
                   />
                 </div>
