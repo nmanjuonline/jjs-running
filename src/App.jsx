@@ -12,6 +12,8 @@ import Testimonials from './components/Testimonials';
 import RegisterModal from './components/RegisterModal';
 import Footer from './components/Footer';
 import JJsLogo from './components/JJsLogo';
+import EventSpotlightBanner from './components/EventSpotlightBanner';
+import FloatingCallCTA from './components/FloatingCallCTA';
 import { Sparkles, ArrowRight, ShieldCheck, Activity, Award } from 'lucide-react';
 
 export default function App() {
@@ -98,6 +100,12 @@ export default function App() {
 
       {/* Main Content Sections - Accessible Anchor with Keyboard Focus */}
       <main id="main-content" tabIndex={-1} className="flex-1 space-y-12 sm:space-y-20 py-4 sm:py-8 w-full max-w-full overflow-hidden focus:outline-none">
+        {/* Signature Event Spotlight (e.g., The Saree Run) */}
+        <EventSpotlightBanner
+          onRegister={(eventData) => handleOpenRegister({ program: eventData.title })}
+          onExploreRaces={() => scrollToSection('races')}
+        />
+
         {/* Programs Section */}
         <section id="programs" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-10">
@@ -163,7 +171,7 @@ export default function App() {
                 className="text-xs sm:text-sm mt-1 max-w-xl"
                 style={{ color: 'var(--text-secondary)' }}
               >
-                Select your city and neighborhood center below to view morning timings, designated grounds, and connect with your Training Center Head (TCH).
+                Select your city and neighborhood center below to view morning timings, designated grounds, and connect with your Training Center Head.
               </p>
             </div>
 
@@ -259,7 +267,7 @@ export default function App() {
             <p className="text-xs sm:text-sm max-w-lg mx-auto mb-5 leading-relaxed"
               style={{ color: 'var(--text-secondary)' }}
             >
-              Your first coached morning session with your local Training Center Head (TCH) is completely free. Meet the squad, find your pace group, and experience the JJs Running magic.
+              Your first coached morning session with your local Training Center Head is completely free. Meet the squad, find your pace group, and experience the JJs Running magic.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3">
               <button
@@ -287,6 +295,9 @@ export default function App() {
 
       {/* Footer */}
       <Footer onScrollTo={scrollToSection} onOpenRegister={() => handleOpenRegister()} />
+
+      {/* Floating Call & WhatsApp Action Pill */}
+      <FloatingCallCTA />
 
       {/* Interactive Registration Modal */}
       <RegisterModal
