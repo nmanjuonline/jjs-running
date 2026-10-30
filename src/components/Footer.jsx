@@ -38,7 +38,7 @@ export default function Footer({ onScrollTo, onOpenRegister, onOpenProgramRegist
             </div>
 
             <p className="text-xs leading-relaxed max-w-sm" style={{ color: 'var(--text-secondary)' }}>
-              At JJs Running, we recognize that goals for fitness or endurance sports are achieved only by scientific planning and dedicated community training. As India’s largest running academy with 20+ centers across Bengaluru, Pune, Kolkata, and beyond, our mission is to empower everyday individuals into lifelong endurance athletes.
+              At JJs Running, we believe that fitness and endurance goals are best achieved through scientific planning and dedicated community training. As India’s largest running academy with 20+ centers across Bengaluru, Pune, Kolkata, and beyond, our mission is to help everyday individuals become lifelong endurance athletes.
             </p>
 
             <div className="flex items-center gap-3 pt-2">
@@ -227,7 +227,7 @@ export default function Footer({ onScrollTo, onOpenRegister, onOpenProgramRegist
               Morning Run Briefing
             </h4>
             <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-              Receive weekly endurance science, nutrition strategies, and marathon race calendar alerts.
+              Receive weekly insights on endurance science, nutrition strategies, and marathon race calendars.
             </p>
 
             <form onSubmit={handleSubscribe} className="space-y-2 pt-1">

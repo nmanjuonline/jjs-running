@@ -121,7 +121,7 @@ export const runnerStories = [
     name: 'Ananya Sharma',
     role: 'Software Architect & Boston Marathon Qualifier',
     center: 'Jayanagar HQ',
-    journey: 'From breathlessness on a 500m jog to a 3:24:12 Boston Qualifier',
+    journey: 'From struggling through a 500 m jog to running a 3:24:12 Boston qualifying time',
     quote: 'Before JJs Running, I thought marathoners were born superhuman. The coaches taught me that endurance is pure scientific compounding: heart-rate control, consistent weekend SLRs, and a pack that never lets you give up.',
     avatar: '/images/jjs/1296547704.jpg',
     stats: {
@@ -135,7 +135,7 @@ export const runnerStories = [
     name: 'Vikramaditya Hegde',
     role: 'Cardiologist & Ultra Trail Finisher',
     center: 'Pune University (SPPU)',
-    journey: 'Overcame metabolic syndrome to conquer Malnad 100K',
+    journey: 'Overcoming metabolic syndrome to conquer the Malnad 100K',
     quote: 'As a doctor, I recommend JJs Running to all my patients. The emphasis on injury prevention, mobility drills, and gradual periodization ensures you run for life, not for an orthopedic clinic.',
     avatar: '/images/jjs/2006143083.jpg',
     stats: {
@@ -149,7 +149,7 @@ export const runnerStories = [
     name: 'Preethi Sundararaman',
     role: 'Mother of Two & 10K Champion',
     center: 'HSR Layout',
-    journey: 'Joined Fitness Thru Running at 43 years old, now podium regular',
+    journey: 'Joined Fitness Thru Running at age 43 and is now a regular on the podium',
     quote: 'Waking up at 5:00 AM with JJs Running changed my mental health forever. The community is so warm, no runner is left behind, whether you run at 4:30 pace or 9:00 pace.',
     avatar: '/images/jjs/1078542079.jpg',
     stats: {
