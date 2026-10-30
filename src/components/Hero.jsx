@@ -218,7 +218,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                   </h1>
 
                   <p className="text-xs sm:text-base text-slate-200 max-w-2xl leading-relaxed font-medium">
-                    Structured heart-rate zone training, cadence calibration, and injury-free marathon milestones led by dedicated Training Center Heads across 20+ neighborhood grounds.
+                    Structured heart-rate zone training, cadence calibration, and injury-free marathon preparation, led by dedicated Training Center Heads across 20+ neighborhood grounds.
                   </p>
 
                   <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3 pt-2">
