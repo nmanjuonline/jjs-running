@@ -9,8 +9,9 @@ export default function LiveTicker({ onActionClick }) {
       icon: Trophy,
       text: 'The Saree Run (Bengaluru Edition): Registrations now open for 3,000+ women at Kanteerava Stadium!',
       mobileText: 'The Saree Run: Registrations Open at Kanteerava',
-      actionText: 'Register Now',
-      actionTarget: 'races'
+      actionText: 'Register on RaceIQ',
+      actionUrl: 'https://raceiq.in/tsr',
+      actionTarget: 'external'
     },
     {
       badge: 'LIVE WIRE',
@@ -103,6 +104,10 @@ export default function LiveTicker({ onActionClick }) {
 
   const handleAction = (e) => {
     if (e) e.stopPropagation();
+    if (current.actionUrl) {
+      window.open(current.actionUrl, '_blank', 'noopener,noreferrer');
+      return;
+    }
     if (onActionClick && current.actionTarget) {
       onActionClick(current.actionTarget);
     }

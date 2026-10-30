@@ -7,6 +7,7 @@ export const eventsData = [
     location: 'Sree Kanteerava Stadium, Bengaluru',
     participants: '3,000+ Women & Girls participating',
     status: 'Registrations Open',
+    registrationUrl: 'https://raceiq.in/tsr',
     targetDistance: '5K Timed / 3K Walk-Jog / Kids Fun Run',
     elevation: 'Flat Track & Stadium Loop',
     image: '/images/events/the-saree-run.jpg',

@@ -211,13 +211,26 @@ export default function RaceCalendar({ onJoinCamp }) {
 
             {/* Action CTA */}
             <div className="flex flex-col sm:flex-row lg:flex-col gap-3 flex-shrink-0">
-              <button
-                onClick={() => onJoinCamp(selectedEvent)}
-                className="w-full sm:w-auto py-3.5 px-7 rounded-2xl bg-[#318cdd] hover:bg-[#2573b8] text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap"
-              >
-                <Flame className="w-4 h-4 fill-white" />
-                <span>JOIN RACE SQUAD</span>
-              </button>
+              {selectedEvent.registrationUrl ? (
+                <a
+                  href={selectedEvent.registrationUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto py-3.5 px-7 rounded-2xl bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-rose-600/30 hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap"
+                >
+                  <Flame className="w-4 h-4 fill-white" />
+                  <span>REGISTER ON RACEIQ</span>
+                  <ArrowUpRight className="w-4 h-4" />
+                </a>
+              ) : (
+                <button
+                  onClick={() => onJoinCamp(selectedEvent)}
+                  className="w-full sm:w-auto py-3.5 px-7 rounded-2xl bg-[#318cdd] hover:bg-[#2573b8] text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap"
+                >
+                  <Flame className="w-4 h-4 fill-white" />
+                  <span>JOIN RACE SQUAD</span>
+                </button>
+              )}
             </div>
           </div>
         </div>
