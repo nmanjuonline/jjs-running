@@ -164,7 +164,7 @@ export default function MethodologySection({ onExploreCenters }) {
               The 4-Day Training Protocol
             </h3>
             <p className="text-xs sm:text-sm opacity-70 mt-1 max-w-xl">
-              Led across 20+ neighborhood grounds by designated Training Center Heads (TCH). Sessions kick off at 05:30 AM sharp.
+              Training sessions are led across 20+ neighborhood grounds by designated Training Center Heads (TCHs). Sessions begin at 5:30 AM sharp.
             </p>
           </div>
 
@@ -229,20 +229,20 @@ export default function MethodologySection({ onExploreCenters }) {
             </h3>
 
             <p className="text-xs sm:text-sm opacity-75 leading-relaxed max-w-2xl">
-              From college students to runners in their 70s and 80s, software engineers, doctors, teachers, entrepreneurs, and homemakers. Whether your pace is 4:15/km or 9:30/km, JJs Running welcomes you with dedicated pace mentors.
+              Our community includes everyone from college students to runners in their 70s and 80s, as well as software engineers, doctors, teachers, entrepreneurs, and homemakers. Whether your pace is 4:15 min/km or 9:30 min/km, JJs Running welcomes you with dedicated pace mentors.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
               <div className="p-3 rounded-xl border space-y-1" style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}>
                 <Coffee className="w-4 h-4 text-amber-500" />
                 <h5 className="text-xs font-bold" style={{ color: 'var(--text-heading)' }}>Post-Run Chai & Debrief</h5>
-                <p className="text-[10px] opacity-65">The signature Sunday morning recovery run, stretching circle, and filter coffee.</p>
+                <p className="text-[10px] opacity-65">Enjoy our signature Sunday morning recovery run, stretching circle, and filter coffee.</p>
               </div>
 
               <div className="p-3 rounded-xl border space-y-1" style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}>
                 <Award className="w-4 h-4 text-rose-500" />
                 <h5 className="text-xs font-bold" style={{ color: 'var(--text-heading)' }}>Major Race Charters</h5>
-                <p className="text-[10px] opacity-65">Travel charters, hospitality tents & cheer zones for TMM, TCS 10K & World Majors.</p>
+                <p className="text-[10px] opacity-65">Travel charters, hospitality tents, and cheer zones for TMM, TCS 10K, and the World Marathon Majors.</p>
               </div>
 
               <div className="p-3 rounded-xl border space-y-1" style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}>
