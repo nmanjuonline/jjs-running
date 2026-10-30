@@ -18,7 +18,12 @@ import { Sparkles, ArrowRight, ShieldCheck, Activity, Award } from 'lucide-react
 
 export default function App() {
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('jjs_theme_variant') || 'swiss-light';
+    const saved = localStorage.getItem('jjs_theme_variant');
+    // Default to swiss-dark mode
+    if (!saved || saved === 'swiss-light' || saved === 'olympic-clean') {
+      return 'swiss-dark';
+    }
+    return saved;
   });
 
   const [registerModalOpen, setRegisterModalOpen] = useState(false);
@@ -28,9 +33,11 @@ export default function App() {
   useEffect(() => {
     document.body.setAttribute('data-theme', theme);
     localStorage.setItem('jjs_theme_variant', theme);
+    const isDark = theme === 'swiss-dark' || theme === 'kinetic' || theme === 'crimson';
+    document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) {
-      meta.setAttribute('content', theme === 'swiss-dark' ? '#090d16' : '#ffffff');
+      meta.setAttribute('content', isDark ? '#090d16' : '#ffffff');
     }
   }, [theme]);
 

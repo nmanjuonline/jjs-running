@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Menu, X, Sun, Moon, ArrowRight } from 'lucide-react';
 import JJsLogo from './JJsLogo';
 
-export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenRegister, onScrollTo }) {
+export default function Navbar({ currentTheme = 'swiss-dark', setTheme, onOpenRegister, onScrollTo }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isDark = currentTheme === 'swiss-dark';
