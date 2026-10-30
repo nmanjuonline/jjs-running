@@ -37,15 +37,13 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
     const isDark = currentTheme === 'swiss-dark';
 
     return (
-      <div className={`rounded-3xl border overflow-hidden transition-all duration-300 ${
-        isDark
-          ? 'border-slate-800 shadow-[0_15px_35px_-10px_rgba(0,0,0,0.5)] bg-slate-900'
-          : 'border-slate-200 shadow-[0_15px_35px_-10px_rgba(0,50,150,0.08)] bg-white'
-      }`}>
-        {/* Top Minimalist Filter Bar */}
-        <div className={`px-4 py-3 sm:px-5 sm:py-3.5 border-b flex flex-col md:flex-row items-center justify-between gap-3 ${
-          isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/70'
+      <div className={`rounded-3xl border overflow-hidden transition-all duration-300 ${isDark
+        ? 'border-slate-800 shadow-[0_15px_35px_-10px_rgba(0,0,0,0.5)] bg-slate-900'
+        : 'border-slate-200 shadow-[0_15px_35px_-10px_rgba(0,50,150,0.08)] bg-white'
         }`}>
+        {/* Top Minimalist Filter Bar */}
+        <div className={`px-4 py-3 sm:px-5 sm:py-3.5 border-b flex flex-col md:flex-row items-center justify-between gap-3 ${isDark ? 'border-slate-800 bg-slate-950/70' : 'border-slate-100 bg-slate-50/70'
+          }`}>
           <div className="flex flex-wrap items-center gap-1.5 w-full md:w-auto" role="tablist" aria-label="Filter training grounds by city">
             {CITIES.map((city) => {
               const count = city === 'All Cities'
@@ -63,18 +61,16 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                     const firstInCity = centersData.find(c => city === 'All Cities' || c.city === city);
                     if (firstInCity) setSelectedCenterId(firstInCity.id);
                   }}
-                  className={`px-3 py-1 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer ${
-                    isActive
-                      ? 'bg-[#318cdd] text-white shadow-md shadow-[#318cdd]/25'
-                      : isDark
-                        ? 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
-                        : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
-                  }`}
+                  className={`px-3 py-1 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer ${isActive
+                    ? 'bg-[#318cdd] text-white shadow-md shadow-[#318cdd]/25'
+                    : isDark
+                      ? 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800'
+                      : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+                    }`}
                 >
                   <span>{city}</span>
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono tabular-num ${
-                    isActive ? 'bg-white/20 text-white' : isDark ? 'text-slate-400 bg-slate-800' : 'text-slate-400 bg-slate-100'
-                  }`}>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono tabular-num ${isActive ? 'bg-white/20 text-white' : isDark ? 'text-slate-400 bg-slate-800' : 'text-slate-400 bg-slate-100'
+                    }`}>
                     {count}
                   </span>
                 </button>
@@ -87,15 +83,14 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
             <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
-              aria-label="Search training centers by neighborhood or TCH coach"
-              placeholder="Search neighborhood or TCH..."
+              aria-label="Search training centers by neighborhood or center head"
+              placeholder="Search neighborhood or center head..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className={`w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#318cdd]/30 ${
-                isDark
-                  ? 'border-slate-800 bg-slate-900 text-slate-100 placeholder:text-slate-500'
-                  : 'border-slate-200 bg-white text-slate-900 placeholder:text-slate-400'
-              }`}
+              className={`w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#318cdd]/30 ${isDark
+                ? 'border-slate-800 bg-slate-900 text-slate-100 placeholder:text-slate-500'
+                : 'border-slate-200 bg-white text-slate-900 placeholder:text-slate-400'
+                }`}
             />
           </div>
         </div>
@@ -103,13 +98,11 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
         {/* Master Detail Split */}
         <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[440px]">
           {/* Left Column: Center List with Distinct Directory Styling */}
-          <div className={`lg:col-span-5 border-b-2 lg:border-b-0 lg:border-r flex flex-col ${
-            isDark ? 'border-slate-800 bg-slate-950/40' : 'border-slate-200 bg-slate-50/50'
-          }`}>
-            {/* Scrollable Directory Header */}
-            <div className={`px-4 py-2.5 border-b flex-shrink-0 flex items-center justify-between text-[11px] font-mono tracking-wider ${
-              isDark ? 'border-slate-800 bg-slate-950/80 text-slate-400' : 'border-slate-200 bg-slate-100/80 text-slate-500'
+          <div className={`lg:col-span-5 border-b-2 lg:border-b-0 lg:border-r flex flex-col ${isDark ? 'border-slate-800 bg-slate-950/40' : 'border-slate-200 bg-slate-50/50'
             }`}>
+            {/* Scrollable Directory Header */}
+            <div className={`px-4 py-2.5 border-b flex-shrink-0 flex items-center justify-between text-[11px] font-mono tracking-wider ${isDark ? 'border-slate-800 bg-slate-950/80 text-slate-400' : 'border-slate-200 bg-slate-100/80 text-slate-500'
+              }`}>
               <span className="font-bold uppercase tracking-wider">Training Centers ({filteredCenters.length})</span>
               <span className="hidden lg:inline text-[10px] text-slate-400 font-mono">
                 SELECT A GROUND
@@ -124,9 +117,8 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
               id="centers-list"
               role="listbox"
               aria-label="Training grounds directory"
-              className={`max-h-56 sm:max-h-64 lg:max-h-[460px] overflow-y-auto divide-y ${
-                isDark ? 'divide-slate-800/70' : 'divide-slate-200/80'
-              }`}
+              className={`max-h-56 sm:max-h-64 lg:max-h-[460px] overflow-y-auto divide-y ${isDark ? 'divide-slate-800/70' : 'divide-slate-200/80'
+                }`}
             >
               {filteredCenters.length === 0 ? (
                 <div className="p-6 text-center space-y-2.5">
@@ -142,79 +134,73 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                 </div>
               ) : (
                 filteredCenters.map((center) => {
-                const isSelected = currentCenter && currentCenter.id === center.id;
-                return (
-                  <div
-                    key={center.id}
-                    role="option"
-                    aria-selected={isSelected}
-                    tabIndex={0}
-                    onClick={() => setSelectedCenterId(center.id)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        setSelectedCenterId(center.id);
-                      }
-                    }}
-                    className={`p-3.5 sm:px-4 sm:py-3 cursor-pointer transition-all flex items-center justify-between gap-3 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#318cdd] ${
-                      isSelected
+                  const isSelected = currentCenter && currentCenter.id === center.id;
+                  return (
+                    <div
+                      key={center.id}
+                      role="option"
+                      aria-selected={isSelected}
+                      tabIndex={0}
+                      onClick={() => setSelectedCenterId(center.id)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setSelectedCenterId(center.id);
+                        }
+                      }}
+                      className={`p-3.5 sm:px-4 sm:py-3 cursor-pointer transition-all flex items-center justify-between gap-3 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#318cdd] ${isSelected
                         ? isDark
                           ? 'bg-gradient-to-r from-[#318cdd]/20 via-[#318cdd]/10 to-transparent border-l-4 border-[#318cdd]'
                           : 'bg-gradient-to-r from-[#318cdd]/10 via-[#318cdd]/5 to-transparent border-l-4 border-[#318cdd]'
                         : isDark
                           ? 'border-l-4 border-transparent hover:bg-slate-800/50 text-slate-300'
                           : 'border-l-4 border-transparent hover:bg-slate-100/80 text-slate-700'
-                    }`}
-                  >
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <h4 className={`text-sm font-black truncate ${
-                          isSelected
+                        }`}
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <h4 className={`text-sm font-black truncate ${isSelected
                             ? isDark ? 'text-white' : 'text-slate-950 font-black'
                             : isDark ? 'text-slate-200' : 'text-slate-800'
-                        }`}>
-                          {center.name}
-                        </h4>
-                        <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${
-                          isSelected
+                            }`}>
+                            {center.name}
+                          </h4>
+                          <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${isSelected
                             ? isDark ? 'bg-[#318cdd]/30 text-[#60a5fa]' : 'bg-[#318cdd]/20 text-[#1d72bd]'
                             : isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200/80 text-slate-600'
-                        }`}>
-                          {center.city}
-                        </span>
-                      </div>
-                      <p className={`text-xs truncate mt-0.5 ${
-                        isSelected
+                            }`}>
+                            {center.city}
+                          </span>
+                        </div>
+                        <p className={`text-xs truncate mt-0.5 ${isSelected
                           ? isDark ? 'text-slate-300' : 'text-slate-600'
                           : isDark ? 'text-slate-400' : 'text-slate-500'
-                      }`}>
-                        {center.venue}
-                      </p>
-                      <p className={`text-[11px] mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                        TCH: <strong className="text-[#d02426]">{center.tch}</strong>
-                      </p>
-                    </div>
+                          }`}>
+                          {center.venue}
+                        </p>
+                        <p className={`text-[11px] mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          Center Head: <strong className="text-[#d02426]">{center.tch}</strong>
+                        </p>
+                      </div>
 
-                    <div className="flex items-center gap-1.5 flex-shrink-0">
-                      <span className={`text-[10px] font-mono font-bold tabular-num ${isSelected ? 'text-[#318cdd]' : 'text-slate-400'}`}>
-                        5:30 AM
-                      </span>
-                      <ChevronRight className={`w-3.5 h-3.5 transition-transform ${isSelected ? 'text-[#318cdd] translate-x-0.5' : 'text-slate-400/60'}`} />
+                      <div className="flex items-center gap-1.5 flex-shrink-0">
+                        <span className={`text-[10px] font-mono font-bold tabular-num ${isSelected ? 'text-[#318cdd]' : 'text-slate-400'}`}>
+                          5:30 AM
+                        </span>
+                        <ChevronRight className={`w-3.5 h-3.5 transition-transform ${isSelected ? 'text-[#318cdd] translate-x-0.5' : 'text-slate-400/60'}`} />
+                      </div>
                     </div>
-                  </div>
-                );
-              }))}
+                  );
+                }))}
             </div>
           </div>
 
           {/* Right Column: Distinct Ground Details Spotlight */}
-          <div className={`lg:col-span-7 p-4 sm:p-5 lg:p-6 flex flex-col justify-between ${
-            isDark ? 'bg-slate-900' : 'bg-white'
-          }`}>
-            {/* Mobile Distinct Section Banner */}
-            <div className={`flex items-center justify-between pb-2 mb-2 border-b lg:hidden ${
-              isDark ? 'border-slate-800/90 text-slate-400' : 'border-slate-200 text-slate-500'
+          <div className={`lg:col-span-7 p-4 sm:p-5 lg:p-6 flex flex-col justify-between ${isDark ? 'bg-slate-900' : 'bg-white'
             }`}>
+            {/* Mobile Distinct Section Banner */}
+            <div className={`flex items-center justify-between pb-2 mb-2 border-b lg:hidden ${isDark ? 'border-slate-800/90 text-slate-400' : 'border-slate-200 text-slate-500'
+              }`}>
               <span className="text-[10px] font-mono uppercase tracking-wider text-[#318cdd] font-bold flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#318cdd] animate-pulse" />
                 Selected Ground Details
@@ -230,17 +216,16 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                 >
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
-                        isDark
-                          ? 'bg-[#318cdd]/15 text-[#4ca6f5] border border-[#318cdd]/30'
-                          : 'bg-[#318cdd]/10 text-[#1d72bd] border border-[#318cdd]/20'
-                      }`}>
+                      <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${isDark
+                        ? 'bg-[#318cdd]/15 text-[#4ca6f5] border border-[#318cdd]/30'
+                        : 'bg-[#318cdd]/10 text-[#1d72bd] border border-[#318cdd]/20'
+                        }`}>
                         <MapPin className="w-3 h-3" />
                         {currentCenter.id === 'bengaluru-jayanagar'
                           ? `${currentCenter.city} • Academy HQ`
                           : currentCenter.city === 'Remote'
-                          ? 'Global • Virtual Campus'
-                          : `${currentCenter.city} Chapter`}
+                            ? 'Global • Virtual Campus'
+                            : `${currentCenter.city} Chapter`}
                       </span>
                     </div>
                     <h3 className={`text-xl sm:text-2xl lg:text-3xl font-black tracking-tight truncate ${isDark ? 'text-white' : 'text-slate-950'}`}>
@@ -248,9 +233,8 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                     </h3>
                   </div>
 
-                  <div className={`px-3 py-1.5 rounded-xl border flex items-center gap-2 flex-shrink-0 ${
-                    isDark ? 'bg-slate-950/80 border-slate-800 text-emerald-400' : 'bg-emerald-50 border-emerald-200 text-emerald-700'
-                  }`}>
+                  <div className={`px-3 py-1.5 rounded-xl border flex items-center gap-2 flex-shrink-0 ${isDark ? 'bg-slate-950/80 border-slate-800 text-emerald-400' : 'bg-emerald-50 border-emerald-200 text-emerald-700'
+                    }`}>
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                     <span className="text-xs font-mono font-bold tabular-num">{currentCenter.runnersCount}</span>
                   </div>
@@ -258,9 +242,8 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
 
                 {/* 4 Cards Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
-                  <div className={`p-3 lg:p-3.5 rounded-2xl border ${
-                    isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200/80 bg-slate-50/70'
-                  }`}>
+                  <div className={`p-3 lg:p-3.5 rounded-2xl border ${isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200/80 bg-slate-50/70'
+                    }`}>
                     <div className="flex items-center gap-1.5 text-slate-400 mb-1">
                       <Compass className="w-3.5 h-3.5 text-[#318cdd]" />
                       <span className="text-[10px] font-mono uppercase tracking-wider font-semibold">Training Ground</span>
@@ -270,24 +253,22 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                     </p>
                   </div>
 
-                  <div className={`p-3 lg:p-3.5 rounded-2xl border ${
-                    isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200/80 bg-slate-50/70'
-                  }`}>
+                  <div className={`p-3 lg:p-3.5 rounded-2xl border ${isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200/80 bg-slate-50/70'
+                    }`}>
                     <div className="flex items-center gap-1.5 text-slate-400 mb-1">
                       <UserCheck className="w-3.5 h-3.5 text-[#d02426]" />
-                      <span className="text-[10px] font-mono uppercase tracking-wider font-semibold">Training Center Head (TCH)</span>
+                      <span className="text-[10px] font-mono uppercase tracking-wider font-semibold">Training Center Head</span>
                     </div>
                     <p className="text-xs sm:text-sm font-bold text-[#d02426]">
                       {currentCenter.tch}
                     </p>
                     <span className="text-[10px] text-slate-500 font-medium block mt-0.5">
-                      Certified Running Coach &amp; Pacing Lead
+                      Training Center Head &amp; Pacing Lead
                     </span>
                   </div>
 
-                  <div className={`p-3 lg:p-3.5 rounded-2xl border ${
-                    isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200/80 bg-slate-50/70'
-                  }`}>
+                  <div className={`p-3 lg:p-3.5 rounded-2xl border ${isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200/80 bg-slate-50/70'
+                    }`}>
                     <div className="flex items-center gap-1.5 text-slate-400 mb-1">
                       <Clock className="w-3.5 h-3.5 text-amber-500" />
                       <span className="text-[10px] font-mono uppercase tracking-wider font-semibold">Morning Schedule</span>
@@ -300,9 +281,8 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                     </span>
                   </div>
 
-                  <div className={`p-3 lg:p-3.5 rounded-2xl border ${
-                    isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200/80 bg-slate-50/70'
-                  }`}>
+                  <div className={`p-3 lg:p-3.5 rounded-2xl border ${isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200/80 bg-slate-50/70'
+                    }`}>
                     <div className="flex items-center gap-1.5 text-slate-400 mb-1">
                       <Zap className="w-3.5 h-3.5 text-emerald-400" />
                       <span className="text-[10px] font-mono uppercase tracking-wider font-semibold">Pace Cohorts</span>
@@ -316,9 +296,8 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                   </div>
 
                   {currentCenter.vicinity && (
-                    <div className={`p-3 lg:p-3.5 rounded-2xl border sm:col-span-2 ${
-                      isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200/80 bg-slate-50/70'
-                    }`}>
+                    <div className={`p-3 lg:p-3.5 rounded-2xl border sm:col-span-2 ${isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200/80 bg-slate-50/70'
+                      }`}>
                       <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold block mb-1.5">
                         Vicinity &amp; Nearby Neighborhoods
                       </span>
@@ -326,9 +305,8 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                         {currentCenter.vicinity.split(/,\s*/).map((area, idx) => (
                           <span
                             key={idx}
-                            className={`text-[11px] px-2 py-0.5 rounded-md font-medium ${
-                              isDark ? 'bg-slate-900 text-slate-300 border border-slate-800' : 'bg-white text-slate-700 border border-slate-200 shadow-xs'
-                            }`}
+                            className={`text-[11px] px-2 py-0.5 rounded-md font-medium ${isDark ? 'bg-slate-900 text-slate-300 border border-slate-800' : 'bg-white text-slate-700 border border-slate-200 shadow-xs'
+                              }`}
                           >
                             {area}
                           </span>
@@ -339,19 +317,17 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                 </div>
 
                 {/* Action Bar */}
-                <div className={`pt-3 border-t flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 ${
-                  isDark ? 'border-slate-800' : 'border-slate-100'
-                }`}>
+                <div className={`pt-3 border-t flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 ${isDark ? 'border-slate-800' : 'border-slate-100'
+                  }`}>
                   {mapUrl ? (
                     <a
                       href={mapUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all border ${
-                        isDark
-                          ? 'bg-slate-800/90 hover:bg-slate-700 text-slate-200 border-slate-700/80 hover:border-slate-600'
-                          : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200 shadow-sm'
-                      }`}
+                      className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all border ${isDark
+                        ? 'bg-slate-800/90 hover:bg-slate-700 text-slate-200 border-slate-700/80 hover:border-slate-600'
+                        : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200 shadow-sm'
+                        }`}
                       title="Open Google Maps location"
                     >
                       <Navigation className="w-3.5 h-3.5 text-[#318cdd]" />
@@ -397,11 +373,10 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                     const firstInCity = centersData.find(c => city === 'All Cities' || c.city === city);
                     if (firstInCity) setSelectedCenterId(firstInCity.id);
                   }}
-                  className={`px-3 py-1.5 text-xs font-bold rounded-full transition-all flex items-center gap-1.5 ${
-                    isActive
-                      ? 'bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-md shadow-orange-500/25'
-                      : 'bg-white hover:bg-orange-50 text-zinc-700 border border-orange-200/80'
-                  }`}
+                  className={`px-3 py-1.5 text-xs font-bold rounded-full transition-all flex items-center gap-1.5 ${isActive
+                    ? 'bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-md shadow-orange-500/25'
+                    : 'bg-white hover:bg-orange-50 text-zinc-700 border border-orange-200/80'
+                    }`}
                 >
                   <span>{city}</span>
                   <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${isActive ? 'bg-white/25 text-white' : 'text-zinc-500 bg-orange-50'}`}>
@@ -416,7 +391,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-orange-400" />
             <input
               type="text"
-              placeholder="Filter ground or TCH..."
+              placeholder="Filter ground or center head..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-3 py-2 text-xs rounded-full border border-orange-200 bg-white text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-orange-400/30"
@@ -434,11 +409,10 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                 <div
                   key={center.id}
                   onClick={() => setSelectedCenterId(center.id)}
-                  className={`p-3.5 sm:p-4 cursor-pointer transition-all flex items-center justify-between gap-3 text-left ${
-                    isSelected
-                      ? 'bg-gradient-to-r from-orange-50 to-amber-50/50 border-l-4 border-orange-600'
-                      : 'hover:bg-orange-50/40 text-zinc-700'
-                  }`}
+                  className={`p-3.5 sm:p-4 cursor-pointer transition-all flex items-center justify-between gap-3 text-left ${isSelected
+                    ? 'bg-gradient-to-r from-orange-50 to-amber-50/50 border-l-4 border-orange-600'
+                    : 'hover:bg-orange-50/40 text-zinc-700'
+                    }`}
                 >
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
@@ -453,7 +427,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                       {center.venue}
                     </p>
                     <p className="text-[11px] text-zinc-500 mt-0.5">
-                      TCH: <strong className="text-orange-700 font-bold">{center.tch}</strong>
+                      Center Head: <strong className="text-orange-700 font-bold">{center.tch}</strong>
                     </p>
                   </div>
 
@@ -483,8 +457,8 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                         {currentCenter.id === 'bengaluru-jayanagar'
                           ? `${currentCenter.city} • Academy HQ`
                           : currentCenter.city === 'Remote'
-                          ? 'Global • Virtual Campus'
-                          : currentCenter.city}
+                            ? 'Global • Virtual Campus'
+                            : currentCenter.city}
                       </span>
                     </div>
 
@@ -502,7 +476,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                   </div>
 
                   <div className="p-3 rounded-xl border border-orange-100 bg-orange-50/40">
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 block">Training Center Head (TCH)</span>
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 block">Training Center Head</span>
                     <p className="text-xs font-bold mt-0.5 flex items-center gap-1.5 text-orange-700">
                       <UserCheck className="w-3.5 h-3.5 stroke-[2.5]" />
                       {currentCenter.tch}
@@ -579,11 +553,10 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                     const firstInCity = centersData.find(c => city === 'All Cities' || c.city === city);
                     if (firstInCity) setSelectedCenterId(firstInCity.id);
                   }}
-                  className={`px-3 py-1.5 text-xs font-mono font-bold rounded-xl transition-all flex items-center gap-1.5 ${
-                    isActive
-                      ? 'bg-[#ccff00] text-black shadow-[0_0_12px_rgba(204,255,0,0.3)]'
-                      : 'bg-white/5 text-slate-400 hover:text-white'
-                  }`}
+                  className={`px-3 py-1.5 text-xs font-mono font-bold rounded-xl transition-all flex items-center gap-1.5 ${isActive
+                    ? 'bg-[#ccff00] text-black shadow-[0_0_12px_rgba(204,255,0,0.3)]'
+                    : 'bg-white/5 text-slate-400 hover:text-white'
+                    }`}
                 >
                   <span>{city}</span>
                   <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${isActive ? 'bg-black/20 text-current' : 'opacity-60 bg-white/10'}`}>
@@ -598,7 +571,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
             <Radio className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#ccff00]" />
             <input
               type="text"
-              placeholder="RADAR SCAN GROUND / TCH..."
+              placeholder="RADAR SCAN GROUND / CENTER HEAD..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-3 py-2 text-xs font-mono rounded-xl border border-white/10 bg-black text-white placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-[#ccff00]"
@@ -615,11 +588,10 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                 <div
                   key={center.id}
                   onClick={() => setSelectedCenterId(center.id)}
-                  className={`p-4 cursor-pointer transition-all flex items-center justify-between gap-3 text-left ${
-                    isSelected
-                      ? 'bg-[#ccff00]/10 border-l-4 border-[#ccff00]'
-                      : 'hover:bg-white/5 text-slate-300'
-                  }`}
+                  className={`p-4 cursor-pointer transition-all flex items-center justify-between gap-3 text-left ${isSelected
+                    ? 'bg-[#ccff00]/10 border-l-4 border-[#ccff00]'
+                    : 'hover:bg-white/5 text-slate-300'
+                    }`}
                 >
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
@@ -634,7 +606,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                       {center.venue}
                     </p>
                     <p className="text-[11px] font-mono text-slate-500 mt-0.5">
-                      TCH: <strong className="text-white">{center.tch}</strong>
+                      Center Head: <strong className="text-white">{center.tch}</strong>
                     </p>
                   </div>
 
@@ -678,7 +650,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                   </div>
 
                   <div className="p-3.5 rounded-2xl bg-black/60 border border-white/5">
-                    <span className="text-[10px] text-slate-500 uppercase block">CENTER DIRECTOR (TCH)</span>
+                    <span className="text-[10px] text-slate-500 uppercase block">TRAINING CENTER HEAD</span>
                     <p className="text-xs font-bold text-[#ccff00] mt-1">{currentCenter.tch}</p>
                   </div>
 
@@ -750,11 +722,10 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                   const firstInCity = centersData.find(c => city === 'All Cities' || c.city === city);
                   if (firstInCity) setSelectedCenterId(firstInCity.id);
                 }}
-                className={`px-3 py-1.5 text-xs font-mono font-bold uppercase rounded-lg transition-all flex items-center gap-1.5 ${
-                  isActive
-                    ? 'bg-[#ff1e42] text-white shadow-[0_0_12px_rgba(255,30,66,0.4)]'
-                    : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
-                }`}
+                className={`px-3 py-1.5 text-xs font-mono font-bold uppercase rounded-lg transition-all flex items-center gap-1.5 ${isActive
+                  ? 'bg-[#ff1e42] text-white shadow-[0_0_12px_rgba(255,30,66,0.4)]'
+                  : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+                  }`}
               >
                 <span>{city}</span>
                 <span className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${isActive ? 'bg-black/30 text-white' : 'opacity-60 bg-white/10'}`}>
@@ -785,11 +756,10 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
               <div
                 key={center.id}
                 onClick={() => setSelectedCenterId(center.id)}
-                className={`p-4 cursor-pointer transition-all flex items-center justify-between gap-3 text-left ${
-                  isSelected
-                    ? 'bg-[#ff1e42]/15 border-l-4 border-[#ff1e42]'
-                    : 'hover:bg-zinc-900/50 text-zinc-300'
-                }`}
+                className={`p-4 cursor-pointer transition-all flex items-center justify-between gap-3 text-left ${isSelected
+                  ? 'bg-[#ff1e42]/15 border-l-4 border-[#ff1e42]'
+                  : 'hover:bg-zinc-900/50 text-zinc-300'
+                  }`}
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
