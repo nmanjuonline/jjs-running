@@ -91,14 +91,16 @@ export default function EventSpotlightBanner({ onRegister, onExploreRaces }) {
             </div>
 
             <div className="flex flex-wrap items-center gap-3 pt-2">
-              <button
-                onClick={() => onRegister && onRegister({ title: 'The Saree Run (Bengaluru Edition)' })}
+              <a
+                href="https://raceiq.in/tsr"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="py-3 px-6 sm:px-7 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider text-white bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 transition-all shadow-lg shadow-rose-600/30 hover:scale-105 flex items-center gap-2 cursor-pointer"
               >
                 <Flame className="w-4 h-4 fill-white" />
-                <span>Register for The Saree Run</span>
+                <span>Register on RaceIQ</span>
                 <ArrowRight className="w-4 h-4" />
-              </button>
+              </a>
 
               <button
                 onClick={onExploreRaces}
