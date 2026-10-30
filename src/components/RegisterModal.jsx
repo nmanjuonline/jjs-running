@@ -934,7 +934,8 @@ export default function RegisterModal({ isOpen, onClose, initialData = null, onS
                     style={{
                       backgroundColor: 'var(--card-inner)',
                       borderColor: 'var(--border-color)',
-                      color: 'var(--text-heading)'
+                      color: 'var(--text-heading)',
+                      colorScheme: 'inherit'
                     }}
                   />
                 </div>

@@ -37,6 +37,7 @@ section[id] {
 
   /* SWISS CLEAN - VERSION 1: LOGO MATCH (Light • Cerulean Blue & Sprint Red) */
   body[data-theme='swiss-light'], body[data-theme='olympic-clean'], body[data-theme='street-crew'] {
+    color-scheme: light;
     --bg-page: #ffffff;
     --text-primary: #0f172a;
     --text-secondary: #475569;
@@ -63,6 +64,7 @@ section[id] {
 
   /* SWISS CLEAN - VERSION 2: LOGO CONTRAST (Dark • Deep Obsidian & Logo Palette) */
   body[data-theme='swiss-dark'] {
+    color-scheme: dark;
     --bg-page: #090d16;
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
@@ -112,6 +114,7 @@ section[id] {
 
   /* THEME 3 (DARK): Kinetic Volt (Asymmetric Bento Cockpit) */
   body[data-theme='kinetic'] {
+    color-scheme: dark;
     --bg-page: #090a0f;
     --text-primary: #ffffff;
     --text-secondary: #94a3b8;
@@ -135,6 +138,7 @@ section[id] {
 
   /* THEME 4 (DARK): Crimson Velocity (Breaking2 Speed Runway) */
   body[data-theme='crimson'] {
+    color-scheme: dark;
     --bg-page: #070709;
     --text-primary: #ffffff;
     --text-secondary: #a1a1aa;
@@ -251,38 +255,42 @@ section[id] {
 /* =========================================================================
    SOCIAL MEDIA ICONS (High contrast & brand hover states in light/dark mode)
    ========================================================================= */
-.social-icon-btn {
+.jjs-media-link, .social-icon-btn {
+  display: inline-flex !important;
   background-color: var(--card-inner);
   border-color: var(--border-color);
   color: var(--text-heading);
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.social-icon-btn:hover {
+.jjs-media-link:hover, .social-icon-btn:hover {
   transform: translateY(-2px) scale(1.08);
 }
 
-.social-icon-btn.social-instagram:hover {
+.jjs-media-link.jjs-ig-link:hover, .social-icon-btn.social-instagram:hover {
   background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%) !important;
   color: #ffffff !important;
   border-color: transparent !important;
   box-shadow: 0 8px 18px -4px rgba(220, 39, 67, 0.45);
 }
 
-.social-icon-btn.social-facebook:hover {
+.jjs-media-link.jjs-fb-link:hover, .social-icon-btn.social-facebook:hover {
   background-color: #1877F2 !important;
   color: #ffffff !important;
   border-color: #1877F2 !important;
   box-shadow: 0 8px 18px -4px rgba(24, 119, 242, 0.45);
 }
 
-.social-icon-btn.social-x:hover {
+.jjs-media-link.jjs-tw-link:hover, .social-icon-btn.social-x:hover {
   background-color: #0f172a !important;
   color: #ffffff !important;
   border-color: #0f172a !important;
   box-shadow: 0 8px 18px -4px rgba(15, 23, 42, 0.4);
 }
 
+body[data-theme='swiss-dark'] .jjs-media-link.jjs-tw-link:hover,
+body[data-theme='kinetic'] .jjs-media-link.jjs-tw-link:hover,
+body[data-theme='crimson'] .jjs-media-link.jjs-tw-link:hover,
 body[data-theme='swiss-dark'] .social-icon-btn.social-x:hover,
 body[data-theme='kinetic'] .social-icon-btn.social-x:hover,
 body[data-theme='crimson'] .social-icon-btn.social-x:hover {
@@ -292,7 +300,7 @@ body[data-theme='crimson'] .social-icon-btn.social-x:hover {
   box-shadow: 0 8px 18px -4px rgba(255, 255, 255, 0.35);
 }
 
-.social-icon-btn.social-youtube:hover {
+.jjs-media-link.jjs-yt-link:hover, .social-icon-btn.social-youtube:hover {
   background-color: #FF0000 !important;
   color: #ffffff !important;
   border-color: #FF0000 !important;
