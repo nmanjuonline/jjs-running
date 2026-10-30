@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Menu, X, Sun, Moon, ArrowRight, ChevronRight } from 'lucide-react';
 import JJsLogo from './JJsLogo';
 
-export default function Navbar({ currentTheme = 'swiss-dark', setTheme, onOpenRegister, onOpenProgramRegister, onScrollTo }) {
+export default function Navbar({ currentTheme = 'swiss-dark', setTheme, onOpenRegister, onScrollTo }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isDark = currentTheme === 'swiss-dark';
@@ -212,18 +212,6 @@ export default function Navbar({ currentTheme = 'swiss-dark', setTheme, onOpenRe
               <ArrowRight className="w-4 h-4 stroke-[2.5]" />
             </button>
 
-            {onOpenProgramRegister && (
-              <button
-                onClick={() => { setMobileMenuOpen(false); onOpenProgramRegister(); }}
-                className="w-full py-3 rounded-xl text-xs font-bold uppercase tracking-wider border flex items-center justify-center gap-2 cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition-all"
-                style={{
-                  borderColor: 'var(--border-color)',
-                  color: 'var(--text-heading)'
-                }}
-              >
-                <span>Program Registration</span>
-              </button>
-            )}
           </div>
         </div>
       )}
