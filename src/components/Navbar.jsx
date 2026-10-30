@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Menu, X, Sun, Moon, ArrowRight } from 'lucide-react';
 import JJsLogo from './JJsLogo';
 
-export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenRegister, onScrollTo }) {
+export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenRegister, onOpenProgramRegister, onScrollTo }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isDark = currentTheme === 'swiss-dark';
@@ -186,14 +186,27 @@ export default function Navbar({ currentTheme = 'swiss-light', setTheme, onOpenR
             ))}
           </div>
 
-          <div className="pt-2 border-t" style={{ borderColor: 'var(--border-color)' }}>
+          <div className="pt-2 border-t space-y-2" style={{ borderColor: 'var(--border-color)' }}>
             <button
               onClick={() => { setMobileMenuOpen(false); if (onOpenRegister) onOpenRegister(); }}
               className="w-full py-3.5 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 cursor-pointer bg-[#d02426] text-white hover:bg-[#b51c1e]"
             >
-              <span>Join Squad / Book Free Trial</span>
+              <span>Book Free Trial (1st Run Free)</span>
               <ArrowRight className="w-4 h-4 stroke-[2.5]" />
             </button>
+
+            {onOpenProgramRegister && (
+              <button
+                onClick={() => { setMobileMenuOpen(false); onOpenProgramRegister(); }}
+                className="w-full py-3 rounded-xl text-xs font-bold uppercase tracking-wider border flex items-center justify-center gap-2 cursor-pointer hover:bg-black/5 dark:hover:bg-white/5"
+                style={{
+                  borderColor: 'var(--border-color)',
+                  color: 'var(--text-heading)'
+                }}
+              >
+                <span>Program Registration</span>
+              </button>
+            )}
           </div>
         </div>
       )}
