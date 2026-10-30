@@ -7,22 +7,22 @@ export default function MethodologySection({ onExploreCenters }) {
       icon: Heart,
       title: 'Zone 2 Aerobic Base',
       subtitle: 'Mitochondrial Conditioning',
-      description: 'Systematic low-heart-rate pacing that triggers mitochondrial biogenesis and fat-oxidation efficiency without joint stress or burnout.',
+      description: 'Systematic low-heart-rate pacing designed to promote mitochondrial development and improve fat-oxidation efficiency without joint stress or burnout.',
       highlight: '70% of weekly volume'
     },
     {
       icon: Activity,
       title: 'Cadence & Biomechanics',
       subtitle: '175-185 SPM Stride',
-      description: 'Form correction, posture alignment, forward lean from ankles, and midfoot landing under your center of mass to eliminate heel-strike jarring.',
+      description: 'Form correction, posture alignment, a forward lean from the ankles, and midfoot landing under your center of mass to reduce the impact associated with heel striking.',
       highlight: 'Target: 180 SPM rhythm'
     },
     {
       icon: ShieldCheck,
       title: 'Strength, Core & Mobility',
       subtitle: 'Injury-Proofing',
-      description: 'Periodized weekday functional strength routines, glute and hip stability drills, dynamic warmups, and dedicated post-run stretch circuits.',
-      highlight: '98.4% injury-free longevity'
+      description: 'Periodized weekday functional strength routines, glute and hip stability drills, dynamic warm-ups, and dedicated post-run stretching circuits.',
+      highlight: '98.4% Injury-Free Completion Rate'
     },
     {
       icon: Compass,
@@ -80,7 +80,7 @@ export default function MethodologySection({ onExploreCenters }) {
         </h2>
 
         <p className="text-xs sm:text-base opacity-75 leading-relaxed">
-          How JJs Running achieves a 98%+ injury-free rate across 17,000+ runners, transforming zero-running beginners into confident marathon finishers and endurance runners.
+          How JJs Running achieves a 98%+ injury-free rate across 17,000+ runners, transforming complete beginners into confident marathon finishers and endurance runners.
         </p>
       </div>
 
