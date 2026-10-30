@@ -7,22 +7,22 @@ export default function MethodologySection({ onExploreCenters }) {
       icon: Heart,
       title: 'Zone 2 Aerobic Base',
       subtitle: 'Mitochondrial Conditioning',
-      description: 'Systematic low-heart-rate pacing that triggers mitochondrial biogenesis and fat-oxidation efficiency without joint stress or burnout.',
+      description: 'Systematic low-heart-rate pacing designed to promote mitochondrial development and improve fat-oxidation efficiency without joint stress or burnout.',
       highlight: '70% of weekly volume'
     },
     {
       icon: Activity,
       title: 'Cadence & Biomechanics',
       subtitle: '175-185 SPM Stride',
-      description: 'Form correction, posture alignment, forward lean from ankles, and midfoot landing under your center of mass to eliminate heel-strike jarring.',
+      description: 'Form correction, posture alignment, a forward lean from the ankles, and midfoot landing under your center of mass to reduce the impact associated with heel striking.',
       highlight: 'Target: 180 SPM rhythm'
     },
     {
       icon: ShieldCheck,
       title: 'Strength, Core & Mobility',
       subtitle: 'Injury-Proofing',
-      description: 'Periodized weekday functional strength routines, glute and hip stability drills, dynamic warmups, and dedicated post-run stretch circuits.',
-      highlight: '98.4% injury-free longevity'
+      description: 'Periodized weekday functional strength routines, glute and hip stability drills, dynamic warm-ups, and dedicated post-run stretching circuits.',
+      highlight: '98.4% Injury-Free Completion Rate'
     },
     {
       icon: Compass,
@@ -80,7 +80,7 @@ export default function MethodologySection({ onExploreCenters }) {
         </h2>
 
         <p className="text-xs sm:text-base opacity-75 leading-relaxed">
-          How JJs Running achieves a 98%+ injury-free rate across 17,000+ runners, transforming zero-running beginners into confident marathon finishers and endurance runners.
+          How JJs Running achieves a 98%+ injury-free rate across 17,000+ runners, transforming complete beginners into confident marathon finishers and endurance runners.
         </p>
       </div>
 
@@ -164,7 +164,7 @@ export default function MethodologySection({ onExploreCenters }) {
               The 4-Day Training Protocol
             </h3>
             <p className="text-xs sm:text-sm opacity-70 mt-1 max-w-xl">
-              Led across 20+ neighborhood grounds by designated Training Center Heads (TCH). Sessions kick off at 05:30 AM sharp.
+              Training sessions are led across 20+ neighborhood grounds by designated Training Center Heads (TCHs). Sessions begin at 5:30 AM sharp.
             </p>
           </div>
 
@@ -229,20 +229,20 @@ export default function MethodologySection({ onExploreCenters }) {
             </h3>
 
             <p className="text-xs sm:text-sm opacity-75 leading-relaxed max-w-2xl">
-              From college students to runners in their 70s and 80s, software engineers, doctors, teachers, entrepreneurs, and homemakers. Whether your pace is 4:15/km or 9:30/km, JJs Running welcomes you with dedicated pace mentors.
+              Our community includes everyone from college students to runners in their 70s and 80s, as well as software engineers, doctors, teachers, entrepreneurs, and homemakers. Whether your pace is 4:15 min/km or 9:30 min/km, JJs Running welcomes you with dedicated pace mentors.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
               <div className="p-3 rounded-xl border space-y-1" style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}>
                 <Coffee className="w-4 h-4 text-amber-500" />
                 <h5 className="text-xs font-bold" style={{ color: 'var(--text-heading)' }}>Post-Run Chai & Debrief</h5>
-                <p className="text-[10px] opacity-65">The signature Sunday morning recovery run, stretching circle, and filter coffee.</p>
+                <p className="text-[10px] opacity-65">Enjoy our signature Sunday morning recovery run, stretching circle, and filter coffee.</p>
               </div>
 
               <div className="p-3 rounded-xl border space-y-1" style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}>
                 <Award className="w-4 h-4 text-rose-500" />
                 <h5 className="text-xs font-bold" style={{ color: 'var(--text-heading)' }}>Major Race Charters</h5>
-                <p className="text-[10px] opacity-65">Travel charters, hospitality tents & cheer zones for TMM, TCS 10K & World Majors.</p>
+                <p className="text-[10px] opacity-65">Travel charters, hospitality tents, and cheer zones for TMM, TCS 10K, and the World Marathon Majors.</p>
               </div>
 
               <div className="p-3 rounded-xl border space-y-1" style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}>

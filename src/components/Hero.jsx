@@ -163,7 +163,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                     17,000+ Runners Trained
                   </span>
                   <span className="hidden md:inline-flex px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#318cdd]/25 border border-[#318cdd]/50 text-[#4ca6f5] backdrop-blur-md">
-                    3 CITIES • TUE, THU, SAT &amp; SUN @ 5:30 AM
+                    3 CITIES • TUE, THU, SAT &amp; SUN | 5:30 AM
                   </span>
                 </div>
               )}
@@ -640,7 +640,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                   <div className="pt-2 flex items-center justify-between text-xs">
                     <div>
                       <span className="text-white font-bold block">Experienced Center Heads On Ground</span>
-                      <span className="text-[10px] text-zinc-400">Tue, Thu, Sat &amp; Sun @ 5:30 AM</span>
+                      <span className="text-[10px] text-zinc-400">Tue, Thu, Sat &amp; Sun | 5:30 AM</span>
                     </div>
                     <button
                       onClick={onBookTrial}

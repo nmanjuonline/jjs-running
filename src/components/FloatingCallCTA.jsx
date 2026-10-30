@@ -109,52 +109,28 @@ export default function FloatingCallCTA() {
         </div>
       )}
 
-      {/* Primary Floating Action Pill — clicking opens the popup */}
-      <div className="flex items-center gap-2">
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="group relative flex items-center gap-2.5 py-2.5 px-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer border border-white/20 bg-gradient-to-r from-[#d02426] to-[#b51c1e] text-white select-none"
-          aria-expanded={isExpanded}
-          aria-label="Open contact helpline options"
-        >
-          {/* Gentle Pulsing Ring */}
-          {!isExpanded && (
-            <span className="absolute -inset-1 rounded-full bg-red-500 opacity-30 animate-ping pointer-events-none" />
-          )}
+      {/* Primary Floating Action Pill — Option A: Clean Minimalist Pill */}
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="group flex items-center gap-2.5 py-2 px-3.5 sm:px-4 rounded-full shadow-xl backdrop-blur-xl border transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer select-none"
+        style={{
+          backgroundColor: 'var(--card-bg)',
+          borderColor: 'var(--border-color)',
+          color: 'var(--text-heading)'
+        }}
+        aria-expanded={isExpanded}
+        aria-label="Need Help? Talk to Us"
+      >
+        <div className="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 shadow-xs">
+          <MessageCircle className="w-3.5 h-3.5 fill-white stroke-none" />
+        </div>
 
-          <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
-            <Phone className="w-3.5 h-3.5 stroke-[2.5] fill-white" />
-          </div>
+        <span className="text-xs font-bold tracking-tight" style={{ color: 'var(--text-heading)' }}>
+          Need Help? Talk to Us
+        </span>
 
-          <div className="flex flex-col text-left pr-1">
-            <span className="text-[9px] font-mono font-bold tracking-widest uppercase opacity-85 leading-tight flex items-center gap-1">
-              <Sparkles className="w-2.5 h-2.5" /> Talk to Us
-            </span>
-            <span className="text-xs font-black tracking-tight leading-tight whitespace-nowrap">
-              +91 98440 93666
-            </span>
-          </div>
-
-          <div className="pl-0.5 opacity-75 group-hover:opacity-100 transition-opacity">
-            {isExpanded ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronUp className="w-3.5 h-3.5" />}
-          </div>
-        </button>
-
-        {/* WhatsApp Icon Toggle Button */}
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="w-11 h-11 rounded-full border shadow-xl flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer backdrop-blur-md"
-          style={{
-            backgroundColor: 'var(--card-bg)',
-            borderColor: 'var(--border-color)',
-            color: 'var(--text-heading)'
-          }}
-          aria-label={isExpanded ? 'Collapse call options' : 'More contact options'}
-          title="More contact options"
-        >
-          <MessageCircle className="w-5 h-5 text-emerald-500" />
-        </button>
-      </div>
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse ml-0.5" title="Helpline online" />
+      </button>
     </aside>
   );
 }

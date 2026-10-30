@@ -1,0 +1,85 @@
+name: "🐛 Bug Report"
+description: "File a structured bug report for JJs Running"
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report an issue and keep **JJs Running** smooth and reliable!
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the problem is.
+      placeholder: "e.g. When entering half-marathon split times, the pace calculator resets to 0:00."
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: How can we trigger this bug?
+      placeholder: |
+        1. Navigate to '...'
+        2. Click on '...'
+        3. Enter value '...'
+        4. Observe unexpected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: "e.g. The target pace should compute to 5:15/km."
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior / Screenshots
+      description: What actually occurred? Drag & drop screenshots or paste error messages here.
+    validations:
+      required: false
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected Area
+      description: Which part of the app is affected?
+      options:
+        - "UI / Layout / Mobile Styling"
+        - "Pace / Time / Split Calculations"
+        - "Event / Race Results"
+        - "Social Creative / Poster Export"
+        - "Cloudflare Worker / API / Deployment"
+        - "Other"
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How urgently does this impact usage?
+      options:
+        - "Low (Cosmetic, minor typo, layout quirk)"
+        - "Medium (Feature malfunction with workaround)"
+        - "High (Core feature broken or unusable)"
+        - "Critical (App crash, data loss, deploy blocker)"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Device, operating system, and browser used.
+      placeholder: "e.g. iPhone 15 Pro / Safari 18 OR Windows 11 / Chrome 129"
+    validations:
+      required: false
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Console logs, network requests, or any extra information.
+    validations:
+      required: false

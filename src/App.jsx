@@ -192,7 +192,7 @@ export default function App() {
                 className="text-xs sm:text-sm mt-1 max-w-xl"
                 style={{ color: 'var(--text-secondary)' }}
               >
-                Select your city and neighborhood center below to view morning timings, designated grounds, and connect with your Training Center Head.
+                Select your city and neighborhood center below to view morning timings and designated grounds, and connect with your Training Center Head.
               </p>
             </div>
 

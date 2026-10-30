@@ -274,7 +274,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
                       <span className="text-[10px] font-mono uppercase tracking-wider font-semibold">Morning Schedule</span>
                     </div>
                     <p className={`text-xs sm:text-sm font-bold ${isDark ? 'text-slate-100' : 'text-slate-900'}`}>
-                      Tue, Thu, Sat &amp; Sun @ 5:30 AM
+                      Tue, Thu, Sat &amp; Sun | 5:30 AM
                     </p>
                     <span className="text-[10px] text-slate-500 font-medium block mt-0.5">
                       75-90 min drills &amp; endurance mileage
@@ -485,7 +485,7 @@ export default function CentersExplorer({ onBookTrial, currentTheme = 'olympic-c
 
                   <div className="p-3 rounded-xl border border-orange-100 bg-orange-50/40">
                     <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 block">Morning Timings</span>
-                    <p className="text-xs font-bold text-zinc-900 mt-0.5">{currentCenter.timings || 'Tue, Thu, Sat & Sun @ 5:30 AM'}</p>
+                    <p className="text-xs font-bold text-zinc-900 mt-0.5">{currentCenter.timings || 'Tue, Thu, Sat & Sun | 5:30 AM'}</p>
                   </div>
 
                   <div className="p-3 rounded-xl border border-orange-100 bg-orange-50/40">
