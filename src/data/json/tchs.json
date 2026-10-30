@@ -1,0 +1,262 @@
+[
+  {
+    "id": "tch-kumar",
+    "name": "Kumar",
+    "role": "Training Center Head (TCH)",
+    "city": "Bengaluru",
+    "centerId": "bengaluru-jayanagar",
+    "phone": "+91 98864 01014",
+    "email": "kumar.tch@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-girish",
+    "name": "Girish",
+    "role": "Training Center Head (TCH)",
+    "city": "Bengaluru",
+    "centerId": "bengaluru-jayanagar",
+    "phone": "+91 98867 57704",
+    "email": "girish.tch@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-naveen-nagpal",
+    "name": "Naveen Nagpal",
+    "role": "Training Center Head (TCH)",
+    "city": "Bengaluru",
+    "centerId": "bengaluru-bgr",
+    "phone": "+91 98801 04188",
+    "email": "naveen.nagpal@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-amol-kotwal",
+    "name": "Amol Kotwal",
+    "role": "Training Center Head (TCH)",
+    "city": "Bengaluru",
+    "centerId": "bengaluru-bgr",
+    "phone": "+91 99001 77526",
+    "email": "amol.kotwal@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-manohar-simons",
+    "name": "Manohar Simons",
+    "role": "Training Center Head (TCH)",
+    "city": "Bengaluru",
+    "centerId": "bengaluru-bellandur",
+    "phone": "+91 90190 64548",
+    "email": "manohar.simons@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-geo-joseph",
+    "name": "Geo Joseph",
+    "role": "Training Center Head (TCH)",
+    "city": "Bengaluru",
+    "centerId": "bengaluru-bangalore-university",
+    "phone": "+91 81978 24515",
+    "email": "geo.joseph@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-hanumesh",
+    "name": "Hanumesh",
+    "role": "Training Center Head (TCH)",
+    "city": "Bengaluru",
+    "centerId": "bengaluru-electronic-city",
+    "phone": "+91 99800 36306",
+    "email": "hanumesh.tch@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-krishnan-garry",
+    "name": "Krishnan (Garry)",
+    "role": "Training Center Head (TCH)",
+    "city": "Bengaluru",
+    "centerId": "bengaluru-hebbal",
+    "phone": "+91 98452 70464",
+    "email": "krishnan.garry@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-praful-bhoyar",
+    "name": "Praful Bhoyar",
+    "role": "Training Center Head (TCH)",
+    "city": "Bengaluru",
+    "centerId": "bengaluru-hsr",
+    "phone": "+91 96869 33311",
+    "email": "praful.bhoyar@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-muthamma-acharya",
+    "name": "Muthamma Acharya",
+    "role": "Training Center Head (TCH)",
+    "city": "Bengaluru",
+    "centerId": "bengaluru-indiranagar",
+    "phone": "+91 98456 33932",
+    "email": "muthamma.acharya@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-lakshman",
+    "name": "Lakshman",
+    "role": "Training Center Head (TCH)",
+    "city": "Bengaluru",
+    "centerId": "bengaluru-jalahalli",
+    "phone": "+91 73383 72920",
+    "email": "lakshman.tch@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-vijaya-kumar",
+    "name": "Vijaya Kumar",
+    "role": "Training Center Head (TCH)",
+    "city": "Bengaluru",
+    "centerId": "bengaluru-kalyan-nagar",
+    "phone": "+91 96633 83862",
+    "email": "vijaya.kumar@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-trupti-rao",
+    "name": "Trupti Rao",
+    "role": "Training Center Head (TCH)",
+    "city": "Pune",
+    "centerId": "pune-kalyani-nagar",
+    "phone": "+91 88069 94515",
+    "email": "trupti.rao@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-sangmesh-biradar",
+    "name": "Sangmesh Biradar",
+    "role": "Training Center Head (TCH)",
+    "city": "Bengaluru",
+    "centerId": "bengaluru-kpr",
+    "phone": "+91 81232 32233",
+    "email": "sangmesh.biradar@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-amit-gadnis",
+    "name": "Amit Gadnis",
+    "role": "Training Center Head (TCH)",
+    "city": "Pune",
+    "centerId": "pune-karve-nagar",
+    "phone": "+91 98224 20131",
+    "email": "amit.gadnis@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-anirban-ghosh",
+    "name": "Anirban Ghosh",
+    "role": "Training Center Head (TCH)",
+    "city": "Bengaluru",
+    "centerId": "bengaluru-koramangala",
+    "phone": "+91 70195 71901",
+    "email": "anirban.ghosh@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-vaibhav-pandya",
+    "name": "Vaibhav Pandya",
+    "role": "Training Center Head (TCH)",
+    "city": "Kolkata",
+    "centerId": "kolkata-maidan",
+    "phone": "+91 98312 03456",
+    "email": "vaibhav.pandya@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-ajay-jaishankar",
+    "name": "Ajay Jaishankar",
+    "role": "Training Center Head (TCH)",
+    "city": "Bengaluru",
+    "centerId": "bengaluru-malleshwaram",
+    "phone": "+91 99000 55108",
+    "email": "ajay.jaishankar@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-paresh-bhave",
+    "name": "Paresh Ramesh Bhave",
+    "role": "Training Center Head (TCH)",
+    "city": "Pune",
+    "centerId": "pune-baner",
+    "phone": "+91 99210 04406",
+    "email": "paresh.bhave@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-swarupa-bhadsavle",
+    "name": "Swarupa Bhadsavle",
+    "role": "Training Center Head (TCH)",
+    "city": "Pune",
+    "centerId": "pune-university",
+    "phone": "+91 99238 67722",
+    "email": "swarupa.bhadsavle@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-diksha-jhunjhunwala",
+    "name": "Diksha Jhunjhunwala",
+    "role": "Training Center Head (TCH)",
+    "city": "Kolkata",
+    "centerId": "kolkata-rsl",
+    "phone": "+91 98315 42439",
+    "email": "diksha.jhunjhunwala@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-madhuvanti-deodhar",
+    "name": "Madhuvanti Deodhar",
+    "role": "Training Center Head (TCH)",
+    "city": "Pune",
+    "centerId": "pune-sahakar-nagar",
+    "phone": "+91 98904 31780",
+    "email": "madhuvanti.deodhar@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-vijay-sriram",
+    "name": "Vijay Sriram",
+    "role": "Training Center Head (TCH)",
+    "city": "Bengaluru",
+    "centerId": "bengaluru-vijayanagar",
+    "phone": "+91 98456 93686",
+    "email": "vijay.sriram@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-divakar-mourya",
+    "name": "Divakar Mourya",
+    "role": "Training Center Head (TCH)",
+    "city": "Bengaluru",
+    "centerId": "bengaluru-whitefield",
+    "phone": "+91 98850 22272",
+    "email": "divakar.mourya@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-arun-td",
+    "name": "Arun TD",
+    "role": "Training Center Head (TCH)",
+    "city": "Bengaluru",
+    "centerId": "bengaluru-yelahanka",
+    "phone": "+91 99168 65691",
+    "email": "arun.td@jjsrunning.com",
+    "isActive": true
+  },
+  {
+    "id": "tch-central-team",
+    "name": "Central Coordination Team",
+    "role": "Central Coordination Directorate",
+    "city": "Remote",
+    "centerId": "remote-global",
+    "phone": "+91 80 4000 9000",
+    "email": "central.team@jjsrunning.com",
+    "isActive": true
+  }
+]
