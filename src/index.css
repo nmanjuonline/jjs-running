@@ -7,6 +7,7 @@ section[id] {
   scroll-margin-top: 5.5rem;
 }
 
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -302,44 +303,41 @@ body[data-theme='crimson'] .social-icon-btn.social-x:hover {
   box-shadow: 0 8px 18px -4px rgba(255, 0, 0, 0.45);
 }
 
-/* =========================================================================
-   FORM CONTROLS & DROPDOWN (NATIVE SELECT / OPTION) DARK THEME SUPPORT
-   ========================================================================= */
-select {
-  color-scheme: inherit;
+
+/* React Day Picker Theming */
+.rdp-root {
+  --rdp-accent-color: #d02426;
+  --rdp-accent-background-color: rgba(208, 36, 38, 0.15);
+  --rdp-day-height: 36px;
+  --rdp-day-width: 36px;
+  --rdp-day_button-height: 34px;
+  --rdp-day_button-width: 34px;
+  --rdp-today-color: #318cdd;
+  color: var(--text-heading);
 }
 
-body[data-theme='swiss-dark'] select,
-body[data-theme='kinetic'] select,
-body[data-theme='crimson'] select {
-  color-scheme: dark !important;
-  background-color: #0f172a !important;
-  color: #f8fafc !important;
-  border-color: #334155 !important;
+.rdp-root select {
+  background-color: var(--card-inner) !important;
+  color: var(--text-heading) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-body[data-theme='swiss-dark'] select option,
-body[data-theme='swiss-dark'] select optgroup,
-body[data-theme='kinetic'] select option,
-body[data-theme='kinetic'] select optgroup,
-body[data-theme='crimson'] select option,
-body[data-theme='crimson'] select optgroup {
-  background-color: #0f172a !important;
-  color: #f8fafc !important;
+.rdp-root select option {
+  background-color: var(--card-bg);
+  color: var(--text-heading);
 }
 
-body[data-theme='swiss-light'] select,
-body[data-theme='sunrise-coral'] select,
-body[data-theme='olympic-clean'] select {
-  color-scheme: light !important;
-  background-color: #ffffff !important;
-  color: #0f172a !important;
+.rdp-day_button:hover {
+  background-color: var(--card-inner) !important;
 }
 
-body[data-theme='swiss-light'] select option,
-body[data-theme='swiss-light'] select optgroup,
-body[data-theme='sunrise-coral'] select option,
-body[data-theme='sunrise-coral'] select optgroup {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
+.rdp-selected .rdp-day_button {
+  background-color: #d02426 !important;
+  color: #ffffff !important;
+  font-weight: 700;
 }
