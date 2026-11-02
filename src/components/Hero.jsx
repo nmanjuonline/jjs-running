@@ -174,7 +174,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                   <div className="flex flex-row items-center gap-2 sm:gap-3 pt-1">
                     <button
                       onClick={onBookTrial}
-                      className="flex-1 sm:flex-initial py-2.5 sm:py-3 px-4 sm:px-7 rounded-2xl bg-[#d02426] hover:bg-[#b51c1e] text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(208,36,38,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer"
+                      className="flex-1 sm:flex-initial py-2.5 sm:py-3 px-4 sm:px-7 min-h-[44px] rounded-2xl bg-[#d02426] hover:bg-[#b51c1e] text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(208,36,38,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer"
                     >
                       <span>Book Free Trial</span>
                       <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -182,7 +182,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
 
                     <button
                       onClick={onExploreCenters}
-                      className="flex-1 sm:flex-initial py-2.5 sm:py-3 px-3.5 sm:px-6 rounded-2xl bg-white/95 hover:bg-white text-slate-900 text-xs sm:text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer"
+                      className="flex-1 sm:flex-initial py-2.5 sm:py-3 px-3.5 sm:px-6 min-h-[44px] rounded-2xl bg-white/95 hover:bg-white text-slate-900 text-xs sm:text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer"
                     >
                       <MapPin className="w-3.5 h-3.5 text-[#318cdd] stroke-[2.5]" />
                       <span>Find Grounds</span>
@@ -209,7 +209,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                   <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3 pt-2">
                     <button
                       onClick={onBookTrial}
-                      className="py-3.5 px-6 sm:px-7 rounded-2xl bg-[#d02426] hover:bg-[#b51c1e] text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(208,36,38,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer"
+                      className="py-3.5 px-6 sm:px-7 min-h-[44px] rounded-2xl bg-[#d02426] hover:bg-[#b51c1e] text-white text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-[0_10px_25px_-5px_rgba(208,36,38,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer"
                     >
                       <span>{heroContent.ctas.primary}</span>
                       <ArrowRight className="w-4 h-4 stroke-[2.5]" />
@@ -217,7 +217,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
 
                     <button
                       onClick={onExploreCenters}
-                      className="py-3.5 px-5 sm:px-6 rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-md text-xs sm:text-sm font-bold uppercase tracking-wider transition-all shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer"
+                      className="py-3.5 px-5 sm:px-6 min-h-[44px] rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-md text-xs sm:text-sm font-bold uppercase tracking-wider transition-all shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer"
                     >
                       <MapPin className="w-4 h-4 text-[#38bdf8] stroke-[2.5]" />
                       <span>{heroContent.ctas.secondary}</span>
@@ -225,7 +225,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
 
                     <button
                       onClick={onOpenCalc}
-                      className="py-3.5 px-4 rounded-2xl bg-black/40 hover:bg-black/60 text-slate-200 hover:text-white border border-white/15 backdrop-blur-md text-xs font-mono font-bold uppercase transition-all hover:-translate-y-0.5 flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer"
+                      className="py-3.5 px-4 min-h-[44px] rounded-2xl bg-black/40 hover:bg-black/60 text-slate-200 hover:text-white border border-white/15 backdrop-blur-md text-xs font-mono font-bold uppercase transition-all hover:-translate-y-0.5 flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer"
                     >
                       <Activity className="w-3.5 h-3.5 text-[#38bdf8]" />
                       <span>{heroContent.ctas.tertiary}</span>

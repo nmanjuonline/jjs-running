@@ -122,7 +122,7 @@ export default function Navbar({ currentTheme = 'swiss-dark', setTheme, onOpenRe
             {/* Desktop CTA Button */}
             <button
               onClick={() => { if (onOpenRegister) onOpenRegister(); }}
-              className="py-2.5 px-4 lg:px-5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-md hover:scale-105 flex items-center gap-1.5 text-white bg-[#d02426] hover:bg-[#b51c1e] shadow-red-500/20 cursor-pointer flex-shrink-0 whitespace-nowrap"
+              className="py-2.5 px-4 lg:px-5 min-h-[44px] rounded-full text-xs font-black uppercase tracking-wider transition-all duration-200 shadow-md hover:scale-105 flex items-center gap-1.5 text-white bg-[#d02426] hover:bg-[#b51c1e] shadow-red-500/20 cursor-pointer flex-shrink-0 whitespace-nowrap"
             >
               <span>Book Free Trial</span>
               <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -134,7 +134,7 @@ export default function Navbar({ currentTheme = 'swiss-dark', setTheme, onOpenRe
             {/* Quick Trial Pill on tablet / medium view */}
             <button
               onClick={() => { if (onOpenRegister) onOpenRegister(); }}
-              className="hidden sm:flex py-2 px-3.5 rounded-full text-xs font-black uppercase tracking-wider text-white bg-[#d02426] hover:bg-[#b51c1e] shadow-sm cursor-pointer whitespace-nowrap items-center gap-1"
+              className="hidden sm:flex py-2.5 px-4 min-h-[44px] rounded-full text-xs font-black uppercase tracking-wider text-white bg-[#d02426] hover:bg-[#b51c1e] shadow-sm cursor-pointer whitespace-nowrap items-center gap-1"
             >
               <span>Free Trial</span>
               <ArrowRight className="w-3 h-3 stroke-[2.5]" />
@@ -143,7 +143,7 @@ export default function Navbar({ currentTheme = 'swiss-dark', setTheme, onOpenRe
             {/* Compact Light / Dark Toggle */}
             <button
               onClick={() => setTheme && setTheme(isDark ? 'swiss-light' : 'swiss-dark')}
-              className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-xl border flex-shrink-0 cursor-pointer shadow-xs transition-colors"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl border flex-shrink-0 cursor-pointer shadow-xs transition-colors"
               style={{
                 backgroundColor: 'var(--card-inner)',
                 borderColor: 'var(--border-color)',
@@ -158,7 +158,7 @@ export default function Navbar({ currentTheme = 'swiss-dark', setTheme, onOpenRe
             {/* Mobile & Tablet Hamburger Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-xl border flex-shrink-0 cursor-pointer shadow-xs transition-colors"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl border flex-shrink-0 cursor-pointer shadow-xs transition-colors"
               style={{
                 backgroundColor: mobileMenuOpen ? 'var(--card-bg)' : 'var(--card-inner)',
                 borderColor: mobileMenuOpen ? 'var(--accent)' : 'var(--border-color)',

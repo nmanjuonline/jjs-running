@@ -65,7 +65,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                 tabIndex={isActive ? 0 : -1}
                 onKeyDown={(e) => handleTabKeyDown(e, idx)}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2 text-xs font-bold tracking-wide rounded-full transition-all duration-200 flex-shrink-0 cursor-pointer ${
+                className={`px-4 py-2.5 min-h-[44px] text-xs font-bold tracking-wide rounded-full transition-all duration-200 flex-shrink-0 flex items-center justify-center cursor-pointer ${
                   isActive
                     ? 'bg-[#318cdd] text-white shadow-md shadow-[#318cdd]/25'
                     : isDark
@@ -204,7 +204,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
 
                 <button
                   onClick={() => onRegister(program)}
-                  className="py-2.5 px-5 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md hover:scale-105 flex items-center gap-1.5 bg-[#d02426] hover:bg-[#b51c1e] shadow-[#d02426]/20 cursor-pointer"
+                  className="py-2.5 px-5 min-h-[44px] text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md hover:scale-105 flex items-center justify-center gap-1.5 bg-[#d02426] hover:bg-[#b51c1e] shadow-[#d02426]/20 cursor-pointer"
                 >
                   <span>VIEW PROGRAM</span>
                   <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -233,7 +233,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                 role="tab"
                 aria-selected={isActive}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2 text-xs font-bold tracking-wide rounded-full transition-all duration-200 flex-shrink-0 cursor-pointer ${
+                className={`px-4 py-2.5 min-h-[44px] text-xs font-bold tracking-wide rounded-full transition-all duration-200 flex-shrink-0 flex items-center justify-center cursor-pointer ${
                   isActive
                     ? 'bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-md shadow-orange-500/25'
                     : 'bg-orange-50 hover:bg-orange-100/70 text-zinc-700 border border-orange-100'
@@ -340,7 +340,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
 
                 <button
                   onClick={() => onRegister(program)}
-                  className="py-2.5 px-5 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-orange-500/25 hover:scale-105 flex items-center gap-1.5 cursor-pointer"
+                  className="py-2.5 px-5 min-h-[44px] bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-orange-500/25 hover:scale-105 flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <span>VIEW PROGRAM</span>
                   <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -368,7 +368,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                 role="tab"
                 aria-selected={isActive}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-3.5 py-1.5 text-xs font-mono font-bold tracking-wider rounded-xl transition-all flex-shrink-0 cursor-pointer ${
+                className={`px-4 py-2.5 min-h-[44px] text-xs font-mono font-bold tracking-wider rounded-xl transition-all flex-shrink-0 flex items-center justify-center cursor-pointer ${
                   isActive
                     ? 'bg-[#ccff00] text-black shadow-[0_0_15px_rgba(204,255,0,0.3)]'
                     : 'bg-white/5 text-slate-400 hover:text-white border border-white/10'
@@ -447,7 +447,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                 </div>
                 <button
                   onClick={() => onRegister(program)}
-                  className="py-2.5 px-5 rounded-xl bg-[#ccff00] text-black text-xs font-mono font-black uppercase hover:bg-white transition-all shadow-[0_0_15px_rgba(204,255,0,0.3)] flex items-center gap-1.5 cursor-pointer"
+                  className="py-2.5 px-5 min-h-[44px] rounded-xl bg-[#ccff00] text-black text-xs font-mono font-black uppercase hover:bg-white transition-all shadow-[0_0_15px_rgba(204,255,0,0.3)] flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <span>VIEW PROGRAM</span>
                   <ArrowUpRight className="w-3.5 h-3.5 stroke-[3]" />
@@ -474,7 +474,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
               role="tab"
               aria-selected={isActive}
               onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-1.5 text-xs font-mono font-bold uppercase tracking-wider rounded-lg transition-all flex-shrink-0 cursor-pointer ${
+              className={`px-4 py-2.5 min-h-[44px] text-xs font-mono font-bold uppercase tracking-wider rounded-lg transition-all flex-shrink-0 flex items-center justify-center cursor-pointer ${
                 isActive
                   ? 'bg-[#ff1e42] text-white shadow-[0_0_15px_rgba(255,30,66,0.4)]'
                   : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
@@ -552,7 +552,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
               </div>
               <button
                 onClick={() => onRegister(program)}
-                className="py-2.5 px-5 rounded-lg bg-[#ff1e42] text-white text-xs font-black uppercase tracking-wider hover:bg-white hover:text-black transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(255,30,66,0.3)] cursor-pointer"
+                className="py-2.5 px-5 min-h-[44px] rounded-lg bg-[#ff1e42] text-white text-xs font-black uppercase tracking-wider hover:bg-white hover:text-black transition-all flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(255,30,66,0.3)] cursor-pointer"
               >
                 <span>VIEW PROGRAM</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />

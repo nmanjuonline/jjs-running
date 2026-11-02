@@ -219,7 +219,7 @@ export default function MethodologySection({ onExploreCenters }) {
           <div className="lg:col-span-4 flex flex-col justify-center items-start lg:items-end gap-3 pt-2 lg:pt-0">
             <button
               onClick={onExploreCenters}
-              className="w-full sm:w-auto py-3.5 px-6 rounded-2xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-lg hover:scale-105 flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full sm:w-auto py-3.5 px-6 min-h-[44px] rounded-2xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-lg hover:scale-105 flex items-center justify-center gap-2 cursor-pointer"
               style={{
                 backgroundColor: 'var(--accent)',
                 color: 'var(--accent-contrast)'
