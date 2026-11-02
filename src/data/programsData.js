@@ -1,15 +1,24 @@
 export const programsData = [
   {
     id: 'ftr-beginner',
-    title: 'Fitness Thru Running (FTR)',
+    title: 'Your First 5K (Fitness Thru Running)',
+    outcomeTitle: 'Your First 5K',
+    internalName: 'Fitness Thru Running (FTR)',
     category: 'Beginner',
     badge: 'Most Popular',
     duration: '12 Weeks',
     level: 'Beginners / Couch to 5K & 10K',
     frequency: '3 Days / Week',
+    mode: 'Coached on Ground',
     price: '₹6,000',
     tax: '+ 5% GST',
-    description: 'Transform your lifestyle with scientific run-walk intervals, biomechanical analysis, breathing control, and injury-proofing.',
+    bestFor: 'New runners and people returning after a break.',
+    whatYouBuild: [
+      'Running consistency & routine',
+      'Aerobic base endurance',
+      'Basic strength & mobility'
+    ],
+    description: 'Build running confidence with guided run-walk intervals, biomechanical form correction, breathing control, and injury-proofing.',
     highlights: [
       'Gradual aerobic base building',
       'Posture, cadence & stride correction',
@@ -21,14 +30,23 @@ export const programsData = [
   },
   {
     id: 'elevate-10k',
-    title: 'Elevate 10K Speed & Endurance',
+    title: 'Build to 10K (Elevate 10K Speed)',
+    outcomeTitle: 'Build to 10K',
+    internalName: 'Elevate 10K Speed & Endurance',
     category: '10K',
     badge: 'PB Accelerator',
     duration: '14 Weeks',
     level: 'Sub-60 & Sub-50 10K Hopefuls',
     frequency: '4 Days / Week',
+    mode: 'Coached on Ground',
     price: '₹6,000',
     tax: '+ 5% GST',
+    bestFor: 'Runners ready to progress from 5K or targeting a 10K PB.',
+    whatYouBuild: [
+      'Lactate threshold conditioning',
+      'Track speed & cadence calibration',
+      'Race-day tactical pacing plan'
+    ],
     description: 'Take your 10K performance to the next level with structured lactate-threshold workouts, interval track sessions, and hill repeats.',
     highlights: [
       'Weekly track workouts & 400m/800m repeats',
@@ -41,14 +59,23 @@ export const programsData = [
   },
   {
     id: 'ryf-21k',
-    title: 'RYF 21K Half Marathon Program',
+    title: 'Half Marathon Preparation (RYF 21K)',
+    outcomeTitle: 'Half Marathon Preparation',
+    internalName: 'RYF 21K Half Marathon Program',
     category: 'Half Marathon',
     badge: 'Flagship',
     duration: '16 Weeks',
     level: 'First-time & Target-Pace Half Marathoners',
     frequency: '4 Days / Week',
+    mode: 'Coached on Ground',
     price: '₹6,000',
     tax: '+ 5% GST',
+    bestFor: 'First-time half marathoners and runners targeting sub-2:00 or sub-2:30.',
+    whatYouBuild: [
+      'Progressive 18–20 km weekend long runs',
+      'Pace-group mentorship squads',
+      'In-race fueling & hydration strategy'
+    ],
     description: 'Our celebrated "Reach Your Full Potential" half-marathon program features systematic weekend slow long runs (SLRs).',
     highlights: [
       'Progressive mileage build-up to 18-20 km',
@@ -61,14 +88,23 @@ export const programsData = [
   },
   {
     id: 'ryf-42k',
-    title: 'RYF 42K Full Marathon Mastery',
+    title: 'Marathon Preparation (RYF 42K)',
+    outcomeTitle: 'Marathon Preparation',
+    internalName: 'RYF 42K Full Marathon Mastery',
     category: 'Marathon',
     badge: 'Elite Track',
     duration: '20-24 Weeks',
     level: 'Full Marathoners & Competitive Runners',
     frequency: '5 Days / Week',
+    mode: 'Coached on Ground',
     price: '₹6,000',
     tax: '+ 5% GST',
+    bestFor: 'Experienced runners preparing for a 42.195 km race goal.',
+    whatYouBuild: [
+      '30–34 km supported long run simulations',
+      'Negative-split race tactics',
+      'Heart rate zone periodization & taper'
+    ],
     description: 'Comprehensive periodization for 42.195 km. Aerobic peak blocks, 30+ km SLR simulations, gut training, and negative split tactics.',
     highlights: [
       '30-34km supported simulation runs with hydration stations',
@@ -81,14 +117,23 @@ export const programsData = [
   },
   {
     id: 'ultra-trail',
-    title: 'Extreme Trail & Ultra Endurance',
+    title: 'Ultra & Trail Endurance',
+    outcomeTitle: 'Ultra & Trail Endurance',
+    internalName: 'Extreme Trail & Ultra Endurance',
     category: 'Ultra Trail',
     badge: 'Adrenaline',
     duration: '16-20 Weeks',
     level: '50K, 80K & 100K Trail Runners',
     frequency: '4-5 Days / Week',
+    mode: 'Coached Trails & Ground',
     price: '₹5,250',
     tax: '+ 5% GST',
+    bestFor: 'Endurance runners training for 50K+ trail races and elevation.',
+    whatYouBuild: [
+      'Elevation conditioning & quad fortification',
+      'Technical descent & night trail footwork',
+      'Hydration vest & mandatory gear mastery'
+    ],
     description: 'Designed specifically for rugged terrain, elevation gains, and night running for iconic events like Malnad Ultra, The Border Ultra, and SRT.',
     highlights: [
       'Trail elevation training & quad conditioning',
@@ -101,14 +146,23 @@ export const programsData = [
   },
   {
     id: 'remote-global',
-    title: 'JJs Virtual & Global Remote Academy',
+    title: 'Virtual & Remote Coaching',
+    outcomeTitle: 'Virtual & Remote Coaching',
+    internalName: 'JJs Virtual & Global Remote Academy',
     category: 'Virtual',
-    badge: 'Anywhere',
+    badge: 'Worldwide',
     duration: 'Custom Subscription',
     level: 'Runners worldwide across time zones',
     frequency: 'Flexible schedule',
+    mode: '100% Virtual & Online',
     price: '₹4,500',
     tax: '+ 5% GST',
+    bestFor: 'Runners worldwide seeking structured plans and coach feedback.',
+    whatYouBuild: [
+      'Personalized training calendar & adjustments',
+      'Garmin, Apple Watch, Strava & Coros sync',
+      'Bi-weekly coach feedback & video form analysis'
+    ],
     description: 'Train under master Indian coaches no matter where you live. Automated sync with Garmin/Strava, video form analysis, and weekly 1-on-1 coach calls.',
     highlights: [
       'Full Onca Run App premium access',

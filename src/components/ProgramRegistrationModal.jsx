@@ -972,13 +972,13 @@ export default function ProgramRegistrationModal({
   const resolveProgram = (prog) => {
     if (!prog) return programsData[2];
     if (typeof prog === 'string') {
-      return programsData.find((p) => p.id === prog || p.title === prog) || programsData[2];
+      return programsData.find((p) => p.id === prog || p.title === prog || p.outcomeTitle === prog || p.internalName === prog) || programsData[2];
     }
     if (prog.id) {
       return programsData.find((p) => p.id === prog.id) || prog;
     }
     if (prog.title) {
-      return programsData.find((p) => p.title === prog.title) || prog;
+      return programsData.find((p) => p.title === prog.title || p.outcomeTitle === prog.title || p.internalName === prog.title) || prog;
     }
     return prog;
   };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, ArrowUpRight, Award, Sun } from 'lucide-react';
+import { Check, ArrowUpRight, Award, Sun, Zap, Compass } from 'lucide-react';
 import { programsData } from '../data/programsData';
 
 const CATEGORIES = ['All Programs', 'Beginner', '10K', 'Half Marathon', 'Marathon', 'Ultra Trail', 'Virtual'];
@@ -23,7 +23,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
       });
 
   // =========================================================================
-  // 1. SWISS CLEAN (Light Logo Match & Dark Logo Contrast)
+  // 1. SWISS CLEAN / SWISS DARK (Minimalist Goal Discovery • Olympic Clean)
   // =========================================================================
   if (currentTheme === 'olympic-clean' || currentTheme === 'street-crew' || currentTheme === 'swiss-light' || currentTheme === 'swiss-dark') {
     const isDark = currentTheme === 'swiss-dark';
@@ -31,7 +31,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
     return (
       <div className="space-y-6">
         {/* Category Filter Pills - Sleek Minimalist Tabs */}
-        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2" role="tablist" aria-label="Filter programs by category">
+        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2" role="tablist" aria-label="Filter programs by goal category">
           {CATEGORIES.map((cat) => {
             const isActive = activeCategory === cat;
             return (
@@ -40,7 +40,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                 role="tab"
                 aria-selected={isActive}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2 text-xs font-bold tracking-wide rounded-full transition-all duration-200 flex-shrink-0 ${
+                className={`px-4 py-2 text-xs font-bold tracking-wide rounded-full transition-all duration-200 flex-shrink-0 cursor-pointer ${
                   isActive
                     ? 'bg-[#318cdd] text-white shadow-md shadow-[#318cdd]/25'
                     : isDark
@@ -61,8 +61,8 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
         </div>
 
         {/* Sleek Swiss Precision Cards Grid */}
-        <div className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none gap-6 md:grid-cols-2 lg:grid-cols-3 pb-6 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar">
-          {filtered.map((program, idx) => (
+        <div className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none gap-6 md:grid-cols-2 lg:grid-cols-3 pb-6 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar items-stretch">
+          {filtered.map((program) => (
             <div
               key={program.id}
               className={`w-[86vw] sm:w-[350px] md:w-auto flex-shrink-0 snap-center rounded-3xl border transition-all duration-300 flex flex-col justify-between overflow-hidden group hover:-translate-y-1.5 ${
@@ -73,24 +73,24 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
             >
               <div>
                 {/* Official JJs Program Image Strip */}
-                <div className="relative h-48 overflow-hidden bg-slate-950">
+                <div className="relative h-44 overflow-hidden bg-slate-950">
                   <img
                     src={program.image}
-                    alt={program.title}
+                    alt={program.outcomeTitle || program.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent" />
 
-                  {/* Top Index & Badge */}
+                  {/* Top Goal Chip & Badge */}
                   <div className="absolute top-3 inset-x-3 flex items-center justify-between">
-                    <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-black/60 text-white backdrop-blur-md">
-                      SPEC 0{idx + 1}
+                    <span className="font-mono text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded bg-[#d02426] text-white shadow-md">
+                      {program.category}
                     </span>
                     <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-md backdrop-blur-md ${
                       isDark
                         ? 'bg-blue-950/90 text-blue-300 border border-blue-800/60'
-                        : 'bg-white/95 text-[#d02426] border border-red-100 shadow-sm'
+                        : 'bg-white/95 text-[#318cdd] border border-blue-100 shadow-sm'
                     }`}>
                       {program.badge}
                     </span>
@@ -111,33 +111,52 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                 </div>
 
                 {/* Card Body */}
-                <div className="p-5 sm:p-6 space-y-3">
-                  <div className={`flex items-center gap-2 text-xs font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                    <span className={`font-semibold ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>{program.frequency}</span>
-                    <span>•</span>
-                    <span className="truncate">{program.level}</span>
+                <div className="p-5 sm:p-6 space-y-3.5">
+                  <div>
+                    <span className={`text-[11px] font-mono uppercase tracking-wider block font-semibold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                      {program.internalName}
+                    </span>
+                    <h3 className={`text-xl sm:text-2xl font-black tracking-tight leading-snug mt-0.5 ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                      {program.outcomeTitle || program.title}
+                    </h3>
                   </div>
 
-                  <h3 className={`text-xl font-black tracking-tight leading-snug ${isDark ? 'text-white' : 'text-slate-950'}`}>
-                    {program.title}
-                  </h3>
+                  {/* Best For Self-Selection Block */}
+                  <div className={`p-3 rounded-2xl border text-xs leading-relaxed ${
+                    isDark ? 'bg-slate-800/60 border-slate-700/60 text-slate-300' : 'bg-slate-50 border-slate-200/80 text-slate-700'
+                  }`}>
+                    <span className={`font-black block text-[10px] uppercase tracking-wider mb-0.5 ${isDark ? 'text-[#38bdf8]' : 'text-[#318cdd]'}`}>
+                      Best for:
+                    </span>
+                    <span className="font-medium">{program.bestFor}</span>
+                  </div>
 
-                  <p className={`text-xs leading-relaxed line-clamp-2 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                    {program.description}
-                  </p>
-
-                  {/* Highlights Checklist */}
-                  <div className={`pt-3 border-t space-y-2 ${isDark ? 'border-slate-800' : 'border-slate-100'}`}>
-                    {program.highlights.map((h, i) => (
-                      <div key={i} className={`flex items-center gap-2 text-xs ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                        <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 ${
-                          isDark ? 'bg-blue-950/80 text-blue-400' : 'bg-[#318cdd]/10 text-[#318cdd]'
-                        }`}>
-                          <Check className="w-2.5 h-2.5 stroke-[3]" />
+                  {/* What You Will Build (3 key benefits) */}
+                  <div className="pt-1 space-y-1.5">
+                    <span className={`text-[10px] font-bold uppercase tracking-wider block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                      What You Will Build:
+                    </span>
+                    <div className="space-y-1.5">
+                      {program.whatYouBuild?.map((benefit, i) => (
+                        <div key={i} className={`flex items-center gap-2 text-xs ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                          <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 ${
+                            isDark ? 'bg-emerald-950/80 text-emerald-400' : 'bg-emerald-50 text-emerald-600'
+                          }`}>
+                            <Check className="w-2.5 h-2.5 stroke-[3]" />
+                          </div>
+                          <span className="font-medium">{benefit}</span>
                         </div>
-                        <span className="truncate">{h}</span>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Structure specs */}
+                  <div className={`flex items-center gap-2 text-[11px] font-mono pt-3 border-t ${isDark ? 'border-slate-800 text-slate-400' : 'border-slate-100 text-slate-500'}`}>
+                    <span className="font-bold">{program.duration}</span>
+                    <span>•</span>
+                    <span>{program.frequency}</span>
+                    <span>•</span>
+                    <span className="truncate">{program.mode}</span>
                   </div>
                 </div>
               </div>
@@ -155,9 +174,9 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
 
                 <button
                   onClick={() => onRegister(program)}
-                  className="py-2.5 px-5 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md hover:scale-105 flex items-center gap-1.5 bg-[#318cdd] hover:bg-[#2575c0] shadow-[#318cdd]/25"
+                  className="py-2.5 px-5 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md hover:scale-105 flex items-center gap-1.5 bg-[#d02426] hover:bg-[#b51c1e] shadow-[#d02426]/20 cursor-pointer"
                 >
-                  <span>Register</span>
+                  <span>VIEW PROGRAM</span>
                   <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
                 </button>
               </div>
@@ -169,13 +188,13 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
   }
 
   // =========================================================================
-  // 2. SUNRISE STRIDE (Light • Nike Run Club / Radiant Dawn Milestone Pathway)
+  // 2. SUNRISE STRIDE (Light • Radiant Dawn Milestone Pathway)
   // =========================================================================
   if (currentTheme === 'sunrise-coral' || currentTheme === 'heritage-gold') {
     return (
       <div className="space-y-6">
         {/* Warm Sunrise Category Pills */}
-        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2" role="tablist" aria-label="Filter programs by category">
+        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2" role="tablist" aria-label="Filter programs by goal category">
           {CATEGORIES.map((cat) => {
             const isActive = activeCategory === cat;
             return (
@@ -184,7 +203,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                 role="tab"
                 aria-selected={isActive}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2 text-xs font-bold tracking-wide rounded-full transition-all duration-200 flex-shrink-0 ${
+                className={`px-4 py-2 text-xs font-bold tracking-wide rounded-full transition-all duration-200 flex-shrink-0 cursor-pointer ${
                   isActive
                     ? 'bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-md shadow-orange-500/25'
                     : 'bg-orange-50 hover:bg-orange-100/70 text-zinc-700 border border-orange-100'
@@ -196,32 +215,8 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
           })}
         </div>
 
-        {/* Milestone Pathway Stepper Header */}
-        <div className="hidden lg:grid grid-cols-5 gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-orange-500/5 border border-orange-200/80 text-xs">
-          <div className="flex items-center gap-2">
-            <span className="w-5 h-5 rounded-full bg-orange-600 text-white text-[10px] font-bold flex items-center justify-center">1</span>
-            <span className="font-bold text-zinc-900">Beginner (FTR 5K)</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="w-5 h-5 rounded-full bg-orange-600 text-white text-[10px] font-bold flex items-center justify-center">2</span>
-            <span className="font-bold text-zinc-900">Elevate 10K</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="w-5 h-5 rounded-full bg-orange-600 text-white text-[10px] font-bold flex items-center justify-center">3</span>
-            <span className="font-bold text-zinc-900">RYF 21K Half</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="w-5 h-5 rounded-full bg-orange-600 text-white text-[10px] font-bold flex items-center justify-center">4</span>
-            <span className="font-bold text-zinc-900">RYF 42K Full</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="w-5 h-5 rounded-full bg-orange-600 text-white text-[10px] font-bold flex items-center justify-center">5</span>
-            <span className="font-bold text-zinc-900">Ultra Trail & Remote</span>
-          </div>
-        </div>
-
         {/* Radiant Dawn Cards Deck */}
-        <div className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none gap-6 md:grid-cols-2 lg:grid-cols-3 pb-6 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar">
+        <div className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none gap-6 md:grid-cols-2 lg:grid-cols-3 pb-6 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar items-stretch">
           {filtered.map((program) => (
             <div
               key={program.id}
@@ -229,19 +224,22 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
             >
               <div>
                 {/* Official Banner Image */}
-                <div className="relative h-48 overflow-hidden bg-zinc-950">
+                <div className="relative h-44 overflow-hidden bg-zinc-950">
                   <img
                     src={program.image}
-                    alt={program.title}
+                    alt={program.outcomeTitle || program.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/85 via-transparent to-transparent" />
 
                   {/* Morning Chip */}
-                  <div className="absolute top-3 left-3">
-                    <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/95 text-orange-600 shadow-md backdrop-blur-md flex items-center gap-1">
-                      <Sun className="w-3 h-3 text-amber-500" />
+                  <div className="absolute top-3 inset-x-3 flex items-center justify-between">
+                    <span className="font-mono text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded bg-orange-600 text-white shadow-md flex items-center gap-1">
+                      <Sun className="w-3 h-3 text-amber-300" />
+                      {program.category}
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/95 text-orange-700 shadow-md backdrop-blur-md">
                       {program.badge}
                     </span>
                   </div>
@@ -258,31 +256,47 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                 </div>
 
                 {/* Card Content */}
-                <div className="p-5 sm:p-6 space-y-3">
-                  <div className="flex items-center gap-2 text-xs text-orange-800 font-medium">
-                    <span className="px-2 py-0.5 rounded-full bg-orange-100/80 font-bold text-[10px]">{program.frequency}</span>
-                    <span>•</span>
-                    <span className="truncate text-zinc-600">{program.level}</span>
+                <div className="p-5 sm:p-6 space-y-3.5">
+                  <div>
+                    <span className="text-[11px] font-mono uppercase tracking-wider block font-semibold text-orange-700">
+                      {program.internalName}
+                    </span>
+                    <h3 className="text-xl sm:text-2xl font-black text-zinc-950 tracking-tight leading-snug mt-0.5">
+                      {program.outcomeTitle || program.title}
+                    </h3>
                   </div>
 
-                  <h3 className="text-xl font-black text-zinc-950 tracking-tight leading-snug">
-                    {program.title}
-                  </h3>
+                  {/* Best for Box */}
+                  <div className="p-3 rounded-2xl bg-orange-50/70 border border-orange-200/70 text-xs leading-relaxed text-zinc-800">
+                    <span className="font-black block text-[10px] uppercase tracking-wider mb-0.5 text-orange-700">
+                      Best for:
+                    </span>
+                    <span className="font-medium">{program.bestFor}</span>
+                  </div>
 
-                  <p className="text-xs text-zinc-600 leading-relaxed line-clamp-2">
-                    {program.description}
-                  </p>
-
-                  {/* Highlights with warm checkmarks */}
-                  <div className="pt-3 border-t border-orange-100 space-y-2">
-                    {program.highlights.map((h, i) => (
-                      <div key={i} className="flex items-center gap-2 text-xs text-zinc-700">
-                        <div className="w-4 h-4 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
-                          <Check className="w-2.5 h-2.5 text-orange-600 stroke-[3]" />
+                  {/* What You Will Build */}
+                  <div className="pt-1 space-y-1.5">
+                    <span className="text-[10px] font-bold uppercase tracking-wider block text-zinc-500">
+                      What You Will Build:
+                    </span>
+                    <div className="space-y-1.5">
+                      {program.whatYouBuild?.map((benefit, i) => (
+                        <div key={i} className="flex items-center gap-2 text-xs text-zinc-700">
+                          <div className="w-4 h-4 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
+                            <Check className="w-2.5 h-2.5 text-orange-600 stroke-[3]" />
+                          </div>
+                          <span className="font-medium">{benefit}</span>
                         </div>
-                        <span className="truncate">{h}</span>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-[11px] font-mono pt-3 border-t border-orange-100 text-zinc-500">
+                    <span className="font-bold">{program.duration}</span>
+                    <span>•</span>
+                    <span>{program.frequency}</span>
+                    <span>•</span>
+                    <span className="truncate">{program.mode}</span>
                   </div>
                 </div>
               </div>
@@ -296,9 +310,9 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
 
                 <button
                   onClick={() => onRegister(program)}
-                  className="py-2.5 px-5 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-orange-500/25 hover:scale-105 flex items-center gap-1.5"
+                  className="py-2.5 px-5 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-orange-500/25 hover:scale-105 flex items-center gap-1.5 cursor-pointer"
                 >
-                  <span>Start Journey</span>
+                  <span>VIEW PROGRAM</span>
                   <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
                 </button>
               </div>
@@ -315,7 +329,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
   if (currentTheme === 'kinetic') {
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2" role="tablist" aria-label="Filter programs by category">
+        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2" role="tablist" aria-label="Filter programs by goal category">
           {CATEGORIES.map((cat) => {
             const isActive = activeCategory === cat;
             return (
@@ -324,7 +338,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                 role="tab"
                 aria-selected={isActive}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-3.5 py-1.5 text-xs font-mono font-bold tracking-wider rounded-xl transition-all flex-shrink-0 ${
+                className={`px-3.5 py-1.5 text-xs font-mono font-bold tracking-wider rounded-xl transition-all flex-shrink-0 cursor-pointer ${
                   isActive
                     ? 'bg-[#ccff00] text-black shadow-[0_0_15px_rgba(204,255,0,0.3)]'
                     : 'bg-white/5 text-slate-400 hover:text-white border border-white/10'
@@ -336,28 +350,24 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
           })}
         </div>
 
-        <div className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none gap-5 md:grid-cols-2 lg:grid-cols-3 pb-6 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar">
-          {filtered.map((program, idx) => {
-            const isFeatured = idx === 0 && activeCategory === 'All Programs';
-
-            return (
-              <div
-                key={program.id}
-                className={`w-[86vw] sm:w-[350px] md:w-auto flex-shrink-0 snap-center rounded-3xl border border-[#1e2230] bg-[#11131c] hover:border-[#ccff00]/60 transition-all duration-300 flex flex-col justify-between shadow-xl overflow-hidden ${
-                  isFeatured ? 'md:col-span-2 md:flex-row' : ''
-                }`}
-              >
+        <div className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none gap-5 md:grid-cols-2 lg:grid-cols-3 pb-6 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar items-stretch">
+          {filtered.map((program) => (
+            <div
+              key={program.id}
+              className="w-[86vw] sm:w-[350px] md:w-auto flex-shrink-0 snap-center rounded-3xl border border-[#1e2230] bg-[#11131c] hover:border-[#ccff00]/60 transition-all duration-300 flex flex-col justify-between shadow-xl overflow-hidden"
+            >
+              <div>
                 {/* Official JJs Banner Image Pod */}
-                <div className={`relative ${isFeatured ? 'md:w-1/2 min-h-[220px]' : 'h-44'} overflow-hidden bg-black`}>
+                <div className="relative h-44 overflow-hidden bg-black">
                   <img
                     src={program.image}
-                    alt={program.title}
+                    alt={program.outcomeTitle || program.title}
                     className="w-full h-full object-cover filter brightness-90 contrast-110"
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#11131c] via-[#11131c]/30 to-transparent" />
-                  <div className="absolute top-3 left-3 bg-black/70 border border-[#ccff00]/40 backdrop-blur-md px-2.5 py-0.5 rounded text-[10px] font-mono text-[#ccff00]">
-                    TELEMETRY // {program.duration}
+                  <div className="absolute top-3 left-3 bg-[#ccff00] text-black px-2.5 py-0.5 rounded text-[10px] font-mono font-black uppercase">
+                    {program.category}
                   </div>
                   <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between text-[11px] font-mono text-white">
                     <span className="truncate">{program.targetRace}</span>
@@ -365,62 +375,76 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                   </div>
                 </div>
 
-                <div className={`p-5 flex flex-col justify-between ${isFeatured ? 'md:w-1/2' : ''}`}>
+                <div className="p-5 sm:p-6 space-y-3.5">
                   <div>
-                    <h3 className="text-xl font-black text-white tracking-tight">
-                      {program.title}
+                    <span className="text-[11px] font-mono text-[#ccff00] uppercase tracking-wider block">
+                      {program.internalName}
+                    </span>
+                    <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight mt-0.5">
+                      {program.outcomeTitle || program.title}
                     </h3>
-                    <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
-                      {program.description}
-                    </p>
-
-                    <div className="mt-3 grid grid-cols-2 gap-2 text-xs font-mono">
-                      <div className="p-2 rounded bg-black/40 border border-white/5">
-                        <span className="text-[10px] text-slate-500 uppercase block">CADENCE</span>
-                        <span className="text-white font-bold">175-185 SPM</span>
-                      </div>
-                      <div className="p-2 rounded bg-black/40 border border-white/5">
-                        <span className="text-[10px] text-slate-500 uppercase block">ZONE</span>
-                        <span className="text-[#ccff00] font-bold">AEROBIC Z2</span>
-                      </div>
-                    </div>
                   </div>
 
-                  <div className="pt-4 border-t border-white/10 mt-4 flex items-center justify-between">
-                    <div>
-                      <span className="text-2xl font-black text-white font-mono block leading-none">{program.price}</span>
-                      <span className="text-[10px] font-mono text-slate-500">{program.tax}</span>
-                    </div>
-                    <button
-                      onClick={() => onRegister(program)}
-                      className="py-2.5 px-5 rounded-xl bg-[#ccff00] text-black text-xs font-mono font-black uppercase hover:bg-white transition-all shadow-[0_0_15px_rgba(204,255,0,0.3)] flex items-center gap-1.5"
-                    >
-                      <span>DEPLOY</span>
-                      <ArrowUpRight className="w-3.5 h-3.5 stroke-[3]" />
-                    </button>
+                  <div className="p-3 rounded-2xl bg-black/50 border border-white/10 text-xs text-slate-300">
+                    <span className="font-bold text-[10px] uppercase tracking-wider text-[#ccff00] block mb-0.5">Best for:</span>
+                    <span className="font-mono">{program.bestFor}</span>
+                  </div>
+
+                  <div className="space-y-1.5 pt-1">
+                    <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">What You Will Build:</span>
+                    {program.whatYouBuild?.map((benefit, i) => (
+                      <div key={i} className="flex items-center gap-2 text-xs text-slate-300 font-mono">
+                        <Zap className="w-3 h-3 text-[#ccff00] flex-shrink-0" />
+                        <span className="truncate">{benefit}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="pt-3 border-t border-white/10 text-[11px] font-mono text-slate-400 flex items-center gap-2">
+                    <span>{program.duration}</span>
+                    <span>•</span>
+                    <span>{program.frequency}</span>
+                    <span>•</span>
+                    <span className="truncate">{program.mode}</span>
                   </div>
                 </div>
               </div>
-            );
-          })}
+
+              <div className="p-5 sm:p-6 pt-4 border-t border-white/10 flex items-center justify-between">
+                <div>
+                  <span className="text-2xl font-black text-white font-mono block leading-none">{program.price}</span>
+                  <span className="text-[10px] font-mono text-slate-500">{program.tax}</span>
+                </div>
+                <button
+                  onClick={() => onRegister(program)}
+                  className="py-2.5 px-5 rounded-xl bg-[#ccff00] text-black text-xs font-mono font-black uppercase hover:bg-white transition-all shadow-[0_0_15px_rgba(204,255,0,0.3)] flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span>VIEW PROGRAM</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 stroke-[3]" />
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     );
   }
 
   // =========================================================================
-  // 4. CRIMSON VELOCITY (Dark • Breaking2 Speed Runway & Progressive Timeline)
+  // 4. CRIMSON VELOCITY (Dark • Speed Runway)
   // =========================================================================
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2" role="tablist" aria-label="Filter programs by category">
+      <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2" role="tablist" aria-label="Filter programs by goal category">
         {CATEGORIES.map((cat) => {
           const isActive = activeCategory === cat;
           return (
             <button
               key={cat}
+              role="tab"
+              aria-selected={isActive}
               onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-1.5 text-xs font-mono font-bold uppercase tracking-wider rounded-lg transition-all flex-shrink-0 ${
+              className={`px-4 py-1.5 text-xs font-mono font-bold uppercase tracking-wider rounded-lg transition-all flex-shrink-0 cursor-pointer ${
                 isActive
                   ? 'bg-[#ff1e42] text-white shadow-[0_0_15px_rgba(255,30,66,0.4)]'
                   : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
@@ -432,8 +456,8 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
         })}
       </div>
 
-      <div className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none gap-5 md:grid-cols-2 lg:grid-cols-3 pb-6 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar">
-        {filtered.map((program, idx) => (
+      <div className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none gap-5 md:grid-cols-2 lg:grid-cols-3 pb-6 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar items-stretch">
+        {filtered.map((program) => (
           <div
             key={program.id}
             className="w-[86vw] sm:w-[350px] md:w-auto flex-shrink-0 snap-center rounded-2xl border border-[#26161b] bg-[#110e12] hover:border-[#ff1e42] transition-all flex flex-col justify-between relative group shadow-xl overflow-hidden"
@@ -443,40 +467,50 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
               <div className="relative h-44 overflow-hidden bg-black">
                 <img
                   src={program.image}
-                  alt={program.title}
+                  alt={program.outcomeTitle || program.title}
                   className="w-full h-full object-cover filter brightness-95 contrast-125 transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#110e12] via-[#110e12]/40 to-transparent" />
                 <div className="absolute top-3 left-3 bg-[#ff1e42] text-white px-2.5 py-0.5 rounded text-[10px] font-mono font-black uppercase shadow-lg">
-                  SPEED BLOCK 0{idx + 1}
+                  {program.category}
                 </div>
                 <div className="absolute top-3 right-3 bg-black/80 border border-white/20 text-white px-2 py-0.5 rounded text-[10px] font-mono">
                   {program.duration}
                 </div>
               </div>
 
-              <div className="p-5">
-                <h3 className="text-xl font-black text-white tracking-tight">
-                  {program.title}
-                </h3>
-
-                <div className="my-2.5 p-2 rounded bg-zinc-900/80 border border-zinc-800 text-[11px] font-mono text-zinc-300 flex items-center justify-between">
-                  <span>TARGET RACE:</span>
-                  <strong className="text-[#ff1e42]">{program.targetRace}</strong>
+              <div className="p-5 space-y-3">
+                <div>
+                  <span className="text-[11px] font-mono text-[#ff1e42] uppercase tracking-wider block">
+                    {program.internalName}
+                  </span>
+                  <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight mt-0.5">
+                    {program.outcomeTitle || program.title}
+                  </h3>
                 </div>
 
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  {program.description}
-                </p>
+                <div className="p-2.5 rounded bg-zinc-900 border border-zinc-800 text-xs text-zinc-300">
+                  <span className="font-bold text-[10px] uppercase tracking-wider text-[#ff1e42] block mb-0.5">Best for:</span>
+                  <span>{program.bestFor}</span>
+                </div>
 
-                <div className="mt-3 space-y-1 pt-2 border-t border-zinc-800">
-                  {program.highlights.slice(0, 3).map((h, i) => (
+                <div className="space-y-1 pt-1">
+                  <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider block">What You Will Build:</span>
+                  {program.whatYouBuild?.map((benefit, i) => (
                     <div key={i} className="flex items-center gap-2 text-xs text-zinc-300">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#ff1e42]" />
-                      <span className="truncate">{h}</span>
+                      <span className="truncate">{benefit}</span>
                     </div>
                   ))}
+                </div>
+
+                <div className="pt-2 border-t border-zinc-800 text-[11px] font-mono text-zinc-400 flex items-center gap-2">
+                  <span>{program.duration}</span>
+                  <span>•</span>
+                  <span>{program.frequency}</span>
+                  <span>•</span>
+                  <span className="truncate">{program.mode}</span>
                 </div>
               </div>
             </div>
@@ -488,9 +522,9 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
               </div>
               <button
                 onClick={() => onRegister(program)}
-                className="py-2.5 px-5 rounded-lg bg-[#ff1e42] text-white text-xs font-black uppercase tracking-wider hover:bg-white hover:text-black transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(255,30,66,0.3)]"
+                className="py-2.5 px-5 rounded-lg bg-[#ff1e42] text-white text-xs font-black uppercase tracking-wider hover:bg-white hover:text-black transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(255,30,66,0.3)] cursor-pointer"
               >
-                <span>LOCK SQUAD</span>
+                <span>VIEW PROGRAM</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </button>
             </div>
