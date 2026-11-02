@@ -145,13 +145,13 @@ export default function App() {
               className="text-3xl sm:text-5xl font-black tracking-tight uppercase"
               style={{ color: 'var(--text-heading)' }}
             >
-              Flagship Training Programs
+              FIND THE RIGHT PROGRAM FOR YOUR RUNNING GOAL
             </h2>
             <p
               className="text-xs sm:text-base mt-2 max-w-2xl mx-auto leading-relaxed"
               style={{ color: 'var(--text-secondary)' }}
             >
-              Progressive weekly mileage, structured tempo splits, and weekend long-run pacing - tailored for everyone from first-time 5K runners to seasoned marathoners.
+              From your first 5K to your next marathon or ultra, choose a structured training program built around your current level and target.
             </p>
           </div>
 

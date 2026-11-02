@@ -38,7 +38,7 @@ export default function Footer({ onScrollTo, onOpenRegister, onOpenProgramRegist
             </div>
 
             <p className="text-xs leading-relaxed max-w-sm" style={{ color: 'var(--text-secondary)' }}>
-              At JJs Running, we believe that fitness and endurance goals are best achieved through scientific planning and dedicated community training. As India’s largest running academy with 20+ centers across Bengaluru, Pune, Kolkata, and beyond, our mission is to help everyday individuals become lifelong endurance athletes.
+              At JJs Running, we believe that fitness and endurance goals are best achieved through scientific planning and dedicated community training. As one of India’s premier running academies with 20+ neighborhood training grounds across Bengaluru, Pune, Kolkata, and beyond, our mission is to help everyday individuals become lifelong endurance athletes.
             </p>
 
             <div className="flex items-center gap-3 pt-2">
@@ -246,7 +246,7 @@ export default function Footer({ onScrollTo, onOpenRegister, onOpenProgramRegist
               />
               <button
                 type="submit"
-                className="w-full py-2 px-3 text-xs font-bold rounded-xl transition-all shadow-md hover:scale-102 cursor-pointer"
+                className="w-full py-2.5 px-3 min-h-[44px] text-xs font-bold rounded-xl transition-all shadow-md hover:scale-102 flex items-center justify-center cursor-pointer"
                 style={{
                   backgroundColor: 'var(--accent)',
                   color: 'var(--accent-contrast)'
