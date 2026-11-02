@@ -58,7 +58,7 @@ export default function Navbar({ currentTheme = 'swiss-dark', setTheme, onOpenRe
                 </span>
               </div>
               <span className="text-[9px] sm:text-[10px] tracking-wider uppercase font-semibold hidden sm:block mt-0.5 opacity-70">
-                India's Largest Running Academy
+                India's Premier Running Academy
               </span>
             </div>
           </div>

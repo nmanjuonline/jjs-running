@@ -150,7 +150,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                     Pramod Deshpande • Founder
                   </span>
                   <span className="hidden md:inline-flex px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#318cdd]/25 border border-[#318cdd]/50 text-[#4ca6f5] backdrop-blur-md">
-                    17,000+ RUNNERS TRANSFORMED
+                    17,000+ RUNNERS TRAINED
                   </span>
                 </div>
               ) : (
@@ -367,7 +367,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                     </span>
                   </h1>
                   <p className="text-xs sm:text-base text-zinc-200 max-w-2xl leading-relaxed font-medium">
-                    India’s warmest distance running community. Structured 5:30 AM sessions with designated pace mentors, heart-rate zone conditioning, and injury-free marathon milestones.
+                    India’s warmest distance running community. Structured 5:30 AM sessions with designated pace mentors, heart-rate zone conditioning, and structured marathon preparation.
                   </p>
 
                   <div className="flex flex-col sm:flex-row sm:flex-nowrap items-stretch sm:items-center gap-2.5 sm:gap-3 pt-2">
@@ -527,7 +527,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
                   </div>
                   <div>
                     <span className="text-xs font-bold text-white block">Scientific Base Periodization</span>
-                    <span className="text-[10px] font-mono text-slate-400">98.4% Injury-Free Longevity Rate</span>
+                    <span className="text-[10px] font-mono text-slate-400">Structured Aerobic Progression</span>
                   </div>
                 </div>
                 <button
@@ -585,7 +585,7 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
             </h1>
 
             <p className="text-base sm:text-lg text-zinc-300 max-w-xl leading-relaxed">
-              Lactate threshold intervals, high-speed pace squads, and negative-split race tactics engineered by India’s most successful marathon coaching institution.
+              Lactate threshold intervals, high-speed pace squads, and negative-split race tactics engineered by India’s premier marathon coaching academy.
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-2">
