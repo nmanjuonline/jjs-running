@@ -1,68 +1,19 @@
 import React from 'react';
 import { ShieldCheck, Heart, Zap, Activity, Coffee, Users, Calendar, Award, CheckCircle2, ChevronRight, Compass } from 'lucide-react';
+import { methodologyContent } from '../data/methodologyData';
+
+const ICONS = {
+  Heart,
+  Activity,
+  ShieldCheck,
+  Compass,
+  Coffee,
+  Award,
+  CheckCircle2
+};
 
 export default function MethodologySection({ onExploreCenters }) {
-  const pillars = [
-    {
-      icon: Heart,
-      benefitTitle: 'Build Your Aerobic Base',
-      methodLabel: 'Zone 2 & Easy Running',
-      description: 'Develop the endurance to run longer at a controlled effort without joint stress or burnout.',
-      cues: ['Controlled intensity', 'Progressive volume', 'Recovery-aware pacing'],
-      highlight: 'Aerobic Base Building'
-    },
-    {
-      icon: Activity,
-      benefitTitle: 'Improve Running Efficiency',
-      methodLabel: 'Cadence & Running Form',
-      description: 'Learn movement patterns that support smoother, more efficient running and balanced landing mechanics.',
-      cues: ['Form & posture cues', 'Cadence awareness (175–185 SPM)', 'Coach stride feedback'],
-      highlight: 'Movement Efficiency'
-    },
-    {
-      icon: ShieldCheck,
-      benefitTitle: 'Build a Stronger Runner',
-      methodLabel: 'Strength, Core & Mobility',
-      description: 'Improve physical resilience and movement capacity beyond running alone through guided conditioning.',
-      cues: ['Functional strength', 'Glute & hip stability', 'Mobility progression'],
-      highlight: 'Guided Conditioning'
-    },
-    {
-      icon: Compass,
-      benefitTitle: 'Progress with Support',
-      methodLabel: 'Supported Weekend Long Runs',
-      description: 'Build distance gradually with pacing guidance, designated pace mentors, and a community around you.',
-      cues: ['On-route hydration & nutrition', 'Designated pace mentors', 'Safe group routes'],
-      highlight: 'Fully Supported Routes'
-    }
-  ];
-
-  const weeklySchedule = [
-    {
-      day: 'Tuesday',
-      time: '05:30 AM',
-      focus: 'Intervals & Form',
-      description: 'Track workouts, 400m/800m repeats, cadence drills, and neuromuscular speed conditioning.'
-    },
-    {
-      day: 'Thursday',
-      time: '05:30 AM',
-      focus: 'Tempo & Core',
-      description: 'Lactate-threshold tempo runs paired with functional core, glute, and hip stability circuits.'
-    },
-    {
-      day: 'Saturday',
-      time: '05:30 AM',
-      focus: 'The Signature SLR',
-      description: 'Progressive Slow Long Run (SLR) with dedicated on-route hydration, electrolyte fueling, and pace mentors.'
-    },
-    {
-      day: 'Sunday',
-      time: '05:30 AM',
-      focus: 'Recovery Run & Mobility',
-      description: 'Easy aerobic recovery run, joint mobility, cool-down stretching circle, and post-run debrief with filter coffee.'
-    }
-  ];
+  const { header, pillars, weeklySchedule, culture } = methodologyContent;
 
   return (
     <section id="methodology" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full space-y-12">
@@ -73,28 +24,28 @@ export default function MethodologySection({ onExploreCenters }) {
           style={{ backgroundColor: 'var(--badge-bg)', color: 'var(--accent)' }}
         >
           <Zap className="w-3.5 h-3.5" />
-          The Science of Endurance
+          {header.eyebrow}
         </span>
 
         <h2
           className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight uppercase"
           style={{ color: 'var(--text-heading)' }}
         >
-          Run With Science. Not Guesswork.
+          {header.headline}
         </h2>
 
         <p className="text-xs sm:text-base opacity-75 leading-relaxed max-w-2xl mx-auto">
-          Better running is not just about running more. It is about training at the right intensity, building strength, improving movement efficiency, and progressing consistently. Our approach brings these elements together in one structured program.
+          {header.supportCopy}
         </p>
       </div>
 
       {/* 4 Science Pillars Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
         {pillars.map((pillar, idx) => {
-          const Icon = pillar.icon;
+          const Icon = ICONS[pillar.iconName] || Activity;
           return (
             <div
-              key={pillar.benefitTitle}
+              key={pillar.id}
               className="rounded-3xl p-6 border flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl relative overflow-hidden group"
               style={{
                 backgroundColor: 'var(--card-bg)',
@@ -240,35 +191,28 @@ export default function MethodologySection({ onExploreCenters }) {
               style={{ backgroundColor: 'var(--badge-bg)', color: 'var(--accent)' }}
             >
               <Users className="w-3.5 h-3.5" />
-              The Jaguar Spirit & Culture
+              {culture.eyebrow}
             </div>
 
             <h3 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight" style={{ color: 'var(--text-heading)' }}>
-              No Runner Left Behind. Ever.
+              {culture.headline}
             </h3>
 
             <p className="text-xs sm:text-sm opacity-75 leading-relaxed max-w-2xl">
-              Our community includes everyone from college students to runners in their 70s and 80s, as well as software engineers, doctors, teachers, entrepreneurs, and homemakers. Whether your pace is 4:15 min/km or 9:30 min/km, JJs Running welcomes you with dedicated pace mentors.
+              {culture.description}
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-              <div className="p-3 rounded-xl border space-y-1" style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}>
-                <Coffee className="w-4 h-4 text-amber-500" />
-                <h5 className="text-xs font-bold" style={{ color: 'var(--text-heading)' }}>Post-Run Chai & Debrief</h5>
-                <p className="text-[10px] opacity-65">Enjoy our signature Sunday morning recovery run, stretching circle, and filter coffee.</p>
-              </div>
-
-              <div className="p-3 rounded-xl border space-y-1" style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}>
-                <Award className="w-4 h-4 text-rose-500" />
-                <h5 className="text-xs font-bold" style={{ color: 'var(--text-heading)' }}>Major Race Charters</h5>
-                <p className="text-[10px] opacity-65">Travel charters, hospitality tents, and cheer zones for TMM, TCS 10K, and the World Marathon Majors.</p>
-              </div>
-
-              <div className="p-3 rounded-xl border space-y-1" style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}>
-                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                <h5 className="text-xs font-bold" style={{ color: 'var(--text-heading)' }}>Training Center Heads (TCHs)</h5>
-                <p className="text-[10px] opacity-65">Certified local ground leaders ensuring form guidance and safety every single session.</p>
-              </div>
+              {culture.features.map((feat) => {
+                const FeatIcon = ICONS[feat.iconName] || Award;
+                return (
+                  <div key={feat.id} className="p-3 rounded-xl border space-y-1" style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}>
+                    <FeatIcon className={`w-4 h-4 ${feat.iconColor}`} />
+                    <h5 className="text-xs font-bold" style={{ color: 'var(--text-heading)' }}>{feat.title}</h5>
+                    <p className="text-[10px] opacity-65">{feat.text}</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -281,11 +225,11 @@ export default function MethodologySection({ onExploreCenters }) {
                 color: 'var(--accent-contrast)'
               }}
             >
-              <span>FIND A TRAINING GROUND</span>
+              <span>{culture.cta}</span>
               <ChevronRight className="w-4 h-4 stroke-[2.5]" />
             </button>
             <span className="text-[11px] opacity-60 text-center lg:text-right w-full sm:w-auto">
-              First coached morning trial is 100% free
+              {culture.ctaNote}
             </span>
           </div>
         </div>
