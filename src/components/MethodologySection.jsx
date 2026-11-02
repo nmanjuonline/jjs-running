@@ -5,31 +5,35 @@ export default function MethodologySection({ onExploreCenters }) {
   const pillars = [
     {
       icon: Heart,
-      title: 'Zone 2 Aerobic Base',
-      subtitle: 'Mitochondrial Conditioning',
-      description: 'Systematic low-heart-rate pacing designed to promote mitochondrial development and improve fat-oxidation efficiency without joint stress or burnout.',
-      highlight: '70% of weekly volume'
+      benefitTitle: 'Build Your Aerobic Base',
+      methodLabel: 'Zone 2 & Easy Running',
+      description: 'Develop the endurance to run longer at a controlled effort without joint stress or burnout.',
+      cues: ['Controlled intensity', 'Progressive volume', 'Recovery-aware pacing'],
+      highlight: 'Aerobic Base Building'
     },
     {
       icon: Activity,
-      title: 'Cadence & Biomechanics',
-      subtitle: '175-185 SPM Stride',
-      description: 'Form correction, posture alignment, a forward lean from the ankles, and midfoot landing under your center of mass to reduce the impact associated with heel striking.',
-      highlight: 'Target: 180 SPM rhythm'
+      benefitTitle: 'Improve Running Efficiency',
+      methodLabel: 'Cadence & Running Form',
+      description: 'Learn movement patterns that support smoother, more efficient running and balanced landing mechanics.',
+      cues: ['Form & posture cues', 'Cadence awareness (175–185 SPM)', 'Coach stride feedback'],
+      highlight: 'Movement Efficiency'
     },
     {
       icon: ShieldCheck,
-      title: 'Strength, Core & Mobility',
-      subtitle: 'Injury-Proofing',
-      description: 'Periodized weekday functional strength routines, glute and hip stability drills, dynamic warm-ups, and dedicated post-run stretching circuits.',
-      highlight: '98.4% Injury-Free Completion Rate'
+      benefitTitle: 'Build a Stronger Runner',
+      methodLabel: 'Strength, Core & Mobility',
+      description: 'Improve physical resilience and movement capacity beyond running alone through guided conditioning.',
+      cues: ['Functional strength', 'Glute & hip stability', 'Mobility progression'],
+      highlight: 'Guided Conditioning'
     },
     {
       icon: Compass,
-      title: 'Supported Weekend SLRs',
-      subtitle: 'Slow Long Runs',
-      description: 'Progressive weekend distance simulations with dedicated on-route hydration, electrolyte fluids, nutrition stations, and pace mentors.',
-      highlight: 'Fully supported routes'
+      benefitTitle: 'Progress with Support',
+      methodLabel: 'Supported Weekend Long Runs',
+      description: 'Build distance gradually with pacing guidance, designated pace mentors, and a community around you.',
+      cues: ['On-route hydration & nutrition', 'Designated pace mentors', 'Safe group routes'],
+      highlight: 'Fully Supported Routes'
     }
   ];
 
@@ -63,7 +67,7 @@ export default function MethodologySection({ onExploreCenters }) {
   return (
     <section id="methodology" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full space-y-12">
       {/* Section Header */}
-      <div className="text-center max-w-3xl mx-auto space-y-2">
+      <div className="text-center max-w-3xl mx-auto space-y-3">
         <span
           className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm"
           style={{ backgroundColor: 'var(--badge-bg)', color: 'var(--accent)' }}
@@ -79,18 +83,18 @@ export default function MethodologySection({ onExploreCenters }) {
           Run With Science. Not Guesswork.
         </h2>
 
-        <p className="text-xs sm:text-base opacity-75 leading-relaxed">
-          How JJs Running achieves a 98%+ injury-free rate across 17,000+ runners, transforming complete beginners into confident marathon finishers and endurance runners.
+        <p className="text-xs sm:text-base opacity-75 leading-relaxed max-w-2xl mx-auto">
+          Better running is not just about running more. It is about training at the right intensity, building strength, improving movement efficiency, and progressing consistently. Our approach brings these elements together in one structured program.
         </p>
       </div>
 
       {/* 4 Science Pillars Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
         {pillars.map((pillar, idx) => {
           const Icon = pillar.icon;
           return (
             <div
-              key={pillar.title}
+              key={pillar.benefitTitle}
               className="rounded-3xl p-6 border flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl relative overflow-hidden group"
               style={{
                 backgroundColor: 'var(--card-bg)',
@@ -115,17 +119,32 @@ export default function MethodologySection({ onExploreCenters }) {
                 </div>
 
                 <div>
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider block" style={{ color: 'var(--accent)' }}>
-                    {pillar.subtitle}
+                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider block" style={{ color: 'var(--accent)' }}>
+                    {pillar.methodLabel}
                   </span>
-                  <h3 className="text-lg font-black tracking-tight mt-0.5" style={{ color: 'var(--text-heading)' }}>
-                    {pillar.title}
+                  <h3 className="text-lg font-black tracking-tight mt-1 leading-snug" style={{ color: 'var(--text-heading)' }}>
+                    {pillar.benefitTitle}
                   </h3>
                 </div>
 
                 <p className="text-xs opacity-75 leading-relaxed">
                   {pillar.description}
                 </p>
+
+                {/* Supporting Cues */}
+                <div className="pt-2 space-y-1.5 border-t" style={{ borderColor: 'var(--border-color)' }}>
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider block opacity-50">
+                    Key Focus:
+                  </span>
+                  <div className="space-y-1.5">
+                    {pillar.cues.map((cue, i) => (
+                      <div key={i} className="flex items-center gap-2 text-xs opacity-85">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
+                        <span className="font-medium">{cue}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               <div className="pt-4 border-t mt-4" style={{ borderColor: 'var(--border-color)' }}>
@@ -247,7 +266,7 @@ export default function MethodologySection({ onExploreCenters }) {
 
               <div className="p-3 rounded-xl border space-y-1" style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}>
                 <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                <h5 className="text-xs font-bold" style={{ color: 'var(--text-heading)' }}>Training Center Heads (TCH)</h5>
+                <h5 className="text-xs font-bold" style={{ color: 'var(--text-heading)' }}>Training Center Heads (TCHs)</h5>
                 <p className="text-[10px] opacity-65">Certified local ground leaders ensuring form guidance and safety every single session.</p>
               </div>
             </div>
@@ -256,13 +275,13 @@ export default function MethodologySection({ onExploreCenters }) {
           <div className="lg:col-span-4 flex flex-col justify-center items-start lg:items-end gap-3 pt-2 lg:pt-0">
             <button
               onClick={onExploreCenters}
-              className="w-full sm:w-auto py-3.5 px-6 rounded-2xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-lg hover:scale-105 flex items-center justify-center gap-2"
+              className="w-full sm:w-auto py-3.5 px-6 rounded-2xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-lg hover:scale-105 flex items-center justify-center gap-2 cursor-pointer"
               style={{
                 backgroundColor: 'var(--accent)',
                 color: 'var(--accent-contrast)'
               }}
             >
-              <span>Find Your Morning Ground</span>
+              <span>FIND A TRAINING GROUND</span>
               <ChevronRight className="w-4 h-4 stroke-[2.5]" />
             </button>
             <span className="text-[11px] opacity-60 text-center lg:text-right w-full sm:w-auto">
