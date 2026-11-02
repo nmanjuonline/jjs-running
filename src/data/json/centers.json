@@ -1,0 +1,435 @@
+[
+  {
+    "id": "bengaluru-jayanagar",
+    "city": "Bengaluru",
+    "name": "Jayanagar (HQ)",
+    "venue": "Chandragupta Maurya Ground (a.k.a Shalini Grounds)",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-kumar", "tch-girish"],
+    "vicinity": "Jayanagar, Lalbagh, JP Nagar, BTM Layout, Basavanagudi, Banashankari, Bannerghatta Road, Chamrajpet, Hanumanth Nagar, Giri Nagar, Wilson Garden, Richmond Town, Shanti Nagar, Double Road",
+    "mapUrl": "https://maps.app.goo.gl/4hP2NKYfEYrpumS67",
+    "runnersCount": "450+ Active Runners",
+    "level": "Beginner to Ultra",
+    "amenities": [
+      "Track & Synthetic Surface",
+      "Hydration Support",
+      "Restrooms",
+      "Parking"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "bengaluru-bgr",
+    "city": "Bengaluru",
+    "name": "Bannerghatta Road",
+    "venue": "Vintage Car Park, 5th Main Rd, Addischetan Layout, Bilekahalli",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-naveen-nagpal", "tch-amol-kotwal"],
+    "vicinity": "Bilekahalli, Bannerghatta Road, BTM Layout, Vijaya Bank Layout, Arekere",
+    "mapUrl": "https://maps.app.goo.gl/MdfEfHsw226HW83BA",
+    "runnersCount": "195+ Active Runners",
+    "level": "Beginner to Marathon",
+    "amenities": [
+      "Paved Tree-lined Loops",
+      "Stretching Area",
+      "Hydration Hub"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "bengaluru-bellandur",
+    "city": "Bengaluru",
+    "name": "Bellandur",
+    "venue": "Building 32, Ecoworld, Near Marketplace, Marathahalli - Sarjapur Outer Ring Road",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-manohar-simons"],
+    "vicinity": "Bellandur, Marathahalli, Panathur, Carmelaram, Kaikondrahalli, Sarjapur Outer Ring Road",
+    "mapUrl": "https://maps.app.goo.gl/3JEotzvLMA9on4Jg7",
+    "runnersCount": "220+ Active Runners",
+    "level": "All levels",
+    "amenities": [
+      "Tech Park Campus Loop",
+      "Smooth Tarmac",
+      "Hydration station"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "bengaluru-bangalore-university",
+    "city": "Bengaluru",
+    "name": "Bengaluru University (Jnana Bharati)",
+    "venue": "Behind Shri Muneshwara Swamy temple",
+    "timings": "5:30 AM - 7:30 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-geo-joseph"],
+    "vicinity": "Bangalore University, Gnana Bharathi, Nagarabhavi, Kengeri, RR Nagar, Chandra Layout",
+    "mapUrl": "https://maps.app.goo.gl/gZNBEzXZLhKDf68K7",
+    "runnersCount": "310+ Active Runners",
+    "level": "SLR & Elevation Training",
+    "amenities": [
+      "Long 15K+ Protected Loops",
+      "Forest Hills",
+      "Support Vehicles"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "bengaluru-electronic-city",
+    "city": "Bengaluru",
+    "name": "Electronic City",
+    "venue": "KSSIDC Complex, Next to Police Station, Electronic City Phase 1",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-hanumesh"],
+    "vicinity": "Neelandri Nagar, Neo Town, Prestige Sunrise Apts, Hosur Road, Electronic City Phase 1",
+    "mapUrl": "https://maps.app.goo.gl/odAbXRAaD8i67ZHA7",
+    "runnersCount": "230+ Active Runners",
+    "level": "Beginner to Marathon",
+    "amenities": [
+      "Wide Asphalt Runways",
+      "Locker access",
+      "Hydration point"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "bengaluru-hebbal",
+    "city": "Bengaluru",
+    "name": "Hebbal",
+    "venue": "Basketball Court, Sahakar Nagar Ground",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-krishnan-garry"],
+    "vicinity": "Sahakar Nagar, Hebbal, Balaji Nagar, GKVK (Vignana Kendra), North Bengaluru",
+    "mapUrl": "https://maps.app.goo.gl/CHJCYuMHM2q2Pgvh9",
+    "runnersCount": "210+ Active Runners",
+    "level": "Beginner to Marathon",
+    "amenities": [
+      "Clay Track",
+      "Basketball Court Zone",
+      "Hydration Station"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "bengaluru-hsr",
+    "city": "Bengaluru",
+    "name": "HSR Layout",
+    "venue": "Atal Bihari Vajpayee Stadium",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-praful-bhoyar"],
+    "vicinity": "HSR Layout, Koramangala, Sarjapur Road, Bellandur, Outer Ring Road, Ejipura, Hosur Road",
+    "mapUrl": "https://maps.app.goo.gl/j2qr272zfKoHTzA9A",
+    "runnersCount": "320+ Active Runners",
+    "level": "Beginner to Marathon",
+    "amenities": [
+      "Scenic Lake Trail",
+      "Locker access",
+      "Hydration point"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "bengaluru-indiranagar",
+    "city": "Bengaluru",
+    "name": "Indiranagar",
+    "venue": "Basketball court (Behind Domlur Bus stand)",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-muthamma-acharya"],
+    "vicinity": "Indiranagar, HAL 1/2/3 Stage, 100Ft Road, Old Madras Road, CMH Road, Domlur, Ulsoor, Murugeshpalya, Old Airport Road, CV Raman Nagar, Thippasandra, Kodihalli, Jeevan Bima Nagar",
+    "mapUrl": "https://maps.app.goo.gl/EzMx6JzEmdQKhhzo8",
+    "runnersCount": "260+ Active Runners",
+    "level": "Beginner to Half Marathon",
+    "amenities": [
+      "Soft Grass & Paved Trails",
+      "Core Workout Zone",
+      "Hydration point"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "bengaluru-jalahalli",
+    "city": "Bengaluru",
+    "name": "Jalahalli",
+    "venue": "BEL Skating Ring, BEL Colony",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-lakshman"],
+    "vicinity": "Jalahalli, BEL Colony, Vidyaranyapura, Peenya, Gangamma Circle",
+    "mapUrl": "https://maps.app.goo.gl/4US4944nDybPdvPy6",
+    "runnersCount": "150+ Active Runners",
+    "level": "All levels",
+    "amenities": [
+      "Zero Traffic Roads",
+      "Skating Ring Base",
+      "Lush Canopy"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "bengaluru-kalyan-nagar",
+    "city": "Bengaluru",
+    "name": "Kalyan Nagar",
+    "venue": "BBMP Basket-ball ground, near Royale Concord Intl. School",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-vijaya-kumar"],
+    "vicinity": "RamaMurthy Nagar, Banaswadi, Jal-Vayu Vihar, HRBR layout, Nagawara, NRI colony, Kammanahalli",
+    "mapUrl": "https://maps.app.goo.gl/vsxEhrExtNy61iN69",
+    "runnersCount": "165+ Active Runners",
+    "level": "All levels",
+    "amenities": [
+      "Lake Trail",
+      "Basketball Ground",
+      "Hydration"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "pune-kalyani-nagar",
+    "city": "Pune",
+    "name": "Kalyani Nagar",
+    "venue": "Kalyani Nagar Joggers Park (Damodar Raoji Galande Patil Joggers Park)",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-trupti-rao"],
+    "vicinity": "Koregaon Park, Viman Nagar, Kalyani nagar, Mundhwa, Wadgaon Sheri, Magarpatta, Yerwada",
+    "mapUrl": "https://maps.app.goo.gl/tiiU9oyFhsQSJJLC7",
+    "runnersCount": "160+ Active Runners",
+    "level": "All levels",
+    "amenities": [
+      "Paved park loops",
+      "Shaded Tree Canopy",
+      "Hydration point"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "bengaluru-kpr",
+    "city": "Bengaluru",
+    "name": "Kanakapura Road",
+    "venue": "BDA Sculpture Park, Banashankari 6th Stage, Subramanyapura",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-sangmesh-biradar"],
+    "vicinity": "Banashankari 6th Stage, Subramanyapura, Bharath Housing Society Layout, Uttarahalli, Kanakapura Road",
+    "mapUrl": "https://maps.app.goo.gl/jR8vLU562T1xiWn78",
+    "runnersCount": "185+ Active Runners",
+    "level": "Beginner to Ultra",
+    "amenities": [
+      "Park Perimeter Trail",
+      "Stretching Lawns",
+      "Hydration point"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "pune-karve-nagar",
+    "city": "Pune",
+    "name": "Karve Nagar",
+    "venue": "Radhabai Tol Sabhagruha Badminton Hall, Navshayadri Society",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-amit-gadnis"],
+    "vicinity": "Erandwane, Karvenagar (upto Cummins College), Sinhagad Road (from Dandekar Bridge upto Venkys house Rajaram Bridge), Dattwadi, Rajendra Nagar",
+    "mapUrl": "https://maps.app.goo.gl/6tersbvYZ7Th26Xq7",
+    "runnersCount": "190+ Active Runners",
+    "level": "Beginner to Marathon",
+    "amenities": [
+      "Dedicated Running Track",
+      "Stretching Lawn",
+      "Hydration point"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "bengaluru-koramangala",
+    "city": "Bengaluru",
+    "name": "Koramangala",
+    "venue": "BBMP Park, Near BDA Complex, Koramangala 5th Block",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-anirban-ghosh"],
+    "vicinity": "Koramangala 5th Block, 4th Block, 3rd Block, BDA Complex, Ejipura, ST Bed",
+    "mapUrl": "https://maps.app.goo.gl/NUF1wrvFwxMUQreeA",
+    "runnersCount": "270+ Active Runners",
+    "level": "All levels",
+    "amenities": [
+      "Grass Infield for Drills",
+      "Hydration Hub",
+      "Restrooms"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "kolkata-maidan",
+    "city": "Kolkata",
+    "name": "Maidan (Elliot Park)",
+    "venue": "Elliot Park, Maidan",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-vaibhav-pandya"],
+    "vicinity": "Alipore, Bhawanipur, Park Circus, Esplanade, Central Avenue, Barabazar, Khidirpur, Sealdah & Howrah",
+    "mapUrl": "https://maps.app.goo.gl/nfzTNf76zWaKfxP76",
+    "runnersCount": "200+ Active Runners",
+    "level": "Endurance & Tempo",
+    "amenities": [
+      "Expansive Open Maidan",
+      "Historical scenic route",
+      "Hydration point"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "bengaluru-malleshwaram",
+    "city": "Bengaluru",
+    "name": "Malleshwaram",
+    "venue": "Sankey Tank, Bengaluru",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-ajay-jaishankar"],
+    "vicinity": "Malleshwaram, Sadashivanagar, Vyalikaval, Rajajinagar, Yeshwanthpur",
+    "mapUrl": "https://maps.app.goo.gl/AL2XXj3RdBi6dkJVA",
+    "runnersCount": "240+ Active Runners",
+    "level": "Beginner to Ultra",
+    "amenities": [
+      "Elevation Lake Loop",
+      "Stretching Gazebo",
+      "Hydration"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "pune-baner",
+    "city": "Pune",
+    "name": "Pimple Nilakh & Baner",
+    "venue": "Shahid Ashok Kamthe Udyan, Pimple Nilakh",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-paresh-bhave"],
+    "vicinity": "Baner, Balewadi, Aundh, Pimple Nilakh, Wakad, Vishal Nagar",
+    "mapUrl": "https://maps.app.goo.gl/heYrzWTub6i2vXyW6",
+    "runnersCount": "210+ Active Runners",
+    "level": "Olympic Track & Trail",
+    "amenities": [
+      "Garden Loops",
+      "Soft Jogging Track",
+      "Hydration Station"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "pune-university",
+    "city": "Pune",
+    "name": "Pune University",
+    "venue": "Basketball Court, Savitribai Phule Pune University (SPPU)",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-swarupa-bhadsavle"],
+    "vicinity": "SPPU Campus, Ganeshkhind, Aundh, Shivaji Nagar, Pashan, Model Colony",
+    "mapUrl": "https://maps.app.goo.gl/NVTRpGS4DLvt3H2t6",
+    "runnersCount": "290+ Active Runners",
+    "level": "Beginner to Ultra",
+    "amenities": [
+      "Heritage Campus Roads",
+      "Rolling Slopes",
+      "Hydration Point"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "kolkata-rsl",
+    "city": "Kolkata",
+    "name": "Rabindra Sarovar (RSL)",
+    "venue": "Rabindra Sarovar, South Kolkata",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-diksha-jhunjhunwala"],
+    "vicinity": "South Kolkata, Southern Avenue, Lake Gardens, Dhakuria, Ballygunge, Golf Green",
+    "mapUrl": "https://maps.app.goo.gl/QtcHJggR5nwQgAmDA",
+    "runnersCount": "240+ Active Runners",
+    "level": "Beginner to Marathon",
+    "amenities": [
+      "Lake Loop",
+      "Rowing Club View",
+      "Hydration station"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "pune-sahakar-nagar",
+    "city": "Pune",
+    "name": "Sahakar Nagar",
+    "venue": "Shivajirao Dhume sports complex, Tulshibagwale colony",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-madhuvanti-deodhar"],
+    "vicinity": "Sahakar Nagar, Tulshibagwale colony, Parvati, Aranyeshwar, Bibwewadi, Padmavati",
+    "mapUrl": "https://maps.app.goo.gl/sqm7YwqS7sdTDC3Y6",
+    "runnersCount": "175+ Active Runners",
+    "level": "Trail, Hills & Distance",
+    "amenities": [
+      "Taljai Foothills",
+      "Sports Complex Grounds",
+      "Clean Air Trail"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "bengaluru-vijayanagar",
+    "city": "Bengaluru",
+    "name": "Vijayanagar",
+    "venue": "BGS Stadium, 5th Main, Govindrajnagar ward",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-vijay-sriram"],
+    "vicinity": "Vijayanagar, Rajaji Nagar, Basaveshwar Nagar, Chandra Layout, RPC Layout",
+    "mapUrl": "https://maps.app.goo.gl/i7XPteThFsG7ofaP8",
+    "runnersCount": "210+ Active Runners",
+    "level": "Beginner to Marathon",
+    "amenities": [
+      "Track Repeats",
+      "Hydration Hub",
+      "Warm-up Lawn"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "bengaluru-whitefield",
+    "city": "Bengaluru",
+    "name": "Whitefield",
+    "venue": "AECS Layout Playground",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-divakar-mourya"],
+    "vicinity": "AECS Layout, BEML Layout, Kundanahalli, Brookefield, Marathahalli, ORR, Bellandur, Old Airport Road, Kadubeesanahalli",
+    "mapUrl": "https://maps.app.goo.gl/QPCstLF1t8eYaf1E8",
+    "runnersCount": "280+ Active Runners",
+    "level": "Beginner to Marathon",
+    "amenities": [
+      "Paved Tree-lined Loops",
+      "Hydration Support",
+      "Stretching Lawn"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "bengaluru-yelahanka",
+    "city": "Bengaluru",
+    "name": "Yelahanka",
+    "venue": "Janatha Colony, Yelahanka",
+    "timings": "5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)",
+    "tchIds": ["tch-arun-td"],
+    "vicinity": "Yelahanka, Janatha Colony, Kogilu, Allalasandra, Vignana Kendra (GKVK), Jakkur",
+    "mapUrl": "https://maps.app.goo.gl/SoUTAx4TocbPd3mo6?g_st=aw",
+    "runnersCount": "175+ Active Runners",
+    "level": "All levels",
+    "amenities": [
+      "Clean Open Trail",
+      "Track Repeats",
+      "Hydration point"
+    ],
+    "isActive": true
+  },
+  {
+    "id": "remote-global",
+    "city": "Remote",
+    "name": "Global Virtual Campus",
+    "venue": "Anywhere in the World (Synced with Onca Run + GPS)",
+    "timings": "Flexible (Your Local Timezone)",
+    "tchIds": ["tch-central-team"],
+    "vicinity": "Worldwide (Over 14 Countries)",
+    "mapUrl": null,
+    "runnersCount": "1,200+ Runners in 14 Countries",
+    "level": "All Levels (5K to 100K Ultra)",
+    "amenities": [
+      "Real-time Biometric Sync",
+      "Weekly Zoom Strategy Sessions",
+      "Virtual Races"
+    ],
+    "isActive": true
+  }
+]

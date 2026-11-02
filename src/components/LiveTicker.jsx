@@ -4,10 +4,21 @@ import { Flame, Trophy, Clock, Smartphone, MapPin, Award, ChevronLeft, ChevronRi
 export default function LiveTicker({ onActionClick }) {
   const updates = [
     {
+      badge: 'FEATURED EVENT',
+      badgeColor: '#d02426',
+      icon: Trophy,
+      text: 'The Saree Run (Bengaluru Edition): Registrations now open for 3,000+ women at Kanteerava Stadium!',
+      mobileText: 'The Saree Run: Registrations Open at Kanteerava',
+      actionText: 'Register on RaceIQ',
+      actionUrl: 'https://raceiq.in/tsr',
+      actionTarget: 'external'
+    },
+    {
       badge: 'LIVE WIRE',
       badgeColor: '#d02426',
       icon: Flame,
       text: '450+ runners completed morning workout across 20+ centers today',
+      mobileText: '450+ runners completed morning workout across 20+ centers',
       actionText: 'Find Squad',
       actionTarget: 'centers'
     },
@@ -16,7 +27,8 @@ export default function LiveTicker({ onActionClick }) {
       badgeColor: '#d02426',
       icon: Trophy,
       text: 'TCS World 10K & Tata Mumbai Marathon (TMM) training blocks now active',
-      actionText: 'View Programs',
+      mobileText: 'TCS 10K & Mumbai Marathon training blocks active',
+      actionText: 'Programs',
       actionTarget: 'programs'
     },
     {
@@ -24,7 +36,8 @@ export default function LiveTicker({ onActionClick }) {
       badgeColor: '#318cdd',
       icon: Clock,
       text: '5:30 AM Slow Long Run (SLR) gathering across all 20+ morning centers',
-      actionText: 'Explore Centers',
+      mobileText: '5:30 AM Slow Long Run (SLR) at 20+ grounds',
+      actionText: 'Centers',
       actionTarget: 'centers'
     },
     {
@@ -32,15 +45,17 @@ export default function LiveTicker({ onActionClick }) {
       badgeColor: '#318cdd',
       icon: Smartphone,
       text: 'Track real-time stride cadence, heart-rate zones & coach telemetry',
-      actionText: 'Get the App',
+      mobileText: 'Track stride cadence, heart-rate & coach sync',
+      actionText: 'Get App',
       actionTarget: 'app'
     },
     {
       badge: 'HONOR ROLL',
       badgeColor: '#ef7f1a',
       icon: Award,
-      text: '100+ World Major Marathon finishes: Boston, Berlin, London, Tokyo & Comrades',
-      actionText: 'Runner Stories',
+      text: 'Hundreds of World Major Marathon finishes: Boston, Berlin, London, Tokyo, Chicago & NYC',
+      mobileText: 'Hundreds of World Major finishes: Boston, Berlin, London & NYC',
+      actionText: 'Stories',
       actionTarget: 'stories'
     },
     {
@@ -48,7 +63,8 @@ export default function LiveTicker({ onActionClick }) {
       badgeColor: '#ef7f1a',
       icon: MapPin,
       text: 'New centers now open: Baner Balewadi (Pune) & Bellandur (Bengaluru)',
-      actionText: 'Book Free Trial',
+      mobileText: 'New centers: Baner (Pune) & Bellandur (Bengaluru)',
+      actionText: 'Book Trial',
       actionTarget: 'register'
     }
   ];
@@ -88,6 +104,10 @@ export default function LiveTicker({ onActionClick }) {
 
   const handleAction = (e) => {
     if (e) e.stopPropagation();
+    if (current.actionUrl) {
+      window.open(current.actionUrl, '_blank', 'noopener,noreferrer');
+      return;
+    }
     if (onActionClick && current.actionTarget) {
       onActionClick(current.actionTarget);
     }
@@ -136,7 +156,8 @@ export default function LiveTicker({ onActionClick }) {
           >
             <Icon className="w-3.5 h-3.5 flex-shrink-0 hidden md:inline-block text-[#318cdd]" />
             <span className="text-slate-200 text-[11px] sm:text-xs font-medium truncate group-hover:text-white transition-colors">
-              {current.text}
+              <span className="sm:hidden">{current.mobileText || current.text}</span>
+              <span className="hidden sm:inline">{current.text}</span>
             </span>
 
             {/* Clickable Action Link */}

@@ -1,314 +1,88 @@
-export const centersData = [
-    {
-        id: 'bengaluru-jayanagar',
-        city: 'Bengaluru',
-        name: 'Jayanagar (HQ)',
-        venue: 'Chandragupta Maurya Ground (a.k.a Shalini Grounds)',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Kumar & Girish',
-        vicinity: 'Jayanagar, Lalbagh, JP Nagar, BTM Layout, Basavanagudi, Banashankari, Bannerghatta Road, Chamrajpet, Hanumanth Nagar, Giri Nagar, Wilson Garden, Richmond Town, Shanti Nagar, Double Road',
-        mapUrl: 'https://maps.app.goo.gl/4hP2NKYfEYrpumS67',
-        runnersCount: '450+ Active Runners',
-        level: 'Beginner to Ultra',
-        amenities: ["Track & Synthetic Surface","Hydration Support","Restrooms","Parking"]
-    },
-    {
-        id: 'bengaluru-bgr',
-        city: 'Bengaluru',
-        name: 'Bannerghatta Road',
-        venue: 'Vintage Car Park, 5th Main Rd, Addischetan Layout, Bilekahalli',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Naveen Nagpal & Amol Kotwal',
-        vicinity: 'Bilekahalli, Bannerghatta Road, BTM Layout, Vijaya Bank Layout, Arekere',
-        mapUrl: 'https://maps.app.goo.gl/MdfEfHsw226HW83BA',
-        runnersCount: '195+ Active Runners',
-        level: 'Beginner to Marathon',
-        amenities: ["Paved Tree-lined Loops","Stretching Area","Hydration Hub"]
-    },
-    {
-        id: 'bengaluru-bellandur',
-        city: 'Bengaluru',
-        name: 'Bellandur',
-        venue: 'Building 32, Ecoworld, Near Marketplace, Marathahalli - Sarjapur Outer Ring Road',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Manohar Simons',
-        vicinity: 'Bellandur, Marathahalli, Panathur, Carmelaram, Kaikondrahalli, Sarjapur Outer Ring Road',
-        mapUrl: 'https://maps.app.goo.gl/3JEotzvLMA9on4Jg7',
-        runnersCount: '220+ Active Runners',
-        level: 'All levels',
-        amenities: ["Tech Park Campus Loop","Smooth Tarmac","Hydration station"]
-    },
-    {
-        id: 'bengaluru-bangalore-university',
-        city: 'Bengaluru',
-        name: 'Bengaluru University (Jnana Bharati)',
-        venue: 'Behind Shri Muneshwara Swamy temple',
-        timings: '5:30 AM - 7:30 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Geo Joseph',
-        vicinity: 'Bangalore University, Gnana Bharathi, Nagarabhavi, Kengeri, RR Nagar, Chandra Layout',
-        mapUrl: 'https://maps.app.goo.gl/gZNBEzXZLhKDf68K7',
-        runnersCount: '310+ Active Runners',
-        level: 'SLR & Elevation Training',
-        amenities: ["Long 15K+ Protected Loops","Forest Hills","Support Vehicles"]
-    },
-    {
-        id: 'bengaluru-electronic-city',
-        city: 'Bengaluru',
-        name: 'Electronic City',
-        venue: 'KSSIDC Complex, Next to Police Station, Electronic City Phase 1',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Hanumesh',
-        vicinity: 'Neelandri Nagar, Neo Town, Prestige Sunrise Apts, Hosur Road, Electronic City Phase 1',
-        mapUrl: 'https://maps.app.goo.gl/odAbXRAaD8i67ZHA7',
-        runnersCount: '230+ Active Runners',
-        level: 'Beginner to Marathon',
-        amenities: ["Wide Asphalt Runways","Locker access","Hydration point"]
-    },
-    {
-        id: 'bengaluru-hebbal',
-        city: 'Bengaluru',
-        name: 'Hebbal',
-        venue: 'Basketball Court, Sahakar Nagar Ground',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Krishnan (Garry)',
-        vicinity: 'Sahakar Nagar, Hebbal, Balaji Nagar, GKVK (Vignana Kendra), North Bengaluru',
-        mapUrl: 'https://maps.app.goo.gl/CHJCYuMHM2q2Pgvh9',
-        runnersCount: '210+ Active Runners',
-        level: 'Beginner to Marathon',
-        amenities: ["Clay Track","Basketball Court Zone","Hydration Station"]
-    },
-    {
-        id: 'bengaluru-hsr',
-        city: 'Bengaluru',
-        name: 'HSR Layout',
-        venue: 'Atal Bihari Vajpayee Stadium',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Praful Bhoyar',
-        vicinity: 'HSR Layout, Koramangala, Sarjapur Road, Bellandur, Outer Ring Road, Ejipura, Hosur Road',
-        mapUrl: 'https://maps.app.goo.gl/j2qr272zfKoHTzA9A',
-        runnersCount: '320+ Active Runners',
-        level: 'Beginner to Marathon',
-        amenities: ["Scenic Lake Trail","Locker access","Hydration point"]
-    },
-    {
-        id: 'bengaluru-indiranagar',
-        city: 'Bengaluru',
-        name: 'Indiranagar',
-        venue: 'Basketball court (Behind Domlur Bus stand)',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Muthamma Acharya',
-        vicinity: 'Indiranagar, HAL 1/2/3 Stage, 100Ft Road, Old Madras Road, CMH Road, Domlur, Ulsoor, Murugeshpalya, Old Airport Road, CV Raman Nagar, Thippasandra, Kodihalli, Jeevan Bima Nagar',
-        mapUrl: 'https://maps.app.goo.gl/EzMx6JzEmdQKhhzo8',
-        runnersCount: '260+ Active Runners',
-        level: 'Beginner to Half Marathon',
-        amenities: ["Soft Grass & Paved Trails","Core Workout Zone","Hydration point"]
-    },
-    {
-        id: 'bengaluru-jalahalli',
-        city: 'Bengaluru',
-        name: 'Jalahalli',
-        venue: 'BEL Skating Ring, BEL Colony',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Lakshman',
-        vicinity: 'Jalahalli, BEL Colony, Vidyaranyapura, Peenya, Gangamma Circle',
-        mapUrl: 'https://maps.app.goo.gl/4US4944nDybPdvPy6',
-        runnersCount: '150+ Active Runners',
-        level: 'All levels',
-        amenities: ["Zero Traffic Roads","Skating Ring Base","Lush Canopy"]
-    },
-    {
-        id: 'bengaluru-kalyan-nagar',
-        city: 'Bengaluru',
-        name: 'Kalyan Nagar',
-        venue: 'BBMP Basket-ball ground, near Royale Concord Intl. School',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Vijaya Kumar',
-        vicinity: 'RamaMurthy Nagar, Banaswadi, Jal-Vayu Vihar, HRBR layout, Nagawara, NRI colony, Kammanahalli',
-        mapUrl: 'https://maps.app.goo.gl/vsxEhrExtNy61iN69',
-        runnersCount: '165+ Active Runners',
-        level: 'All levels',
-        amenities: ["Lake Trail","Basketball Ground","Hydration"]
-    },
-    {
-        id: 'pune-kalyani-nagar',
-        city: 'Pune',
-        name: 'Kalyani Nagar',
-        venue: 'Kalyani Nagar Joggers Park (Damodar Raoji Galande Patil Joggers Park)',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Trupti Rao',
-        vicinity: 'Koregaon Park, Viman Nagar, Kalyani nagar, Mundhwa, Wadgaon Sheri, Magarpatta, Yerwada',
-        mapUrl: 'https://maps.app.goo.gl/tiiU9oyFhsQSJJLC7',
-        runnersCount: '160+ Active Runners',
-        level: 'All levels',
-        amenities: ["Paved park loops","Shaded Tree Canopy","Hydration point"]
-    },
-    {
-        id: 'bengaluru-kpr',
-        city: 'Bengaluru',
-        name: 'Kanakapura Road',
-        venue: 'BDA Sculpture Park, Banashankari 6th Stage, Subramanyapura',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Sangmesh Biradar',
-        vicinity: 'Banashankari 6th Stage, Subramanyapura, Bharath Housing Society Layout, Uttarahalli, Kanakapura Road',
-        mapUrl: 'https://maps.app.goo.gl/jR8vLU562T1xiWn78',
-        runnersCount: '185+ Active Runners',
-        level: 'Beginner to Ultra',
-        amenities: ["Park Perimeter Trail","Stretching Lawns","Hydration point"]
-    },
-    {
-        id: 'pune-karve-nagar',
-        city: 'Pune',
-        name: 'Karve Nagar',
-        venue: 'Radhabai Tol Sabhagruha Badminton Hall, Navshayadri Society',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Amit Gadnis',
-        vicinity: 'Erandwane, Karvenagar (upto Cummins College), Sinhagad Road (from Dandekar Bridge upto Venkys house Rajaram Bridge), Dattwadi, Rajendra Nagar',
-        mapUrl: 'https://maps.app.goo.gl/6tersbvYZ7Th26Xq7',
-        runnersCount: '190+ Active Runners',
-        level: 'Beginner to Marathon',
-        amenities: ["Dedicated Running Track","Stretching Lawn","Hydration point"]
-    },
-    {
-        id: 'bengaluru-koramangala',
-        city: 'Bengaluru',
-        name: 'Koramangala',
-        venue: 'BBMP Park, Near BDA Complex, Koramangala 5th Block',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Anirban Ghosh',
-        vicinity: 'Koramangala 5th Block, 4th Block, 3rd Block, BDA Complex, Ejipura, ST Bed',
-        mapUrl: 'https://maps.app.goo.gl/NUF1wrvFwxMUQreeA',
-        runnersCount: '270+ Active Runners',
-        level: 'All levels',
-        amenities: ["Grass Infield for Drills","Hydration Hub","Restrooms"]
-    },
-    {
-        id: 'kolkata-maidan',
-        city: 'Kolkata',
-        name: 'Maidan (Elliot Park)',
-        venue: 'Elliot Park, Maidan',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Vaibhav Pandya',
-        vicinity: 'Alipore, Bhawanipur, Park Circus, Esplanade, Central Avenue, Barabazar, Khidirpur, Sealdah & Howrah',
-        mapUrl: 'https://maps.app.goo.gl/nfzTNf76zWaKfxP76',
-        runnersCount: '200+ Active Runners',
-        level: 'Endurance & Tempo',
-        amenities: ["Expansive Open Maidan","Historical scenic route","Hydration point"]
-    },
-    {
-        id: 'bengaluru-malleshwaram',
-        city: 'Bengaluru',
-        name: 'Malleshwaram',
-        venue: 'Sankey Tank, Bengaluru',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Ajay Jaishankar',
-        vicinity: 'Malleshwaram, Sadashivanagar, Vyalikaval, Rajajinagar, Yeshwanthpur',
-        mapUrl: 'https://maps.app.goo.gl/AL2XXj3RdBi6dkJVA',
-        runnersCount: '240+ Active Runners',
-        level: 'Beginner to Ultra',
-        amenities: ["Elevation Lake Loop","Stretching Gazebo","Hydration"]
-    },
-    {
-        id: 'pune-baner',
-        city: 'Pune',
-        name: 'Pimple Nilakh & Baner',
-        venue: 'Shahid Ashok Kamthe Udyan, Pimple Nilakh',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Paresh Ramesh Bhave',
-        vicinity: 'Baner, Balewadi, Aundh, Pimple Nilakh, Wakad, Vishal Nagar',
-        mapUrl: 'https://maps.app.goo.gl/heYrzWTub6i2vXyW6',
-        runnersCount: '210+ Active Runners',
-        level: 'Olympic Track & Trail',
-        amenities: ["Garden Loops","Soft Jogging Track","Hydration Station"]
-    },
-    {
-        id: 'pune-university',
-        city: 'Pune',
-        name: 'Pune University',
-        venue: 'Basketball Court, Savitribai Phule Pune University (SPPU)',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Swarupa Bhadsavle',
-        vicinity: 'SPPU Campus, Ganeshkhind, Aundh, Shivaji Nagar, Pashan, Model Colony',
-        mapUrl: 'https://maps.app.goo.gl/NVTRpGS4DLvt3H2t6',
-        runnersCount: '290+ Active Runners',
-        level: 'Beginner to Ultra',
-        amenities: ["Heritage Campus Roads","Rolling Slopes","Hydration Point"]
-    },
-    {
-        id: 'kolkata-rsl',
-        city: 'Kolkata',
-        name: 'Rabindra Sarovar (RSL)',
-        venue: 'Rabindra Sarovar, South Kolkata',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Diksha Jhunjhunwala',
-        vicinity: 'South Kolkata, Southern Avenue, Lake Gardens, Dhakuria, Ballygunge, Golf Green',
-        mapUrl: 'https://maps.app.goo.gl/QtcHJggR5nwQgAmDA',
-        runnersCount: '240+ Active Runners',
-        level: 'Beginner to Marathon',
-        amenities: ["Lake Loop","Rowing Club View","Hydration station"]
-    },
-    {
-        id: 'pune-sahakar-nagar',
-        city: 'Pune',
-        name: 'Sahakar Nagar',
-        venue: 'Shivajirao Dhume sports complex, Tulshibagwale colony',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Madhuvanti Deodhar',
-        vicinity: 'Sahakar Nagar, Tulshibagwale colony, Parvati, Aranyeshwar, Bibwewadi, Padmavati',
-        mapUrl: 'https://maps.app.goo.gl/sqm7YwqS7sdTDC3Y6',
-        runnersCount: '175+ Active Runners',
-        level: 'Trail, Hills & Distance',
-        amenities: ["Taljai Foothills","Sports Complex Grounds","Clean Air Trail"]
-    },
-    {
-        id: 'bengaluru-vijayanagar',
-        city: 'Bengaluru',
-        name: 'Vijayanagar',
-        venue: 'BGS Stadium, 5th Main, Govindrajnagar ward',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Vijay Sriram',
-        vicinity: 'Vijayanagar, Rajaji Nagar, Basaveshwar Nagar, Chandra Layout, RPC Layout',
-        mapUrl: 'https://maps.app.goo.gl/i7XPteThFsG7ofaP8',
-        runnersCount: '210+ Active Runners',
-        level: 'Beginner to Marathon',
-        amenities: ["Track Repeats","Hydration Hub","Warm-up Lawn"]
-    },
-    {
-        id: 'bengaluru-whitefield',
-        city: 'Bengaluru',
-        name: 'Whitefield',
-        venue: 'AECS Layout Playground',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Divakar Mourya',
-        vicinity: 'AECS Layout, BEML Layout, Kundanahalli, Brookefield, Marathahalli, ORR, Bellandur, Old Airport Road, Kadubeesanahalli',
-        mapUrl: 'https://maps.app.goo.gl/QPCstLF1t8eYaf1E8',
-        runnersCount: '280+ Active Runners',
-        level: 'Beginner to Marathon',
-        amenities: ["Paved Tree-lined Loops","Hydration Support","Stretching Lawn"]
-    },
-    {
-        id: 'bengaluru-yelahanka',
-        city: 'Bengaluru',
-        name: 'Yelahanka',
-        venue: 'Janatha Colony, Yelahanka',
-        timings: '5:30 AM - 7:00 AM (Tue, Thu, Sat, Sun)',
-        tch: 'Arun TD',
-        vicinity: 'Yelahanka, Janatha Colony, Kogilu, Allalasandra, Vignana Kendra (GKVK), Jakkur',
-        mapUrl: 'https://maps.app.goo.gl/SoUTAx4TocbPd3mo6?g_st=aw',
-        runnersCount: '175+ Active Runners',
-        level: 'All levels',
-        amenities: ["Clean Open Trail","Track Repeats","Hydration point"]
-    },
-    {
-        id: 'remote-global',
-        city: 'Remote',
-        name: 'Global Virtual Campus',
-        venue: 'Anywhere in the World (Synced with Onca Run + GPS)',
-        timings: 'Flexible (Your Local Timezone)',
-        tch: 'Central Coaching Team',
-        vicinity: 'Worldwide (Over 14 Countries)',
-        mapUrl: null,
-        runnersCount: '1,200+ Runners in 14 Countries',
-        level: 'All Levels (5K to 100K Ultra)',
-        amenities: ["Real-time Biometric Sync","Weekly Zoom Strategy Sessions","Virtual Races"]
-    }
-];
+/**
+ * Data Access Layer & Abstraction for Training Centers and Training Center Heads (TCHs)
+ *
+ * Current Data Source:
+ *   - Modular JSON files:
+ *     - src/data/json/centers.json (Training grounds & centers with map URLs & vicinities)
+ *     - src/data/json/tchs.json (Individual Training Center Heads)
+ *
+ * Architecture Notes:
+ *   - Centers and TCHs have a 1-to-many relationship (centers can have multiple TCHs, e.g. Jayanagar and BGR).
+ *   - Each TCH is an individual person record with distinct ID, contact, and center assignment.
+ *   - Database Migration Note: When connecting to your existing database, update the data adapter below.
+ *     UI components consume `centersData`, `tchsData`, or the helper query getters without needing schema changes.
+ */
+
+import rawCenters from './json/centers.json';
+import rawTchs from './json/tchs.json';
+
+// Fast O(1) lookup map for TCH records
+const tchMap = new Map(rawTchs.map((tch) => [tch.id, tch]));
+
+// Fast O(1) lookup map for Centers
+const centerMap = new Map(rawCenters.map((center) => [center.id, center]));
+
+/**
+ * Hydrated Centers Collection:
+ * Resolves all assigned TCHs for each center.
+ * Provides backward-compatible `center.tch` (e.g. "Kumar & Girish")
+ * alongside the full array `center.tchs`.
+ */
+export const centersData = rawCenters.map((center) => {
+  const tchs = (center.tchIds || [])
+    .map((tchId) => tchMap.get(tchId))
+    .filter(Boolean);
+
+  const tchDisplayNames = tchs.map((t) => t.name).join(' & ');
+
+  return {
+    ...center,
+    // Formatted display string for existing components expecting `center.tch`
+    tch: tchDisplayNames || 'TCH Assigned',
+    // Full array of individual TCH objects
+    tchs: tchs
+  };
+});
+
+/**
+ * Hydrated TCHs Collection:
+ * Each TCH record with resolved center reference.
+ */
+export const tchsData = rawTchs.map((tch) => {
+  const center = centerMap.get(tch.centerId) || null;
+  return {
+    ...tch,
+    center: center
+      ? {
+          id: center.id,
+          name: center.name,
+          city: center.city,
+          venue: center.venue,
+          mapUrl: center.mapUrl
+        }
+      : null
+  };
+});
+
+// Helper Query Methods (Ready for future DB / API replacement)
+export const getCenters = () => centersData;
+export const getTchs = () => tchsData;
+
+export const getCenterById = (id) => {
+  return centersData.find((c) => c.id === id) || null;
+};
+
+export const getTchById = (id) => {
+  return tchsData.find((t) => t.id === id) || null;
+};
+
+export const getTchsByCenterId = (centerId) => {
+  return tchsData.filter((t) => t.centerId === centerId);
+};
+
+export const getCentersByCity = (city) => {
+  if (!city || city === 'All Cities') return centersData;
+  return centersData.filter((c) => c.city.toLowerCase() === city.toLowerCase());
+};
+
+export default centersData;

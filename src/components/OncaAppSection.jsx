@@ -40,7 +40,7 @@ export default function OncaAppSection({ onGetApp }) {
           </h2>
 
           <p className="text-xs sm:text-base opacity-75 leading-relaxed max-w-xl">
-            The digital gateway to the JJs Running structured training ecosystem. Sync seamlessly with your Garmin, Apple Watch, Coros, or phone GPS. Get audio pace cues, track your weekly SLR mileage, log nutrition, and stay in direct sync with your Training Center Head.
+            Your digital gateway to JJs Running’s structured training ecosystem. Sync seamlessly with your Garmin, Apple Watch, COROS device, or phone GPS. Get audio pace cues, track your weekly SLR mileage, log nutrition, and stay in direct sync with your Training Center Head.
           </p>
 
           {/* Key pillars */}
@@ -64,7 +64,7 @@ export default function OncaAppSection({ onGetApp }) {
               <h4 className="text-xs font-black uppercase tracking-wider" style={{ color: 'var(--text-heading)' }}>
                 Nutrition &amp; Health
               </h4>
-              <p className="text-[11px] opacity-70">Pre-race carb loading protocols, hydration guides &amp; gut training.</p>
+              <p className="text-[11px] opacity-70">Pre-race carb-loading protocols, hydration guides, and gut-training strategies.</p>
             </div>
 
             <div
