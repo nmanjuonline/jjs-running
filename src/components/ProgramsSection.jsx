@@ -22,6 +22,26 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
         return p.category.toLowerCase().includes(activeCategory.toLowerCase());
       });
 
+  const handleTabKeyDown = (e, currentIdx) => {
+    let nextIdx = null;
+    if (e.key === 'ArrowRight') {
+      nextIdx = (currentIdx + 1) % CATEGORIES.length;
+    } else if (e.key === 'ArrowLeft') {
+      nextIdx = (currentIdx - 1 + CATEGORIES.length) % CATEGORIES.length;
+    } else if (e.key === 'Home') {
+      nextIdx = 0;
+    } else if (e.key === 'End') {
+      nextIdx = CATEGORIES.length - 1;
+    }
+    if (nextIdx !== null) {
+      e.preventDefault();
+      setActiveCategory(CATEGORIES[nextIdx]);
+      const parent = e.currentTarget.parentElement;
+      const tabs = parent.querySelectorAll('button[role="tab"]');
+      tabs[nextIdx]?.focus();
+    }
+  };
+
   // =========================================================================
   // 1. SWISS CLEAN / SWISS DARK (Minimalist Goal Discovery • Olympic Clean)
   // =========================================================================
@@ -32,13 +52,18 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
       <div className="space-y-6">
         {/* Category Filter Pills - Sleek Minimalist Tabs */}
         <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto no-scrollbar pb-2 -mx-2 px-2" role="tablist" aria-label="Filter programs by goal category">
-          {CATEGORIES.map((cat) => {
+          {CATEGORIES.map((cat, idx) => {
             const isActive = activeCategory === cat;
+            const tabId = `tab-${cat.toLowerCase().replace(/\s+/g, '-')}`;
             return (
               <button
                 key={cat}
+                id={tabId}
                 role="tab"
                 aria-selected={isActive}
+                aria-controls="programs-grid"
+                tabIndex={isActive ? 0 : -1}
+                onKeyDown={(e) => handleTabKeyDown(e, idx)}
                 onClick={() => setActiveCategory(cat)}
                 className={`px-4 py-2 text-xs font-bold tracking-wide rounded-full transition-all duration-200 flex-shrink-0 cursor-pointer ${
                   isActive
@@ -61,7 +86,12 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
         </div>
 
         {/* Sleek Swiss Precision Cards Grid */}
-        <div className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none gap-6 md:grid-cols-2 lg:grid-cols-3 pb-6 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar items-stretch">
+        <div
+          id="programs-grid"
+          role="tabpanel"
+          aria-label="Training programs catalog"
+          className="flex md:grid overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none gap-6 md:grid-cols-2 lg:grid-cols-3 pb-6 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar items-stretch"
+        >
           {filtered.map((program) => (
             <div
               key={program.id}
@@ -76,7 +106,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                 <div className="relative h-44 overflow-hidden bg-slate-950">
                   <img
                     src={program.image}
-                    alt={program.outcomeTitle || program.title}
+                    alt={`${program.outcomeTitle || program.title} - ${program.internalName} training program`}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
                   />
@@ -227,7 +257,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                 <div className="relative h-44 overflow-hidden bg-zinc-950">
                   <img
                     src={program.image}
-                    alt={program.outcomeTitle || program.title}
+                    alt={`${program.outcomeTitle || program.title} - ${program.internalName} training program`}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
                   />
@@ -361,7 +391,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
                 <div className="relative h-44 overflow-hidden bg-black">
                   <img
                     src={program.image}
-                    alt={program.outcomeTitle || program.title}
+                    alt={`${program.outcomeTitle || program.title} - ${program.internalName} training program`}
                     className="w-full h-full object-cover filter brightness-90 contrast-110"
                     loading="lazy"
                   />
@@ -467,7 +497,7 @@ export default function ProgramsSection({ onRegister, currentTheme = 'olympic-cl
               <div className="relative h-44 overflow-hidden bg-black">
                 <img
                   src={program.image}
-                  alt={program.outcomeTitle || program.title}
+                  alt={`${program.outcomeTitle || program.title} - ${program.internalName} training program`}
                   className="w-full h-full object-cover filter brightness-95 contrast-125 transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
                 />

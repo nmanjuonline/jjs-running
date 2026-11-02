@@ -32,10 +32,18 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
             isDark ? 'border-slate-800 bg-slate-950 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.7)]' : 'border-slate-200/90 bg-white'
           }`}>
             <div
+              role="region"
+              aria-roledescription="carousel"
+              aria-label="Training Highlights Carousel"
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
+              onFocus={() => setIsPaused(true)}
+              onBlur={() => setIsPaused(false)}
               className="relative min-h-[540px] sm:min-h-0 sm:h-[420px] md:h-[480px] w-full overflow-hidden bg-slate-950 p-4 sm:p-0 flex flex-col justify-between sm:block"
             >
+              <div className="sr-only" aria-live="polite" aria-atomic="true">
+                Slide {activeSlide + 1} of {HERO_IMAGES.length}
+              </div>
               {/* Automatic Cross-Fade Carousel Slides */}
               {HERO_IMAGES.map((img, idx) => (
                 <img
@@ -100,14 +108,14 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
               <button
                 onClick={() => setActiveSlide((prev) => (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length)}
                 aria-label="Previous slide"
-                className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-black/50 hover:bg-black/80 text-white items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 border border-white/20 cursor-pointer shadow-lg"
+                className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-black/50 hover:bg-black/80 text-white items-center justify-center opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity duration-200 border border-white/20 cursor-pointer shadow-lg"
               >
                 <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
               </button>
               <button
                 onClick={() => setActiveSlide((prev) => (prev + 1) % HERO_IMAGES.length)}
                 aria-label="Next slide"
-                className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-black/50 hover:bg-black/80 text-white items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 border border-white/20 cursor-pointer shadow-lg"
+                className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-black/50 hover:bg-black/80 text-white items-center justify-center opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity duration-200 border border-white/20 cursor-pointer shadow-lg"
               >
                 <ChevronRight className="w-5 h-5 stroke-[2.5]" />
               </button>
@@ -358,22 +366,22 @@ export default function Hero({ currentTheme, onBookTrial, onExploreCenters, onOp
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="p-3.5 rounded-2xl bg-white border border-orange-100/90 shadow-sm space-y-1">
               <span className="text-[10px] font-mono text-orange-600 font-bold uppercase">05:30 AM • STEP 1</span>
-              <h4 className="text-xs sm:text-sm font-black text-zinc-900">Dynamic Warmup</h4>
+              <h3 className="text-xs sm:text-sm font-black text-zinc-900">Dynamic Warmup</h3>
               <p className="text-[11px] text-zinc-500">Joint activation & stride drills</p>
             </div>
             <div className="p-3.5 rounded-2xl bg-white border border-orange-100/90 shadow-sm space-y-1">
               <span className="text-[10px] font-mono text-orange-600 font-bold uppercase">05:45 AM • STEP 2</span>
-              <h4 className="text-xs sm:text-sm font-black text-zinc-900">Zone 2 Aerobic Run</h4>
+              <h3 className="text-xs sm:text-sm font-black text-zinc-900">Zone 2 Aerobic Run</h3>
               <p className="text-[11px] text-zinc-500">Guided pacing with pack mentors</p>
             </div>
             <div className="p-3.5 rounded-2xl bg-white border border-orange-100/90 shadow-sm space-y-1">
               <span className="text-[10px] font-mono text-orange-600 font-bold uppercase">06:40 AM • STEP 3</span>
-              <h4 className="text-xs sm:text-sm font-black text-zinc-900">Core & Flexibility</h4>
+              <h3 className="text-xs sm:text-sm font-black text-zinc-900">Core & Flexibility</h3>
               <p className="text-[11px] text-zinc-500">Injury-proofing muscle strength</p>
             </div>
             <div className="p-3.5 rounded-2xl bg-orange-50/70 border border-orange-200/80 shadow-sm space-y-1">
               <span className="text-[10px] font-mono text-orange-700 font-bold uppercase">07:00 AM • STEP 4</span>
-              <h4 className="text-xs sm:text-sm font-black text-orange-950">Post-Run Chai & Chat</h4>
+              <h3 className="text-xs sm:text-sm font-black text-orange-950">Post-Run Chai & Chat</h3>
               <p className="text-[11px] text-zinc-600">The unbreakable JJs runner bond</p>
             </div>
           </div>

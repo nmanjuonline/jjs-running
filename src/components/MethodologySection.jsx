@@ -23,7 +23,7 @@ export default function MethodologySection({ onExploreCenters }) {
           className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm"
           style={{ backgroundColor: 'var(--badge-bg)', color: 'var(--accent)' }}
         >
-          <Zap className="w-3.5 h-3.5" />
+          <Zap className="w-3.5 h-3.5" aria-hidden="true" />
           {header.eyebrow}
         </span>
 
@@ -62,7 +62,7 @@ export default function MethodologySection({ onExploreCenters }) {
                       color: 'var(--accent)'
                     }}
                   >
-                    <Icon className="w-6 h-6 stroke-[2.2]" />
+                    <Icon className="w-6 h-6 stroke-[2.2]" aria-hidden="true" />
                   </div>
                   <span className="font-mono text-[10px] font-bold opacity-50">
                     PILLAR 0{idx + 1}
@@ -90,7 +90,7 @@ export default function MethodologySection({ onExploreCenters }) {
                   <div className="space-y-1.5">
                     {pillar.cues.map((cue, i) => (
                       <div key={i} className="flex items-center gap-2 text-xs opacity-85">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" aria-hidden="true" />
                         <span className="font-medium">{cue}</span>
                       </div>
                     ))}
@@ -127,7 +127,7 @@ export default function MethodologySection({ onExploreCenters }) {
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider mb-2"
               style={{ backgroundColor: 'var(--badge-bg)', color: 'var(--accent)' }}
             >
-              <Calendar className="w-3.5 h-3.5" />
+              <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
               Weekly Ground Schedule
             </div>
             <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tight" style={{ color: 'var(--text-heading)' }}>
@@ -190,7 +190,7 @@ export default function MethodologySection({ onExploreCenters }) {
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
               style={{ backgroundColor: 'var(--badge-bg)', color: 'var(--accent)' }}
             >
-              <Users className="w-3.5 h-3.5" />
+              <Users className="w-3.5 h-3.5" aria-hidden="true" />
               {culture.eyebrow}
             </div>
 
@@ -207,8 +207,8 @@ export default function MethodologySection({ onExploreCenters }) {
                 const FeatIcon = ICONS[feat.iconName] || Award;
                 return (
                   <div key={feat.id} className="p-3 rounded-xl border space-y-1" style={{ backgroundColor: 'var(--card-inner)', borderColor: 'var(--border-color)' }}>
-                    <FeatIcon className={`w-4 h-4 ${feat.iconColor}`} />
-                    <h5 className="text-xs font-bold" style={{ color: 'var(--text-heading)' }}>{feat.title}</h5>
+                    <FeatIcon className={`w-4 h-4 ${feat.iconColor}`} aria-hidden="true" />
+                    <h4 className="text-xs font-bold" style={{ color: 'var(--text-heading)' }}>{feat.title}</h4>
                     <p className="text-[10px] opacity-65">{feat.text}</p>
                   </div>
                 );
@@ -226,7 +226,7 @@ export default function MethodologySection({ onExploreCenters }) {
               }}
             >
               <span>{culture.cta}</span>
-              <ChevronRight className="w-4 h-4 stroke-[2.5]" />
+              <ChevronRight className="w-4 h-4 stroke-[2.5]" aria-hidden="true" />
             </button>
             <span className="text-[11px] opacity-60 text-center lg:text-right w-full sm:w-auto">
               {culture.ctaNote}
