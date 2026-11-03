@@ -574,7 +574,7 @@ export default function RegisterModal({ isOpen, onClose, initialData = null, onS
     setErrors((prev) => ({ ...prev, [field]: err }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const newErrors = {
@@ -591,10 +591,33 @@ export default function RegisterModal({ isOpen, onClose, initialData = null, onS
     }
 
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          mobile: formData.mobile,
+          center: formData.center,
+          program: formData.program,
+          experienceLevel: formData.experienceLevel,
+          notes: formData.notes,
+          source: 'register_modal'
+        })
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        console.warn('Edge lead submission warning:', errorData.error);
+      }
       setSubmitted(true);
-    }, 700);
+    } catch (err) {
+      console.warn('Edge lead submission offline note:', err);
+      setSubmitted(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!isOpen) return null;

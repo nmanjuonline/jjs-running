@@ -5,7 +5,6 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: true,
     host: true, // Exposes the dev server to local network (Wi-Fi) for mobile browsing
     port: 5173,
     watch: {
